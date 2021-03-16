@@ -34,18 +34,9 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             builder.AddAttribute(8, "oninput", EventCallback.Factory.CreateBinder(this, __value => SearchTerm = __value, SearchTerm));
         }
 
-        protected async Task CheckForFilterd()
-        {
-            var result = await Task.FromResult( Http.GetFromJsonAsync<Visitor[]>("api/Visitor/FilterCheck"));
-
-            if (result == null)
-            {
-                
-            }
-        }
-
         protected async Task VisitorArrived(Visitor visitorThatArrived, bool overRide)
         {
+            showDialogArrived = false;
             if (visitorThatArrived.ArrivalTime == null || overRide == true)
             {
                 visitorThatArrived.ArrivalTime = DateTime.Now;
@@ -59,6 +50,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         }
         protected async Task VisitorDeparted(Visitor visitorThatDeparted, bool overRide)
         {
+            showDialogDeparted = false;
             if (visitorThatDeparted.DepartureTime == null || overRide == true)
             {
                 visitorThatDeparted.DepartureTime = DateTime.Now;
@@ -68,6 +60,19 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             else
             {
                 showDialogDeparted = true;
+            }
+        }
+
+        protected async Task GetVisitorsFilterdByServer()
+        {
+            try
+            {
+                visitors = await Http.GetFromJsonAsync<Visitor[]>($"api/Visitor/FilterCheck");
+
+            }
+            catch (AccessTokenNotAvailableException exception)
+            {
+                exception.Redirect();
             }
         }
     }

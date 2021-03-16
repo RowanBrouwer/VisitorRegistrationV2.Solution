@@ -43,17 +43,23 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
             return Task.FromResult(context.Visitors.Find(id));
         }
 
-        public async Task<Visitor> GetVisitorByName(string firstName, string middleName, string lastName)
+        public async Task<Visitor> GetVisitorByName(string Name)
         {
-            var stringList = new List<string> { firstName, middleName, lastName };
+            return await Task.FromResult(
+                context.Visitors
+                .Where(a => a.FullName()
+                .ToLower()
+                .Contains(Name.ToLower()))
+                .FirstOrDefault());
+        }
 
-            return await Task.FromResult(context.Visitors
-                .FirstOrDefault(a => a.FirstName
-                .Contains(stringList.Any().ToString())
-                || a.MiddleName
-                .Contains(stringList.Any().ToString())
-                || a.LastName
-                .Contains(stringList.Any().ToString())));
+        public async Task<IEnumerable<Visitor>> GetVisitorListBySearchTerm(string searchTerm)
+        {
+            return await Task.FromResult(
+                context.Visitors
+                .Where(a => a.FullName()
+                .ToLower()
+                .Contains(searchTerm.ToLower())));
         }
 
         public async Task UpdateVisitor(Visitor updatedVisitor)

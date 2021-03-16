@@ -36,9 +36,9 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
         }
 
         [HttpGet("/FilterCheck")]
-        public async Task<ActionResult<IEnumerable<Visitor>>> GetFilterd()
+        public async Task<ActionResult<IEnumerable<Visitor>>> GetFilterdList(string searchTerm)
         {
-            var result = await context.GetListOfVisitors();
+            var result = await context.GetVisitorListBySearchTerm(searchTerm);
 
             if (result == null)
             {
