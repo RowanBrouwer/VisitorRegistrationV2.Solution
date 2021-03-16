@@ -18,19 +18,32 @@
             </tr>
         </thead>
         <tbody>
+            @if (filterdVisitors == null)
+            {
+                
+            }
             @if (visitors != null)
             {
                 @foreach (var visitor in filterdVisitors)
                 {
-                    <tr>
-                        <td hidden> @visitor.Id</td>
-                        <td>@visitor.FullName()</td>
-                        <td>@visitor.ArrivalTime</td>
-                        <td>@visitor.DepartureTime</td>
-                        <th><button @onclick="@(() => VisitorArrived(visitor))">Arrived</button></th>
-                        <th><button @onclick="@(() => VisitorDeparted(visitor))">Departure</button></th>
-                    </tr>
+            <tr>
+                <td hidden> @visitor.Id</td>
+                <td>@visitor.FullName()</td>
+                <td>@visitor.ArrivalTime</td>
+                <td>@visitor.DepartureTime</td>
+                <th><button @onclick="@(() => VisitorArrived(visitor, false))">Arrived</button></th>
+                <th><button @onclick="@(() => VisitorDeparted(visitor, false))">Departure</button></th>
+                @if (showDialogArrived)
+                {
+            <th>Want to override this time? <button @onclick="@(() => VisitorArrived(visitor, true))">Yes</button> <button @onclick="@(() => VisitorArrived(visitor, false))">No</button></th>
+                }
+                @if (showDialogDeparted)
+                {
+                    <th>Want to override this time? <button @onclick="@(() => VisitorDeparted(visitor, true))">Yes</button> <button @onclick="@(() => VisitorDeparted(visitor, false))">No</button></th>
+                }
+            </tr>
                 }
             }
         </tbody>
 </table>
+

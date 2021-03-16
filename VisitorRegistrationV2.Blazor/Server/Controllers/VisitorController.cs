@@ -35,6 +35,19 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
             return Ok(result);
         }
 
+        [HttpGet("/FilterCheck")]
+        public async Task<ActionResult<IEnumerable<Visitor>>> GetFilterd()
+        {
+            var result = await context.GetListOfVisitors();
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
         // GET api/<VisitorController>/5
         [HttpGet("{id}")]
         public string Get(int id)

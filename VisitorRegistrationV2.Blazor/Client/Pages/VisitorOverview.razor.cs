@@ -34,20 +34,40 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             builder.AddAttribute(8, "oninput", EventCallback.Factory.CreateBinder(this, __value => SearchTerm = __value, SearchTerm));
         }
 
-        protected async Task VisitorArrived(Visitor visitorThatArrived)
+        protected async Task CheckForFilterd()
         {
-            if (visitorThatArrived.ArrivalTime == null)
+            var result = await Task.FromResult( Http.GetFromJsonAsync<Visitor[]>("api/Visitor/FilterCheck"));
+
+            if (result == null)
+            {
+                
+            }
+        }
+
+        protected async Task VisitorArrived(Visitor visitorThatArrived, bool overRide)
+        {
+            if (visitorThatArrived.ArrivalTime == null || overRide == true)
             {
                 visitorThatArrived.ArrivalTime = DateTime.Now;
                 await Http.PutAsJsonAsync($"api/visitor{visitorThatArrived.Id}", visitorThatArrived);
+                showDialogArrived = false;
+            }
+            else
+            {
+                showDialogArrived = true;
             }
         }
-        protected async Task VisitorDeparted(Visitor visitorThatDeparted)
+        protected async Task VisitorDeparted(Visitor visitorThatDeparted, bool overRide)
         {
-            if (visitorThatDeparted.DepartureTime == null)
+            if (visitorThatDeparted.DepartureTime == null || overRide == true)
             {
                 visitorThatDeparted.DepartureTime = DateTime.Now;
                 await Http.PutAsJsonAsync($"api/visitor{visitorThatDeparted.Id}", visitorThatDeparted);
+                showDialogDeparted = false;
+            }
+            else
+            {
+                showDialogDeparted = true;
             }
         }
     }
