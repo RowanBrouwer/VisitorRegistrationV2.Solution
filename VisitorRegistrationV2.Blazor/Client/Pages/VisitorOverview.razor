@@ -1,0 +1,36 @@
+﻿@page "/"
+@inherits VisitorOverviewModel
+
+
+    <div class="text-left bg-blue-100">
+        <input class="border-dark" @bind-value="SearchTerm"
+               @bind-value:event="oninput"/>
+    </div>
+
+<table class="table">
+        <thead>
+            <tr>
+                <th>Full name</th>
+                <th>Arrival time</th>
+                <th>Departure time</th>
+                <th>Arrived</th>
+                <th>Departure</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (visitors != null)
+            {
+                @foreach (var visitor in filterdVisitors)
+                {
+                    <tr>
+                        <td hidden> @visitor.Id</td>
+                        <td>@visitor.FullName()</td>
+                        <td>@visitor.ArrivalTime</td>
+                        <td>@visitor.DepartureTime</td>
+                        <th><button>Arrived</button></th>
+                        <th><button>Departure</button></th>
+                    </tr>
+                }
+            }
+        </tbody>
+</table>
