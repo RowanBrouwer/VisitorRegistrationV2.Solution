@@ -50,8 +50,9 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
 
         // PUT api/<VisitorController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public Task Put(int id, [FromBody] Visitor visitor)
         {
+            return Task.FromResult(context.UpdateVisitor(visitor));
         }
 
         // DELETE api/<VisitorController>/5

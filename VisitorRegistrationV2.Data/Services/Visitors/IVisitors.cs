@@ -15,5 +15,6 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
         public Task UpdateVisitor(Visitor updatedVisitor);
         public Task<Visitor> GetVisitorById(int id);
         public Task<Visitor> GetVisitorByName(string firstName, string middleName, string lastName);
+
     }
 }

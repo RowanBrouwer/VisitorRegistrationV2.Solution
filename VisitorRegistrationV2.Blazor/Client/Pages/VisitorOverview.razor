@@ -27,8 +27,8 @@
                         <td>@visitor.FullName()</td>
                         <td>@visitor.ArrivalTime</td>
                         <td>@visitor.DepartureTime</td>
-                        <th><button>Arrived</button></th>
-                        <th><button>Departure</button></th>
+                        <th><button @onclick="@(() => VisitorArrived(visitor))">Arrived</button></th>
+                        <th><button @onclick="@(() => VisitorDeparted(visitor))">Departure</button></th>
                     </tr>
                 }
             }
