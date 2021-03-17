@@ -35,7 +35,7 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/FilterCheck")]
+        [HttpPost("/FilterCheck/{searchTerm}")]
         public async Task<ActionResult<IEnumerable<Visitor>>> GetFilterdList(string searchTerm)
         {
             var result = await context.GetVisitorListBySearchTerm(searchTerm);
@@ -63,9 +63,16 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
 
         // PUT api/<VisitorController>/5
         [HttpPut("{id}")]
-        public Task Put(int id, [FromBody] Visitor visitor)
+        public async Task<ActionResult> Put(int id, [FromBody]Visitor visitor)
         {
-            return Task.FromResult(context.UpdateVisitor(visitor));
+            var result = await Task.FromResult(context.UpdateVisitor(visitor));
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+            
+            return NoContent();
         }
 
         // DELETE api/<VisitorController>/5

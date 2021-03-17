@@ -5,8 +5,11 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using System.Timers;
 using VisitorRegistrationV2.Blazor.Client.PageModels;
 using VisitorRegistrationV2.Blazor.Shared;
 
@@ -14,6 +17,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 {
     public class VisitorOverviewModel : VisitorOverviewBaseModel
     {
+        private Timer _delayTimer;
         protected override async Task OnInitializedAsync()
         {
             try
@@ -40,8 +44,11 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             if (visitorThatArrived.ArrivalTime == null || overRide == true)
             {
                 visitorThatArrived.ArrivalTime = DateTime.Now;
-                await Http.PutAsJsonAsync($"api/visitor{visitorThatArrived.Id}", visitorThatArrived);
+                var response = await Http.PutAsJsonAsync($"api/visitor/{visitorThatArrived.Id}", visitorThatArrived);
                 showDialogArrived = false;
+
+                message = responseManager.GetMessage(response);
+                await delayMessageReset();
             }
             else
             {
@@ -54,8 +61,13 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             if (visitorThatDeparted.DepartureTime == null || overRide == true)
             {
                 visitorThatDeparted.DepartureTime = DateTime.Now;
-                await Http.PutAsJsonAsync($"api/visitor{visitorThatDeparted.Id}", visitorThatDeparted);
-                showDialogDeparted = false;
+                using var response = await Http.PutAsJsonAsync($"api/visitor/{visitorThatDeparted.Id}", visitorThatDeparted);
+                {
+                    showDialogDeparted = false;
+
+                    message = responseManager.GetMessage(response);
+                    await delayMessageReset();
+                }
             }
             else
             {
@@ -63,17 +75,22 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             }
         }
 
-        protected async Task GetVisitorsFilterdByServer()
+        protected void MessageDisposal()
         {
-            try
-            {
-                visitors = await Http.GetFromJsonAsync<Visitor[]>($"api/Visitor/FilterCheck");
+            message = null;
+            StateHasChanged(); 
+        }
 
-            }
-            catch (AccessTokenNotAvailableException exception)
-            {
-                exception.Redirect();
-            }
+        protected Task delayMessageReset()
+        {
+            _delayTimer = new System.Timers.Timer();
+            _delayTimer.Interval = 3000;
+            _delayTimer.Elapsed += (o, e) => MessageDisposal();
+            _delayTimer.AutoReset = false;
+            _delayTimer.Start();
+            return Task.CompletedTask;
         }
     }
+
 }
+

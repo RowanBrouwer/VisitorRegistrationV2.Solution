@@ -2,50 +2,48 @@
 @inherits VisitorOverviewModel
 
 
-    <div class="text-left bg-blue-100">
-        <input class="border-dark" @bind-value="SearchTerm"
-               @bind-value:event="oninput"/>
-    </div>
-
+<div class="text-left bg-blue-100">
+    <input class="border-dark" @bind-value="SearchTerm"
+           @bind-value:event="oninput" />
+</div>
 <table class="table">
-        <thead>
-            <tr>
-                <th>Full name</th>
-                <th>Arrival time</th>
-                <th>Departure time</th>
-                <th>Arrived</th>
-                <th>Departure</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (visitors != null)
+    <thead>
+        <tr>
+            <th>Full name</th>
+            <th>Arrival time</th>
+            <th>Departure time</th>
+            <th>Arrived</th>
+            <th>Departure</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (visitors != null)
+        {
+            @foreach (var visitor in filterdVisitors)
             {
-                @if (filterdVisitors.Count() == 0)
-                {
-                    <tr>
-                        <th>No results found, want to reconnect to the <button @onclick="@(() => GetVisitorsFilterdByServer())">database</button>?</th>
-                    </tr>
-                }
-                @foreach (var visitor in filterdVisitors)
-                {
-                    <tr>
-                        <td hidden> @visitor.Id</td>
-                        <td>@visitor.FullName()</td>
-                        <td>@visitor.ArrivalTime</td>
-                        <td>@visitor.DepartureTime</td>
-                        <th><button @onclick="@(() => VisitorArrived(visitor, false))">Arrived</button></th>
-                        <th><button @onclick="@(() => VisitorDeparted(visitor, false))">Departure</button></th>
-                        @if (showDialogArrived)
-                        {
-                            <th>Want to override this time? <button @onclick="@(() => VisitorArrived(visitor, true))">Yes</button> <button @onclick="@(() => showDialogArrived = false)">No</button></th>
-                        }
-                        @if (showDialogDeparted)
-                        {
-                            <th>Want to override this time? <button @onclick="@(() => VisitorDeparted(visitor, true))">Yes</button> <button @onclick="@(() => showDialogDeparted = false)">No</button></th>
-                        }
-                    </tr>
-                }
+                <tr>
+                    <td hidden> @visitor.Id</td>
+                    <td>@visitor.FullName()</td>
+                    <td>@visitor.ArrivalTime</td>
+                    <td>@visitor.DepartureTime</td>
+                    <th><button @onclick="@(() => VisitorArrived(visitor, false))">Arrived</button></th>
+                    <th><button @onclick="@(() => VisitorDeparted(visitor, false))">Departure</button></th>
+                    @if (showDialogArrived)
+                    {
+                        <th>Want to override this time? <button @onclick="@(() => VisitorArrived(visitor, true))">Yes</button> <button @onclick="@(() => showDialogArrived = false)">No</button></th>
+                    }
+                    @if (showDialogDeparted)
+                    {
+                        <th>Want to override this time? <button @onclick="@(() => VisitorDeparted(visitor, true))">Yes</button> <button @onclick="@(() => showDialogDeparted = false)">No</button></th>
+                    }
+                </tr>
             }
-        </tbody>
+        }
+    </tbody>
 </table>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-info">@message</div>
+}
 

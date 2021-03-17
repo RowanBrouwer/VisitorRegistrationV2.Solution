@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using VisitorRegistrationV2.Blazor.Client.ClientServices.IMessageResponse;
 
 namespace VisitorRegistrationV2.Blazor.Client
 {
@@ -23,7 +24,7 @@ namespace VisitorRegistrationV2.Blazor.Client
 
             // Supply HttpClient instances that include access tokens when making requests to the server project
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("VisitorRegistrationV2.Blazor.ServerAPI"));
-
+            builder.Services.AddScoped<IMessageResponse, MessageResponse>();
             builder.Services.AddApiAuthorization();
 
             await builder.Build().RunAsync();
