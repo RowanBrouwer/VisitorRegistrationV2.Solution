@@ -65,7 +65,7 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
 
         // POST api/<VisitorController>
         [HttpPost]
-        public async Task<ActionResult<Visitor>> Post([FromBody] Visitor newVisitor)
+        public async Task<ActionResult<int>> Post([FromBody] Visitor newVisitor)
         {
             var result = await context.AddVisitor(newVisitor);
 
@@ -74,7 +74,7 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
                 return BadRequest();
             }
 
-            return Ok(result);
+            return Ok(result.Id);
         }
 
         // PUT api/<VisitorController>/5

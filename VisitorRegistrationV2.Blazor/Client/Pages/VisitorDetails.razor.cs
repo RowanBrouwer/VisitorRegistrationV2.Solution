@@ -20,7 +20,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         {
             try
             {
-                //visitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{VisitorId}");
+                visitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{VisitorId}");
             }
             catch (AccessTokenNotAvailableException exception)
             {

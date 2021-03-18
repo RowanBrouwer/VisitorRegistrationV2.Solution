@@ -23,9 +23,9 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             {
                 var responseMessage = ResponseManager.GetMessage(response);
 
-                var returnedVisitor = await response.Content.ReadFromJsonAsync<Visitor>();
+                int Id = response.Content.ReadFromJsonAsync<int>().Result;
 
-                NavManager.NavigateTo($"/Details/{visitor.Id}");
+                NavManager.NavigateTo($"/");
             }
         }
 
