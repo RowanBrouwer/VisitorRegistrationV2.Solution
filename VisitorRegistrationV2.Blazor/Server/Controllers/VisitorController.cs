@@ -50,9 +50,16 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
 
         // GET api/<VisitorController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<Visitor>> Get(int id)
         {
-            return "value";
+            var result = await context.GetVisitorById(id);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
         }
 
         // POST api/<VisitorController>
@@ -77,8 +84,11 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
 
         // DELETE api/<VisitorController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
+            await context.DeleteVisitor(id);
+
+            return Ok();
         }
     }
 }
