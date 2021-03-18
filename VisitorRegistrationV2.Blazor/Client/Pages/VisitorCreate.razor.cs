@@ -23,10 +23,10 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             {
                 var responseMessage = ResponseManager.GetMessage(response);
 
-                int Id = response.Content.ReadFromJsonAsync<int>().Result;
-
-                NavManager.NavigateTo($"/");
+                //var Id = response.Content.ReadFromJsonAsync<Visitor>();    
             }
+
+            NavManager.NavigateTo($"/");
         }
 
         protected void CancelRedirect()
