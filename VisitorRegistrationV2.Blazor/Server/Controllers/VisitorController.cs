@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,8 +65,16 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
 
         // POST api/<VisitorController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<Visitor>> Post([FromBody] Visitor newVisitor)
         {
+            var result = await context.AddVisitor(newVisitor);
+
+            if (result == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result);
         }
 
         // PUT api/<VisitorController>/5

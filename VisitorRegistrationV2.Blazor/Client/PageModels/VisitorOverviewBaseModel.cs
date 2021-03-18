@@ -9,17 +9,13 @@ namespace VisitorRegistrationV2.Blazor.Client.PageModels
 {
     public class VisitorOverviewBaseModel : PageBaseModel
     {
-        [Inject]
-        protected IMessageResponse responseManager { get; set; }
 
         [Parameter]
         public string SearchTerm { get; set; } = "";
         protected bool showDialogArrived { get; set; } = false;
         protected bool showDialogDeparted { get; set; } = false;
         protected IEnumerable<Visitor> visitors { get; set; } = new List<Visitor>();
-        protected IEnumerable<Visitor> filterdVisitors => visitors.Where(a => a.FullName().ToLower().Contains(SearchTerm.ToLower()));
-        protected string message { get; set; }
-
-
+        protected IEnumerable<Visitor> filterdPresentVisitors => visitors.Where(a => /*a.ArrivalTime != null && a.DepartureTime == null &&*/ a.FullName().ToLower().Contains(SearchTerm.ToLower()));
+        protected IEnumerable<Visitor> filterdNotPresentVisitors => visitors.Where(a => a.ArrivalTime == null || a.DepartureTime != null && a.FullName().ToLower().Contains(SearchTerm.ToLower()));
     }
 }

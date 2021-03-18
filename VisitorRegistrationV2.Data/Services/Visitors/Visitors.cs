@@ -20,7 +20,8 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
         {
             context.Add(newVisitor);
             context.SaveChanges();
-            return await Task.FromResult(context.Visitors.Find(newVisitor));
+            var result = await context.Visitors.FindAsync(newVisitor);
+            return result;
         }
 
         public Task DeleteVisitor(int id)

@@ -1,0 +1,20 @@
+﻿@page "/Details/{visitorId}"
+@inherits VisitorDetailsModel
+
+<div>
+    <label>First name :</label>
+    <label @bind="@visitor.FirstName" />
+    <label>"Middle name :</label>
+    <label @bind="@visitor.MiddleName" />
+    <label>Last name :</label>
+    <label @bind="@visitor.LastName" />
+</div>
+
+@if (!string.IsNullOrEmpty(Message))
+{
+    <div class="alert alert-info">@Message</div>
+}
+
+<div>
+    <button @onclick="@(() => RedirectToOverview())">Back to overview</button>
+</div>

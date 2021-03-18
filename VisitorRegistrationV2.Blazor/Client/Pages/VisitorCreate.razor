@@ -1,0 +1,18 @@
+﻿@page "/Create"
+@inherits VisitorCreateModel
+
+
+<div>
+    <label>First name :</label>
+    <input @bind-value="@newVisitor.FirstName" />
+    <label>"Middle name :</label>
+    <input @bind-value="@newVisitor.MiddleName" />
+    <label>Last name :</label>
+    <input @bind-value="@newVisitor.LastName" />
+</div>
+<div>
+    <button @onclick="@(() => saveNewVisitor(newVisitor))">Add</button>
+</div>
+<div>
+    <button @onclick="@(() => CancelRedirect())">Cancel</button>
+</div>

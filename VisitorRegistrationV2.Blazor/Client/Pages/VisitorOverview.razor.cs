@@ -17,7 +17,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 {
     public class VisitorOverviewModel : VisitorOverviewBaseModel
     {
-        private Timer _delayTimer;
+        
         protected override async Task OnInitializedAsync()
         {
             try
@@ -47,7 +47,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
                 var response = await Http.PutAsJsonAsync($"api/visitor/{visitorThatArrived.Id}", visitorThatArrived);
                 showDialogArrived = false;
 
-                message = responseManager.GetMessage(response);
+                Message = ResponseManager.GetMessage(response);
                 await delayMessageReset();
             }
             else
@@ -65,7 +65,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
                 {
                     showDialogDeparted = false;
 
-                    message = responseManager.GetMessage(response);
+                    Message = ResponseManager.GetMessage(response);
                     await delayMessageReset();
                 }
             }
@@ -75,20 +75,9 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             }
         }
 
-        protected void MessageDisposal()
+        protected void RedirectToCreatePage()
         {
-            message = null;
-            StateHasChanged(); 
-        }
-
-        protected Task delayMessageReset()
-        {
-            _delayTimer = new System.Timers.Timer();
-            _delayTimer.Interval = 3000;
-            _delayTimer.Elapsed += (o, e) => MessageDisposal();
-            _delayTimer.AutoReset = false;
-            _delayTimer.Start();
-            return Task.CompletedTask;
+            NavManager.NavigateTo("/Create");
         }
     }
 
