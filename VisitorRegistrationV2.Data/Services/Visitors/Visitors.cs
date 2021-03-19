@@ -19,8 +19,11 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
         public async Task<Visitor> AddVisitor(Visitor newVisitor)
         {
             context.Add(newVisitor);
+
             context.SaveChanges();
-            var result = await context.Visitors.FindAsync(newVisitor);
+
+            var result = await GetVisitorById(newVisitor.Id);
+
             return result;
         }
 

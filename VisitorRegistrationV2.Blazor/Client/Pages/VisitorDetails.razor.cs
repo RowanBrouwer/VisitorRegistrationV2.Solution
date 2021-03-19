@@ -16,7 +16,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         public int VisitorId { get; set; }
         protected Visitor visitor { get; set; }
 
-        protected async override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
             try
             {
@@ -26,7 +26,6 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             {
                 exception.Redirect();
             }
-            await delayMessageReset();
         }
 
         protected void RedirectToOverview()

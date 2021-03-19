@@ -19,14 +19,20 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 
         protected async Task saveNewVisitor(Visitor visitor)
         {
+            Visitor AddedVisitor;
             using var response = await Http.PostAsJsonAsync("api/Visitor", visitor);
             {
-                var responseMessage = ResponseManager.GetMessage(response);
+                Message = ResponseManager.GetMessage(response);
 
-                //var Id = response.Content.ReadFromJsonAsync<Visitor>();    
+                AddedVisitor = await response.Content.ReadFromJsonAsync<Visitor>();
             }
 
-            NavManager.NavigateTo($"/");
+            NavigateToDetailPage(AddedVisitor.Id);
+        }
+
+        protected void NavigateToDetailPage(int id)
+        {
+            NavManager.NavigateTo($"/Details/{id}");
         }
 
         protected void CancelRedirect()

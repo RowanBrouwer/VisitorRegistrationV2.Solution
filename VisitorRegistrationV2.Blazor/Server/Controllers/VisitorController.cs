@@ -36,8 +36,8 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
             return Ok(result);
         }
 
-        [HttpPost("/FilterCheck/{searchTerm}")]
-        public async Task<ActionResult<IEnumerable<Visitor>>> GetFilterdList(string searchTerm)
+        [HttpPost("/FilterCheck")]
+        public async Task<ActionResult<IEnumerable<Visitor>>> GetFilterdList([FromBody]string searchTerm)
         {
             var result = await context.GetVisitorListBySearchTerm(searchTerm);
 
@@ -51,7 +51,7 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
 
         // GET api/<VisitorController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Visitor>> Get(int id)
+        public async Task<ActionResult> Get(int id)
         {
             var result = await context.GetVisitorById(id);
 
@@ -65,16 +65,20 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
 
         // POST api/<VisitorController>
         [HttpPost]
-        public async Task<ActionResult<int>> Post([FromBody] Visitor newVisitor)
+        public async Task<ActionResult<Visitor>> Post([FromBody] Visitor newVisitor)
         {
-            var result = await context.AddVisitor(newVisitor);
-
-            if (result == null)
+            Visitor result = newVisitor;
+            if (ModelState.IsValid)
             {
-                return BadRequest();
+                result = await context.AddVisitor(newVisitor);
+
+                if (result == null)
+                {
+                    return BadRequest();
+                }
             }
 
-            return Ok(result.Id);
+            return Ok(result);
         }
 
         // PUT api/<VisitorController>/5

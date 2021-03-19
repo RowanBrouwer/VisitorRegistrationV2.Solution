@@ -1,14 +1,15 @@
-﻿@page "/Details/{visitorId}"
+﻿@page "/Details/{VisitorId:int}"
 @inherits VisitorDetailsModel
 
+
+@if (visitor != null)
+{
 <div>
-    <label>First name :</label>
-    <label @bind="@visitor.FirstName" />
-    <label>"Middle name :</label>
-    <label @bind="@visitor.MiddleName" />
-    <label>Last name :</label>
-    <label @bind="@visitor.LastName" />
+    <label>First name : @visitor.FirstName</label>
+    <label>Middle name : @visitor.MiddleName</label>
+    <label>Last name : @visitor.LastName</label>
 </div>
+}
 
 @if (!string.IsNullOrEmpty(Message))
 {
