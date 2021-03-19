@@ -37,7 +37,7 @@ namespace VisitorRegistrationV2.Tests
         }
 
         [Fact]
-        public async void GetApplicationUserList()
+        public async void GetListOfVisitorsTest()
         {
 
             var result = await context.GetListOfVisitors();
@@ -48,7 +48,7 @@ namespace VisitorRegistrationV2.Tests
         }
 
         [Fact]
-        public async void GetApplicationUserById()
+        public async void GetVisitorByIdTest()
         {
             var result = await context.GetVisitorById(TestVisitorId1);
 
@@ -59,7 +59,7 @@ namespace VisitorRegistrationV2.Tests
         }
 
         [Fact]
-        public async void UpdateApplicationUserById()
+        public async void UpdateVisitorTest()
         {
             var user = await context.GetVisitorById(TestVisitorId1);
 
@@ -90,6 +90,30 @@ namespace VisitorRegistrationV2.Tests
 
             Assert.Null(DeletedUser);
         }
+
+        [Fact]
+        public async void AddVisitorTest()
+        {
+            Visitor newVisitor = new Visitor { ArrivalTime = DateTime.Now, FirstName = "Test", LastName = "Person" };
+
+            var lookUpNewVisitor = await context.AddVisitor(newVisitor);
+
+            Assert.Equal(7, lookUpNewVisitor.Id);
+        }
+
+
+        // need to figure the linq behind the method
+        //[Fact]
+        //public async void GetVisitorListBySearchTermTest()
+        //{
+        //    string Name = "Rowan Brouwer";
+
+        //    var SearchResult = await context.GetVisitorListBySearchTerm(Name);
+
+        //    var RowanVisitor = SearchResult.FirstOrDefault(v => v.FullName() == Name);
+
+        //    Assert.Equal(Name, RowanVisitor.FullName());
+        //}
 
     }
 }

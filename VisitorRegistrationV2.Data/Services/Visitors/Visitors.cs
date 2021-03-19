@@ -10,7 +10,7 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
     public class Visitors : IVisitors
     {
         private readonly ApplicationDbContext context;
-                 
+
         public Visitors(ApplicationDbContext context)
         {
             this.context = context;
@@ -48,24 +48,16 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
             return Task.FromResult(context.Visitors.Find(id));
         }
 
-        public async Task<Visitor> GetVisitorByName(string Name)
-        {
-            return await Task.FromResult(
-                context.Visitors
-                .Where(a => a.FullName()
-                .ToLower()
-                .Contains(Name.ToLower()))
-                .FirstOrDefault());
-        }
 
-        public async Task<IEnumerable<Visitor>> GetVisitorListBySearchTerm(string searchTerm)
-        {
-            return await Task.FromResult(
-                context.Visitors
-                .Where(a => a.FullName()
-                .ToLower()
-                .Contains(searchTerm.ToLower())));
-        }
+        // Still need to figure out how to change the linq for it to work.
+        //public async Task<IEnumerable<Visitor>> GetVisitorListBySearchTerm(string searchTerm)
+        //{
+        //    string LoweredSearchTerm = searchTerm.ToLower();
+
+        //    var result = await Task.FromResult(context.Visitors.Where(v => v.FullName().ToLower().ToString().Contains(searchTerm.ToLower())));
+
+        //    return result;
+        //}
 
         public async Task UpdateVisitor(Visitor updatedVisitor)
         {
