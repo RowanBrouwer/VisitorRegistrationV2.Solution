@@ -31,6 +31,7 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
         {
             var VisitorToDelete = context.Visitors.Find(id);
             context.Visitors.Remove(VisitorToDelete);
+            context.SaveChanges();
 
             return Task.FromResult(true);
         }

@@ -10,7 +10,7 @@ namespace VisitorRegistrationV2.Data
 {
     public class ApplicationSeed
     {
-        public static void Seed(UserManager<Registrar> userManager, ApplicationDbContext db)
+        public static void Seed(UserManager<Registrar> userManager, ApplicationDbContext db, bool testing)
         {
             if (db.Registrars.Count() == 0)
             {
@@ -22,7 +22,12 @@ namespace VisitorRegistrationV2.Data
                     UserName = "Admin1@Admin1",
                     NormalizedUserName = "ADMIN1@ADMIN1"
                 };
-                IdentityResult result = userManager.CreateAsync(user, "!Admin123").Result;
+
+                if (!testing)
+                {
+                    IdentityResult result = userManager.CreateAsync(user, "!Admin123").Result;
+                } 
+                
                 db.Add(user);
                 db.SaveChanges();
             }

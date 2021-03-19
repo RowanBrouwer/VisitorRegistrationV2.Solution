@@ -75,7 +75,7 @@ namespace VisitorRegistrationV2.Blazor.Server
             app.UseAuthentication();
             app.UseAuthorization();
 
-            ApplicationSeed.Seed(userManager, db);
+            ApplicationSeed.Seed(userManager, db, false);
 
             app.UseEndpoints(endpoints =>
             {

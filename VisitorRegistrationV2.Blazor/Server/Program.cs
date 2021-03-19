@@ -29,7 +29,7 @@ namespace VisitorRegistrationV2.Blazor.Server
                         GetRequiredService<UserManager<Registrar>>();
 
                     ApplicationSeed.Seed
-                        (userManager, db);
+                        (userManager, db, false);
                 }
                 catch
                 {
