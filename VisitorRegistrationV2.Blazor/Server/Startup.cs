@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using System.Linq;
 using VisitorRegistrationV2.Blazor.Shared;
 using VisitorRegistrationV2.Data;
+using VisitorRegistrationV2.Data.Services.Hubs;
 using VisitorRegistrationV2.Data.Services.Visitors;
 
 namespace VisitorRegistrationV2.Blazor.Server
@@ -28,6 +29,8 @@ namespace VisitorRegistrationV2.Blazor.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseInMemoryDatabase(
                     Configuration.GetConnectionString("InMemoryConnection")));
@@ -47,11 +50,19 @@ namespace VisitorRegistrationV2.Blazor.Server
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddResponseCompression(options =>
+            {
+                options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+                    new[] { "application/octet-stream" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<Registrar> userManager, ApplicationDbContext db)
         {
+            app.UseResponseCompression();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -81,6 +92,7 @@ namespace VisitorRegistrationV2.Blazor.Server
             {
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
+                endpoints.MapHub<VisitorHub>("/VisitorHub");
                 endpoints.MapFallbackToFile("index.html");
             });
         }
