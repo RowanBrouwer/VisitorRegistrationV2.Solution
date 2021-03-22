@@ -41,6 +41,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         
         protected async Task VisitorArrived(Visitor visitorThatArrived, bool overRide)
         {
+            selectedVisitor = null;
             showDialogArrived = false;
             if (visitorThatArrived.ArrivalTime == null || overRide == true)
             {
@@ -59,6 +60,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         }
         protected async Task VisitorDeparted(Visitor visitorThatDeparted, bool overRide)
         {
+            selectedVisitor = null;
             showDialogDeparted = false;
             if (visitorThatDeparted.DepartureTime == null || overRide == true)
             {
