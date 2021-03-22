@@ -17,7 +17,8 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 {
     public class VisitorOverviewModel : VisitorOverviewBaseModel
     {
-        
+        protected Visitor selectedVisitor { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
             try
@@ -37,7 +38,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             builder.AddAttribute(7, "value", BindConverter.FormatValue(SearchTerm));
             builder.AddAttribute(8, "oninput", EventCallback.Factory.CreateBinder(this, __value => SearchTerm = __value, SearchTerm));
         }
-
+        
         protected async Task VisitorArrived(Visitor visitorThatArrived, bool overRide)
         {
             showDialogArrived = false;
@@ -52,6 +53,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             }
             else
             {
+                selectedVisitor = visitorThatArrived;
                 showDialogArrived = true;
             }
         }
@@ -71,6 +73,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             }
             else
             {
+                selectedVisitor = visitorThatDeparted;
                 showDialogDeparted = true;
             }
         }
@@ -79,6 +82,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         {
             NavManager.NavigateTo("/Create");
         }
+
     }
 
 }

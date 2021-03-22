@@ -6,84 +6,191 @@
     <input class="border-dark" @bind-value="SearchTerm" @bind-value:event="oninput" />
 </div>
 
-<table style="background-color:lightgrey" width="100%">
-    <thead style="border:solid; border-width:medium;">
-        <tr>
-            <th>Full name</th>
-            <th>Arrival time</th>
-            <th>Departure time</th>
-            <th>Arrived</th>
-            <th>Departure</th>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-5">
+            <div class="row">
+                <div class="col border border-dark col-sm-4">
+                    Full name
+                </div>
+                <div class="col border border-dark col-sm-2">
+                    Arrival time
+                </div>
+                <div class="col border border-dark col-sm-3">
+                    Arrived
+                </div>
+                <div class="col border border-dark col-sm-3">
+                    Departure
+                </div>
+            </div>
+            @foreach (var visitor in filterdPresentVisitors)
+            {
+                <div class="row">
+                    <div class="col border border-dark col-sm-4">
+                        @visitor.FullName()
+                    </div>
+                    <div class="col border border-dark col-sm-2">
+                        @if (visitor.ArrivalTime != null)
+                        {
+                            @(((DateTime)visitor.ArrivalTime).ToString("T"))
+                        }
+                        else
+                        {
+                            @visitor.ArrivalTime
+                        }
+                    </div>
+                    <button type="button" @onclick="@(() => VisitorArrived(visitor, false))" class="col border border-dark col-sm-3 btn-success">Arrived</button>
+                    <button type="button" @onclick="@(() => VisitorDeparted(visitor, false))" class="col border border-dark col-sm-3 btn-danger">Departure</button>
+                </div>
+            }
+        </div>
+        <div class="col-lg-7">
+            <div class="row">
+                <div class="col border border-dark col-sm-4">
+                    Full name
+                </div>
+                <div class="col border border-dark col-sm-2">
+                    Arrival time
+                </div>
+                <div class="col border border-dark col-sm-2">
+                    Departure time
+                </div>
+                <div class="col border border-dark col-sm-2">
+                    Arrived
+                </div>
+                <div class="col border border-dark col-sm-2">
+                    Departure
+                </div>
+            </div>
+            @foreach (var visitor in filterdNotPresentVisitors)
+            {
+                <div class="row">
+                    <div class="col border border-dark col-sm-4">
+                        @visitor.FullName()
+                    </div>
+                    <div class="col border border-dark col-sm-2">
+                        @if (visitor.ArrivalTime != null)
+                        {
+                            @(((DateTime)visitor.ArrivalTime).ToString("T"))
+                        }
+                        else
+                        {
+                            @visitor.ArrivalTime
+                        }
+                    </div>
+                    <div class="col border border-dark col-sm-2">
+                        @if (visitor.DepartureTime != null)
+                        {
+                            @(((DateTime)visitor.DepartureTime).ToString("T"))
+                        }
+                        else
+                        {
+                            @visitor.DepartureTime
+                        }
+                    </div>
+                    <button type="button" @onclick="@(() => VisitorArrived(visitor, false))" class="col border border-dark col-sm-2 btn-success">Arrived</button>
+                    <button type="button" @onclick="@(() => VisitorDeparted(visitor, false))" class="col border border-dark col-sm-2 btn-danger">Departure</button>
+                </div>
+            }
+        </div>
+        <div class="row">
             @if (showDialogArrived)
             {
-                <th></th>
+                <div class="col border border-dark col-auto">Want to override this time? </div>
+                <button class="col border border-dark col-auto btn-success" type="button" @onclick="@(() => VisitorArrived(selectedVisitor, true))">Yes</button>
+                <button class="col border border-dark col-auto btn-danger" type="button" @onclick="@(() => showDialogArrived = false)">No</button>
             }
             @if (showDialogDeparted)
             {
-                <th></th>
+                <div class="col border border-dark col-auto">Want to override this time? </div>
+                <button class="col border border-dark col-auto btn-success" type="button" @onclick="@(() => VisitorDeparted(selectedVisitor, true))">Yes</button>
+                <button class="col border border-dark col-auto btn-danger" type="button" @onclick="@(() => showDialogDeparted = false)">No</button>
             }
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var visitor in filterdPresentVisitors)
-        {
-            <tr style="border:solid; border-width:medium;">
-                <td hidden> @visitor.Id</td>
-                <td>@visitor.FullName()</td>
-                <td>@visitor.ArrivalTime</td>
-                <td>@visitor.DepartureTime</td>
-                <th><button @onclick="@(() => VisitorArrived(visitor, false))">Arrived</button></th>
-                <th><button @onclick="@(() => VisitorDeparted(visitor, false))">Departure</button></th>
+        </div>
+    </div>
+</div>
+@*<table style="background-color:lightgrey" width="100%">
+        <thead style="border:solid; border-width:medium;">
+            <tr>
+                <th>Full name</th>
+                <th>Arrival time</th>
+                <th>Departure time</th>
+                <th>Arrived</th>
+                <th>Departure</th>
                 @if (showDialogArrived)
                 {
-                    <th>Want to override this time? <button @onclick="@(() => VisitorArrived(visitor, true))">Yes</button> <button @onclick="@(() => showDialogArrived = false)">No</button></th>
+                    <th></th>
                 }
                 @if (showDialogDeparted)
                 {
-                    <th>Want to override this time? <button @onclick="@(() => VisitorDeparted(visitor, true))">Yes</button> <button @onclick="@(() => showDialogDeparted = false)">No</button></th>
+                    <th></th>
                 }
             </tr>
-        }
-    </tbody>
-    <thead style="border:solid; border-width:medium;">
-        <tr>
-            <th>Full name</th>
-            <th>Arrival time</th>
-            <th>Departure time</th>
-            <th>Arrived</th>
-            <th>Departure</th>
-            @if (showDialogArrived)
+        </thead>
+        <tbody>
+            @foreach (var visitor in filterdPresentVisitors)
             {
-                <th></th>
+                <tr style="border:solid; border-width:medium;">
+                    <td hidden> @visitor.Id</td>
+                    <td>@visitor.FullName()</td>
+                    <td>@visitor.ArrivalTime</td>
+                    <td>@visitor.DepartureTime</td>
+                    <th><button @onclick="@(() => VisitorArrived(visitor, false))">Arrived</button></th>
+                    <th><button @onclick="@(() => VisitorDeparted(visitor, false))">Departure</button></th>
+                    @if (showDialogArrived)
+                    {
+                        <th>Want to override this time? <button @onclick="@(() => VisitorArrived(visitor, true))">Yes</button> <button @onclick="@(() => showDialogArrived = false)">No</button></th>
+                    }
+                    @if (showDialogDeparted)
+                    {
+                        <th>Want to override this time? <button @onclick="@(() => VisitorDeparted(visitor, true))">Yes</button> <button @onclick="@(() => showDialogDeparted = false)">No</button></th>
+                    }
+                </tr>
             }
-            @if (showDialogDeparted)
-            {
-                <th></th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var visitor in filterdPresentVisitors)
-        {
-            <tr style="border:solid; border-width:medium;">
-                <td hidden> @visitor.Id</td>
-                <td>@visitor.FullName()</td>
-                <td>@visitor.ArrivalTime</td>
-                <td>@visitor.DepartureTime</td>
-                <th><button @onclick="@(() => VisitorArrived(visitor, false))">Arrived</button></th>
-                <th><button @onclick="@(() => VisitorDeparted(visitor, false))">Departure</button></th>
+        </tbody>
+    </table>
+    <br />
+    <table style="background-color:lightgrey" width="100%">
+        <thead style="border:solid; border-width:medium;">
+            <tr>
+                <th>Full name</th>
+                <th>Arrival time</th>
+                <th>Departure time</th>
+                <th>Arrived</th>
+                <th>Departure</th>
                 @if (showDialogArrived)
                 {
-                    <th>Want to override this time? <button @onclick="@(() => VisitorArrived(visitor, true))">Yes</button> <button @onclick="@(() => showDialogArrived = false)">No</button></th>
+                    <th></th>
                 }
                 @if (showDialogDeparted)
                 {
-                    <th>Want to override this time? <button @onclick="@(() => VisitorDeparted(visitor, true))">Yes</button> <button @onclick="@(() => showDialogDeparted = false)">No</button></th>
+                    <th></th>
                 }
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var visitor in filterdNotPresentVisitors)
+            {
+                <tr style="border:solid; border-width:medium;">
+                    <td hidden> @visitor.Id</td>
+                    <td>@visitor.FullName()</td>
+                    <td>@visitor.ArrivalTime</td>
+                    <td>@visitor.DepartureTime</td>
+                    <th><button @onclick="@(() => VisitorArrived(visitor, false))">Arrived</button></th>
+                    <th><button @onclick="@(() => VisitorDeparted(visitor, false))">Departure</button></th>
+                    @if (showDialogArrived)
+                    {
+                        <th>Want to override this time? <button @onclick="@(() => VisitorArrived(visitor, true))">Yes</button> <button @onclick="@(() => showDialogArrived = false)">No</button></th>
+                    }
+                    @if (showDialogDeparted)
+                    {
+                        <th>Want to override this time? <button @onclick="@(() => VisitorDeparted(visitor, true))">Yes</button> <button @onclick="@(() => showDialogDeparted = false)">No</button></th>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>*@
 
 <div>
     <button @onclick="@(() => RedirectToCreatePage())">Add visitor</button>
