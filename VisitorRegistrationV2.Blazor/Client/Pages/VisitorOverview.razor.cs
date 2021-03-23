@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +19,89 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
     public class VisitorOverviewModel : VisitorOverviewBaseModel
     {
         protected Visitor selectedVisitor { get; set; }
+        private HubConnection hubConnection;
 
         protected override async Task OnInitializedAsync()
+        {
+            hubConnection = new HubConnectionBuilder()
+                    .WithUrl(NavManager.ToAbsoluteUri("/visitorhub"))
+                    .Build();
+
+
+            hubConnection.On<string>("ReceiveMessage", (message) =>
+            {
+                if (message == "UpdatedAll")
+                {
+                    CallLoadData(message);
+                    StateHasChanged();
+                }
+                if (message == "UpdatedSingle")
+                {
+                    CallLoadData(message);
+                    StateHasChanged();
+                }             
+            });
+
+            await hubConnection.StartAsync();
+
+            await LoadData();
+        }
+
+        protected void CallLoadData(string message)
+        {
+            switch (message)
+            {
+                case "UpdatedAll":
+                    Task.Run(async () =>
+                    {
+                        await LoadData();
+                    });
+                    break;
+                case "UpdatedSingle":
+                    Task.Run(async () =>
+                    {
+                        await LoadData();
+                    });
+                    break;
+                default:
+                    break;
+            }
+            //if (message == "UpdatedAll")
+            //{
+            //    Task.Run(async () =>
+            //    {
+            //        await LoadData();
+            //    });
+            //}
+            //if(message == "UpdatedSingle")
+            //{
+            //    Task.Run(async () =>
+            //    {
+            //        await GetUpdatedUser();
+            //    });
+            //}
+        }
+
+        protected async Task GetUpdatedUser()
+        {
+            try
+            {
+                var FoundVisitor = visitors.First(v => v.Id == selectedVisitor.Id);
+                FoundVisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{selectedVisitor.Id}");
+                StateHasChanged();
+            }
+            catch (AccessTokenNotAvailableException exception)
+            {
+                exception.Redirect();
+            }
+        }
+
+        protected async Task LoadData()
         {
             try
             {
                 visitors = await Http.GetFromJsonAsync<Visitor[]>("api/Visitor");
-                
+                StateHasChanged();
             }
             catch (AccessTokenNotAvailableException exception)
             {
@@ -46,11 +123,22 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             if (visitorThatArrived.ArrivalTime == null || overRide == true)
             {
                 visitorThatArrived.ArrivalTime = DateTime.Now;
-                var response = await Http.PutAsJsonAsync($"api/visitor/{visitorThatArrived.Id}", visitorThatArrived);
-                showDialogArrived = false;
 
-                Message = ResponseManager.GetMessage(response);
-                await delayMessageReset();
+               using var response = await Http.PutAsJsonAsync($"api/visitor/{visitorThatArrived.Id}", visitorThatArrived);
+               {
+                    showDialogArrived = false;
+
+                    if (IsConnected)
+                    {
+                        Message = ResponseManager.GetMessage(response);
+                        await SendUpdate();
+                        await delayMessageReset();
+                    }
+                    else
+                    {
+                        Message = "No Connection";
+                    }
+                }
             }
             else
             {
@@ -69,8 +157,16 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
                 {
                     showDialogDeparted = false;
 
-                    Message = ResponseManager.GetMessage(response);
-                    await delayMessageReset();
+                    if (IsConnected)
+                    {
+                        Message = ResponseManager.GetMessage(response);
+                        await SendUpdate();
+                        await delayMessageReset();
+                    }
+                    else
+                    {
+                        Message = "No Connection";
+                    } 
                 }
             }
             else
@@ -85,7 +181,16 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             NavManager.NavigateTo("/Create");
         }
 
-    }
+        Task SendMessage() => hubConnection.SendAsync("SendUpdateNotification", "UpdateAll");
+        Task SendUpdate() => hubConnection.SendAsync("SendUpdateNotification", "UpdatedSingle");
 
+        protected bool IsConnected =>
+        hubConnection.State == HubConnectionState.Connected;
+
+        protected void Dispose()
+        {
+            _ = hubConnection.DisposeAsync();
+        }
+    }
 }
 

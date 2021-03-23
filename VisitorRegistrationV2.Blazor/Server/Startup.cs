@@ -92,7 +92,7 @@ namespace VisitorRegistrationV2.Blazor.Server
             {
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
-                endpoints.MapHub<VisitorHub>("/VisitorHub");
+                endpoints.MapHub<VisitorHub>("/visitorhub");
                 endpoints.MapFallbackToFile("index.html");
             });
         }

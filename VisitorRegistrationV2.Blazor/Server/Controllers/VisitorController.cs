@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VisitorRegistrationV2.Blazor.Shared;
+using VisitorRegistrationV2.Data.Services.Hubs;
 using VisitorRegistrationV2.Data.Services.Visitors;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -16,9 +18,11 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
     public class VisitorController : ControllerBase
     {
         private readonly IVisitors context;
-        public VisitorController(IVisitors context)
+        private readonly IHubContext<VisitorHub> hubContext;
+        public VisitorController(IVisitors context, IHubContext<VisitorHub> hubContext)
         {
             this.context = context;
+            this.hubContext = hubContext;
         }
 
 

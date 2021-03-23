@@ -9,9 +9,16 @@ namespace VisitorRegistrationV2.Data.Services.Hubs
 {
     public class VisitorHub : Hub
     {
-        public async Task SendMessage(string user, string message)
+        public async Task SendUpdateNotification(string message)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            if (message == "UpdateAll")
+            {
+                await Clients.All.SendAsync("ReceiveMessage", message);
+            }
+            if (message == "UpdatedSingle")
+            {
+                await Clients.All.SendAsync("ReceiveMessage", message);
+            }
         }
     }
 }
