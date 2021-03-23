@@ -22,6 +22,10 @@ namespace VisitorRegistrationV2.Blazor.Client.PageModels
 
         private Timer _delayTimer;
 
+        protected HubConnection hubConnection;
+        protected bool IsConnected =>
+        hubConnection.State == HubConnectionState.Connected;
+
         protected void MessageDisposal()
         {
             Message = null;

@@ -14,10 +14,6 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
     {
         protected Visitor newVisitor = new Visitor();
 
-        protected HubConnection hubConnection;
-        protected bool IsConnected =>
-        hubConnection.State == HubConnectionState.Connected;
-
         protected override async Task OnInitializedAsync()
         {
             hubConnection = new HubConnectionBuilder()
