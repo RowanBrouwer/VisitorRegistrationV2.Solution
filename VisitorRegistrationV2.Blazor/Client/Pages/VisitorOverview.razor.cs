@@ -19,7 +19,10 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
     public class VisitorOverviewModel : VisitorOverviewBaseModel
     {
         protected Visitor selectedVisitor { get; set; }
-        private HubConnection hubConnection;
+
+        protected HubConnection hubConnection;
+        protected bool IsConnected =>
+        hubConnection.State == HubConnectionState.Connected;
 
         protected override async Task OnInitializedAsync()
         {
@@ -27,19 +30,16 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
                     .WithUrl(NavManager.ToAbsoluteUri("/visitorhub"))
                     .Build();
 
-
-            hubConnection.On<string>("ReceiveMessage", (message) =>
+            hubConnection.On("ReceiveMessage", () =>
             {
-                if (message == "UpdatedAll")
-                {
-                    CallLoadData(message);
-                    StateHasChanged();
-                }
-                if (message == "UpdatedSingle")
-                {
-                    CallLoadData(message);
-                    StateHasChanged();
-                }             
+                CallGetUpdatedUser();
+                StateHasChanged();
+            });
+
+            hubConnection.On<int>("ReceiveAddedUser", (VisitorId) =>
+            {
+                CallUpdateToGetAddedUser(VisitorId);
+                 StateHasChanged();
             });
 
             await hubConnection.StartAsync();
@@ -47,39 +47,27 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             await LoadData();
         }
 
-        protected void CallLoadData(string message)
+        protected void CallUpdateToGetAddedUser(int VisitorId)
         {
-            switch (message)
+            Task.Run(async () =>
             {
-                case "UpdatedAll":
-                    Task.Run(async () =>
-                    {
-                        await LoadData();
-                    });
-                    break;
-                case "UpdatedSingle":
-                    Task.Run(async () =>
-                    {
-                        await LoadData();
-                    });
-                    break;
-                default:
-                    break;
-            }
-            //if (message == "UpdatedAll")
-            //{
-            //    Task.Run(async () =>
-            //    {
-            //        await LoadData();
-            //    });
-            //}
-            //if(message == "UpdatedSingle")
-            //{
-            //    Task.Run(async () =>
-            //    {
-            //        await GetUpdatedUser();
-            //    });
-            //}
+                await UpdateToGetAddedUser(VisitorId);
+            });
+        }
+
+        protected async Task UpdateToGetAddedUser(int VisitorId)
+        {
+            var newvisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{VisitorId}");
+            visitors.Add(newvisitor);
+            StateHasChanged();
+        }
+
+        protected void CallGetUpdatedUser()
+        {
+            Task.Run(async () =>
+            {
+                await LoadData();
+            });
         }
 
         protected async Task GetUpdatedUser()
@@ -100,7 +88,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         {
             try
             {
-                visitors = await Http.GetFromJsonAsync<Visitor[]>("api/Visitor");
+                visitors = await Http.GetFromJsonAsync<List<Visitor>>("api/Visitor");
                 StateHasChanged();
             }
             catch (AccessTokenNotAvailableException exception)
@@ -181,11 +169,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             NavManager.NavigateTo("/Create");
         }
 
-        Task SendMessage() => hubConnection.SendAsync("SendUpdateNotification", "UpdateAll");
-        Task SendUpdate() => hubConnection.SendAsync("SendUpdateNotification", "UpdatedSingle");
-
-        protected bool IsConnected =>
-        hubConnection.State == HubConnectionState.Connected;
+        Task SendUpdate() => hubConnection.SendAsync("SendUpdateNotification");
 
         protected void Dispose()
         {

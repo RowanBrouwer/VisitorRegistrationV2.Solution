@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,19 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 {
     public class VisitorCreateModel : VisitorCreateBaseModel
     {
-        protected Visitor newVisitor { get; set; }
-        protected override Task OnInitializedAsync()
+        protected Visitor newVisitor = new Visitor();
+
+        protected HubConnection hubConnection;
+        protected bool IsConnected =>
+        hubConnection.State == HubConnectionState.Connected;
+
+        protected override async Task OnInitializedAsync()
         {
-            return Task.FromResult(newVisitor = new Visitor());
+            hubConnection = new HubConnectionBuilder()
+                    .WithUrl(NavManager.ToAbsoluteUri("/visitorhub"))
+                    .Build();
+
+            await hubConnection.StartAsync();
         }
 
         protected async Task saveNewVisitor(Visitor visitor)
@@ -25,10 +35,15 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
                 Message = ResponseManager.GetMessage(response);
 
                 AddedVisitor = await response.Content.ReadFromJsonAsync<Visitor>();
+                if (IsConnected)
+                {
+                    await SendUpdate(AddedVisitor.Id);
+                }
             }
-
             NavigateToDetailPage(AddedVisitor.Id);
         }
+
+        Task SendUpdate(int visitorId) => hubConnection.SendAsync("SendAddNotification", visitorId);
 
         protected void NavigateToDetailPage(int id)
         {
@@ -38,6 +53,10 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         protected void CancelRedirect()
         {
             NavManager.NavigateTo("/");
+        }
+        protected void Dispose()
+        {
+            _ = hubConnection.DisposeAsync();
         }
     }
 }
