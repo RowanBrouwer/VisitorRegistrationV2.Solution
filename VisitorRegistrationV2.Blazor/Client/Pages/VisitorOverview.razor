@@ -98,13 +98,13 @@
             @if (showDialogArrived)
             {
                 <div class="col col-4 border border-dark col-auto">Want to override this time? </div>
-                <button class="col col-4 border border-dark col-auto btn-success" type="button" @onclick="@(() => VisitorArrived(selectedVisitor, true))">Yes</button>
+                <button class="col col-4 border border-dark col-auto btn-success" type="button" @onclick="@(() => VisitorArrived(SelectedVisitor, true))">Yes</button>
                 <button class="col col-4 border border-dark col-auto btn-danger" type="button" @onclick="@(() => showDialogArrived = false)">No</button>
             }
             @if (showDialogDeparted)
             {
                 <div class="col col-4 border border-dark col-auto">Want to override this time? </div>
-                <button class="col col-4 border border-dark col-auto btn-success" type="button" @onclick="@(() => VisitorDeparted(selectedVisitor, true))">Yes</button>
+                <button class="col col-4 border border-dark col-auto btn-success" type="button" @onclick="@(() => VisitorDeparted(SelectedVisitor, true))">Yes</button>
                 <button class="col col-4 border border-dark col-auto btn-danger" type="button" @onclick="@(() => showDialogDeparted = false)">No</button>
             }
         </div>

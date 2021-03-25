@@ -18,7 +18,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 {
     public class VisitorOverviewModel : VisitorOverviewBaseModel
     {
-        protected Visitor selectedVisitor { get; set; }
+        protected Visitor SelectedVisitor { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -70,8 +70,8 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         {
             try
             {
-                var FoundVisitor = visitors.First(v => v.Id == selectedVisitor.Id);
-                FoundVisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{selectedVisitor.Id}");
+                var FoundVisitor = visitors.First(v => v.Id == SelectedVisitor.Id);
+                FoundVisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{SelectedVisitor.Id}");
                 StateHasChanged();
             }
             catch (AccessTokenNotAvailableException exception)
@@ -102,7 +102,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         
         protected async Task VisitorArrived(Visitor visitorThatArrived, bool overRide)
         {
-            selectedVisitor = null;
+            SelectedVisitor = null;
             showDialogArrived = false;
             if (visitorThatArrived.ArrivalTime == null || overRide == true)
             {
@@ -127,13 +127,13 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             }
             else
             {
-                selectedVisitor = visitorThatArrived;
+                SelectedVisitor = visitorThatArrived;
                 showDialogArrived = true;
             }
         }
         protected async Task VisitorDeparted(Visitor visitorThatDeparted, bool overRide)
         {
-            selectedVisitor = null;
+            SelectedVisitor = null;
             showDialogDeparted = false;
             if (visitorThatDeparted.DepartureTime == null || overRide == true)
             {
@@ -157,7 +157,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             }
             else
             {
-                selectedVisitor = visitorThatDeparted;
+                SelectedVisitor = visitorThatDeparted;
                 showDialogDeparted = true;
             }
         }
