@@ -16,81 +16,30 @@ using VisitorRegistrationV2.Blazor.Shared;
 
 namespace VisitorRegistrationV2.Blazor.Client.Pages
 {
-    public class VisitorOverviewModel : VisitorOverviewBaseModel
+    public class VisitorOverviewModel : VisitorOverviewPageModel
     {
         protected Visitor SelectedVisitor { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            hubConnection = new HubConnectionBuilder()
-                    .WithUrl(NavManager.ToAbsoluteUri("/visitorhub"))
-                    .Build();
-
-            hubConnection.On("ReceiveMessage", () =>
+            hubConnection.On<int>("UpdateNotification", async (visitorId) =>
             {
-                CallGetUpdatedUser();
+                var visitorToUpdate = await crudCommands.GetUpdatedUser(visitorId);
+                var foundVisitor = visitors.First(v => v.Id == visitorId);
+                foundVisitor = visitorToUpdate;
                 StateHasChanged();
             });
 
-            hubConnection.On<int>("ReceiveAddedUser", (VisitorId) =>
+            hubConnection.On<int>("ReceiveAddedUser",async (VisitorId) =>
             {
-                 CallGetAddedUserAndAddToList(VisitorId);
-                 StateHasChanged();
-            });
-
-            await hubConnection.StartAsync();
-
-            await LoadData();
-        }
-
-        protected void CallGetAddedUserAndAddToList(int VisitorId)
-        {
-            Task.Run(async () =>
-            {
-                await GetAddedUserAndAddToList(VisitorId);
-            });
-        }
-
-        protected async Task GetAddedUserAndAddToList(int VisitorId)
-        {
-            var newvisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{VisitorId}");
-            visitors.Add(newvisitor);
-            StateHasChanged();
-        }
-
-        protected void CallGetUpdatedUser()
-        {
-            Task.Run(async () =>
-            {
-                await LoadData();
-            });
-        }
-
-        protected async Task GetUpdatedUser()
-        {
-            try
-            {
-                var FoundVisitor = visitors.First(v => v.Id == SelectedVisitor.Id);
-                FoundVisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{SelectedVisitor.Id}");
+                var visitorToAdd = await crudCommands.GetUpdatedUser(VisitorId);
+                visitors.Add(visitorToAdd);
                 StateHasChanged();
-            }
-            catch (AccessTokenNotAvailableException exception)
-            {
-                exception.Redirect();
-            }
-        }
+            });
 
-        protected async Task LoadData()
-        {
-            try
-            {
-                visitors = await Http.GetFromJsonAsync<List<Visitor>>("api/Visitor");
-                StateHasChanged();
-            }
-            catch (AccessTokenNotAvailableException exception)
-            {
-                exception.Redirect();
-            }
+            await SignalRCommands.StartHubConnection();
+
+            visitors = await crudCommands.LoadVisitorOverViewItems();
         }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
@@ -108,23 +57,8 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             {
                 visitorThatArrived.ArrivalTime = DateTime.Now;
                 visitorThatArrived.DepartureTime = null;
-
-               using var response = await Http.PutAsJsonAsync($"api/visitor/{visitorThatArrived.Id}", visitorThatArrived);
-               {
-                    showDialogArrived = false;
-
-                    if (IsConnected)
-                    {
-                        Message = ResponseManager.GetMessage(response);
-
-                        await SendUpdate();
-                        await delayMessageReset();
-                    }
-                    else
-                    {
-                        Message = "No Connection";
-                    }
-                }
+                showDialogArrived = false;
+                Message = await crudCommands.VisitorArrived(visitorThatArrived);
             }
             else
             {
@@ -139,22 +73,8 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             if (visitorThatDeparted.DepartureTime == null || overRide == true)
             {
                 visitorThatDeparted.DepartureTime = DateTime.Now;
-                using var response = await Http.PutAsJsonAsync($"api/visitor/{visitorThatDeparted.Id}", visitorThatDeparted);
-                {
-                    showDialogDeparted = false;
-
-                    if (IsConnected)
-                    {
-                        Message = ResponseManager.GetMessage(response);
-
-                        await SendUpdate();
-                        await delayMessageReset();
-                    }
-                    else
-                    {
-                        Message = "No Connection";
-                    } 
-                }
+                showDialogArrived = false;
+                Message = await crudCommands.VisitorDeparted(visitorThatDeparted);
             }
             else
             {
@@ -166,13 +86,6 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         protected void RedirectToCreatePage()
         {
             NavManager.NavigateTo("/Create");
-        }
-
-        Task SendUpdate() => hubConnection.SendAsync("SendUpdateNotification");
-
-        protected void Dispose()
-        {
-            _ = hubConnection.DisposeAsync();
         }
     }
 }

@@ -7,7 +7,7 @@ using VisitorRegistrationV2.Blazor.Shared;
 
 namespace VisitorRegistrationV2.Blazor.Client.PageModels
 {
-    public class VisitorCreateBaseModel : PageBaseModel
+    public class VisitorCreatePageModel : PageModel
     {
     }
 }
