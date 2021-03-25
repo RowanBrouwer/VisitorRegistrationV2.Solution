@@ -28,9 +28,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             Visitor AddedVisitor;
             using var response = await Http.PostAsJsonAsync("api/Visitor", visitor);
             {
-                var MessageInfo = ResponseManager.GetMessage(response);
-                Message = MessageInfo.Item1;
-                MessageColor = MessageInfo.Item2;
+                Message = ResponseManager.GetMessage(response);
 
                 AddedVisitor = await response.Content.ReadFromJsonAsync<Visitor>();
                 if (IsConnected)
