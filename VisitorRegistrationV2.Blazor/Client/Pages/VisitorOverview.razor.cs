@@ -34,7 +34,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 
             hubConnection.On<int>("ReceiveAddedUser", (VisitorId) =>
             {
-                CallUpdateToGetAddedUser(VisitorId);
+                 CallGetAddedUserAndAddToList(VisitorId);
                  StateHasChanged();
             });
 
@@ -43,7 +43,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             await LoadData();
         }
 
-        protected void CallUpdateToGetAddedUser(int VisitorId)
+        protected void CallGetAddedUserAndAddToList(int VisitorId)
         {
             Task.Run(async () =>
             {
