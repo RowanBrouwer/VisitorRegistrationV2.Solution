@@ -19,6 +19,7 @@ namespace VisitorRegistrationV2.Blazor.Client.PageModels
         [Inject]
         protected IMessageResponse ResponseManager { get; set; }
         protected string Message { get; set; }
+        protected string MessageColor { get; set; }
 
         private Timer _delayTimer;
 

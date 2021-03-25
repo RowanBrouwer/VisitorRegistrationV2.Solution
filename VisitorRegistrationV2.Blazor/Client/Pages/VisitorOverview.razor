@@ -2,7 +2,7 @@
 @inherits VisitorOverviewModel
 
 
-<div class="text-left bg-blue-100" style="padding-bottom:4em">
+<div class="text-left bg-blue-100" style="padding-bottom:4em"> Search by name :
     <input class="border-dark" @bind-value="SearchTerm" @bind-value:event="oninput" />
 </div>
 
@@ -11,27 +11,27 @@
     <div class="row">
         <div class="col-lg-5">
             <div class="row">
-                <div class="col border border-dark col-sm-4">
+                <div class="col border border-dark col-4">
                     Full name
                 </div>
-                <div class="col border border-dark col-sm-2">
+                <div class="col border border-dark col-2">
                     Arrival time
                 </div>
-                <div class="col border border-dark col-sm-3">
+                <div class="col border border-dark col-3">
                     Arrived
                 </div>
-                <div class="col border border-dark col-sm-3">
+                <div class="col border border-dark col-3">
                     Departure
                 </div>
             </div>
             @foreach (var visitor in filterdPresentVisitors)
             {
                 <div class="row">
-                    <div class="col border border-dark col-sm-4">
+                    <div class="col border border-dark col-4">
                         @visitor.FullName()
                     </div>
-                    <div class="col border border-dark col-sm-2">
-                        @if (visitor.ArrivalTime != null)
+                    <div class="col border border-dark col-2">
+                        @if (visitor.ArrivalTime != null && visitor.ArrivalTime == DateTime.Today)
                         {
                             @(((DateTime)visitor.ArrivalTime).ToString("T"))
                         }
@@ -40,26 +40,26 @@
                             @visitor.ArrivalTime
                         }
                     </div>
-                    <button type="button" @onclick="@(() => VisitorArrived(visitor, false))" class="col border border-dark col-sm-3 btn-success">Arrived</button>
-                    <button type="button" @onclick="@(() => VisitorDeparted(visitor, false))" class="col border border-dark col-sm-3 btn-danger">Departure</button>
+                    <button type="button" @onclick="@(() => VisitorArrived(visitor, false))" class="col border border-dark col-3 btn-success">Arrived</button>
+                    <button type="button" @onclick="@(() => VisitorDeparted(visitor, false))" class="col border border-dark col-3 btn-danger">Departure</button>
                 </div>
             }
         </div>
         <div class="col-lg-7">
             <div class="row">
-                <div class="col border border-dark col-sm-4">
+                <div class="col border border-dark col-4">
                     Full name
                 </div>
-                <div class="col border border-dark col-sm-2">
+                <div class="col border border-dark col-2">
                     Arrival time
                 </div>
-                <div class="col border border-dark col-sm-2">
+                <div class="col border border-dark col-2">
                     Departure time
                 </div>
-                <div class="col border border-dark col-sm-2">
+                <div class="col border border-dark col-2">
                     Arrived
                 </div>
-                <div class="col border border-dark col-sm-2">
+                <div class="col border border-dark col-2">
                     Departure
                 </div>
             </div>
@@ -97,15 +97,15 @@
         <div class="row">
             @if (showDialogArrived)
             {
-                <div class="col border border-dark col-auto">Want to override this time? </div>
-                <button class="col border border-dark col-auto btn-success" type="button" @onclick="@(() => VisitorArrived(selectedVisitor, true))">Yes</button>
-                <button class="col border border-dark col-auto btn-danger" type="button" @onclick="@(() => showDialogArrived = false)">No</button>
+                <div class="col col-4 border border-dark col-auto">Want to override this time? </div>
+                <button class="col col-4 border border-dark col-auto btn-success" type="button" @onclick="@(() => VisitorArrived(selectedVisitor, true))">Yes</button>
+                <button class="col col-4 border border-dark col-auto btn-danger" type="button" @onclick="@(() => showDialogArrived = false)">No</button>
             }
             @if (showDialogDeparted)
             {
-                <div class="col border border-dark col-auto">Want to override this time? </div>
-                <button class="col border border-dark col-auto btn-success" type="button" @onclick="@(() => VisitorDeparted(selectedVisitor, true))">Yes</button>
-                <button class="col border border-dark col-auto btn-danger" type="button" @onclick="@(() => showDialogDeparted = false)">No</button>
+                <div class="col col-4 border border-dark col-auto">Want to override this time? </div>
+                <button class="col col-4 border border-dark col-auto btn-success" type="button" @onclick="@(() => VisitorDeparted(selectedVisitor, true))">Yes</button>
+                <button class="col col-4 border border-dark col-auto btn-danger" type="button" @onclick="@(() => showDialogDeparted = false)">No</button>
             }
         </div>
     </div>
@@ -117,5 +117,5 @@
 
 @if (!string.IsNullOrEmpty(Message))
 {
-    <div class="alert alert-info">@Message</div>
+    <span class="alert alert-info">@Message</span>
 }

@@ -114,7 +114,10 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 
                     if (IsConnected)
                     {
-                        Message = ResponseManager.GetMessage(response);
+                        var MessageInfo = ResponseManager.GetMessage(response);
+                        Message = MessageInfo.Item1;
+                        MessageColor = MessageInfo.Item2;
+
                         await SendUpdate();
                         await delayMessageReset();
                     }
@@ -143,7 +146,10 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 
                     if (IsConnected)
                     {
-                        Message = ResponseManager.GetMessage(response);
+                        var MessageInfo = ResponseManager.GetMessage(response);
+                        Message = MessageInfo.Item1;
+                        MessageColor = MessageInfo.Item2;
+
                         await SendUpdate();
                         await delayMessageReset();
                     }

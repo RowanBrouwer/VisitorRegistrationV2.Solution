@@ -14,21 +14,21 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices.IMessageResponse
             switch (response.StatusCode)
             {
                 case HttpStatusCode.OK:
-                    return "Action succesfull!";
+                    return ("Action succesfull!");
                 case HttpStatusCode.NoContent:
-                    return "Action succesfull!";
+                    return ("Action succesfull!");
                 case HttpStatusCode.InternalServerError:
-                    return "Oops something went wrong with the server!";
+                    return ("Oops something went wrong with the server!");
                 case HttpStatusCode.NotFound:
-                    return "The requested resource was not found.";
+                    return ("The requested resource was not found.");
                 case HttpStatusCode.Conflict:
-                    return "The requested action has caused a conflict on the server.";
+                    return ("The requested action has caused a conflict on the server.");
                 case HttpStatusCode.BadRequest:
-                    return "Bad Request";
+                    return ("Bad Request");
                 case HttpStatusCode.Accepted:
-                    return "The requested action has been accepted";
+                    return ("The requested action has been accepted");
                 default:
-                    return "";
+                    return ("");
             }
         }
     }
