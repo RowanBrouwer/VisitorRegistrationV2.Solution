@@ -47,11 +47,11 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         {
             Task.Run(async () =>
             {
-                await UpdateToGetAddedUser(VisitorId);
+                await GetAddedUserAndAddToList(VisitorId);
             });
         }
 
-        protected async Task UpdateToGetAddedUser(int VisitorId)
+        protected async Task GetAddedUserAndAddToList(int VisitorId)
         {
             var newvisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{VisitorId}");
             visitors.Add(newvisitor);
