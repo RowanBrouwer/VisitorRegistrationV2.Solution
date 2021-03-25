@@ -107,6 +107,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             if (visitorThatArrived.ArrivalTime == null || overRide == true)
             {
                 visitorThatArrived.ArrivalTime = DateTime.Now;
+                visitorThatArrived.DepartureTime = null;
 
                using var response = await Http.PutAsJsonAsync($"api/visitor/{visitorThatArrived.Id}", visitorThatArrived);
                {

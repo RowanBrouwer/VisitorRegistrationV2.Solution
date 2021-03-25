@@ -11,6 +11,9 @@
     <div class="row">
         <div class="col-lg-5">
             <div class="row">
+                <div class="col col-12 border border-dark bg-dark text-white">Present</div>
+            </div>
+            <div class="row">
                 <div class="col border border-dark col-4">
                     Full name
                 </div>
@@ -31,7 +34,7 @@
                         @visitor.FullName()
                     </div>
                     <div class="col border border-dark col-2">
-                        @if (visitor.ArrivalTime != null && visitor.ArrivalTime == DateTime.Today)
+                        @if (visitor.ArrivalTime != null && visitor.ArrivalTime.Value.Date == DateTime.Today)
                         {
                             @(((DateTime)visitor.ArrivalTime).ToString("T"))
                         }
@@ -47,21 +50,24 @@
         </div>
         <div class="col-lg-7">
             <div class="row">
-                <div class="col border border-dark col-4">
-                    Full name
-                </div>
-                <div class="col border border-dark col-2">
-                    Arrival time
-                </div>
-                <div class="col border border-dark col-2">
-                    Departure time
-                </div>
-                <div class="col border border-dark col-2">
-                    Arrived
-                </div>
-                <div class="col border border-dark col-2">
-                    Departure
-                </div>
+                <div class="col col-12 border border-dark bg-dark text-white"> Not present</div>
+            </div>
+                <div class="row">
+                    <div class="col border border-dark col-4">
+                        Full name
+                    </div>
+                    <div class="col border border-dark col-2">
+                        Arrival time
+                    </div>
+                    <div class="col border border-dark col-2">
+                        Departure time
+                    </div>
+                    <div class="col border border-dark col-2">
+                        Arrived
+                    </div>
+                    <div class="col border border-dark col-2">
+                        Departure
+                    </div>
             </div>
             @foreach (var visitor in filterdNotPresentVisitors)
             {
@@ -70,7 +76,7 @@
                         @visitor.FullName()
                     </div>
                     <div class="col border border-dark col-sm-2">
-                        @if (visitor.ArrivalTime != null)
+                        @if (visitor.ArrivalTime != null && visitor.ArrivalTime.Value.Date == DateTime.Today)
                         {
                             @(((DateTime)visitor.ArrivalTime).ToString("T"))
                         }
@@ -80,7 +86,7 @@
                         }
                     </div>
                     <div class="col border border-dark col-sm-2">
-                        @if (visitor.DepartureTime != null)
+                        @if (visitor.DepartureTime != null && visitor.DepartureTime.Value.Date == DateTime.Today)
                         {
                             @(((DateTime)visitor.DepartureTime).ToString("T"))
                         }
@@ -94,28 +100,29 @@
                 </div>
             }
         </div>
-        <div class="row">
-            @if (showDialogArrived)
-            {
-                <div class="col col-4 border border-dark col-auto">Want to override this time? </div>
-                <button class="col col-4 border border-dark col-auto btn-success" type="button" @onclick="@(() => VisitorArrived(SelectedVisitor, true))">Yes</button>
-                <button class="col col-4 border border-dark col-auto btn-danger" type="button" @onclick="@(() => showDialogArrived = false)">No</button>
-            }
-            @if (showDialogDeparted)
-            {
-                <div class="col col-4 border border-dark col-auto">Want to override this time? </div>
-                <button class="col col-4 border border-dark col-auto btn-success" type="button" @onclick="@(() => VisitorDeparted(SelectedVisitor, true))">Yes</button>
-                <button class="col col-4 border border-dark col-auto btn-danger" type="button" @onclick="@(() => showDialogDeparted = false)">No</button>
-            }
-        </div>
+    </div>
+    <br />
+    <div class="row">
+        @if (showDialogArrived)
+        {
+            <div class="col col-2 border border-dark col-auto">Want to override this time? </div>
+            <button class="col col-5 border border-dark col-auto btn-success" type="button" @onclick="@(() => VisitorArrived(SelectedVisitor, true))">Yes</button>
+            <button class="col col-5 border border-dark col-auto btn-danger" type="button" @onclick="@(() => showDialogArrived = false)">No</button>
+        }
+        @if (showDialogDeparted)
+        {
+            <div class="col col-2 border border-dark col-auto">Want to override this time? </div>
+            <button class="col col-5 border border-dark col-auto btn-success" type="button" @onclick="@(() => VisitorDeparted(SelectedVisitor, true))">Yes</button>
+            <button class="col col-5 border border-dark col-auto btn-danger" type="button" @onclick="@(() => showDialogDeparted = false)">No</button>
+        }
     </div>
 </div>
-
+<br />
 <div>
     <button @onclick="@(() => RedirectToCreatePage())">Add visitor</button>
 </div>
-
+<br />
 @if (!string.IsNullOrEmpty(Message))
 {
-    <span class="alert alert-info">@Message</span>
+    <span class="alert alert-info" style="padding:10px,17px,12px,8px">@Message</span>
 }

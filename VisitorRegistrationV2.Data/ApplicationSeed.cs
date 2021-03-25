@@ -38,7 +38,7 @@ namespace VisitorRegistrationV2.Data
                 var timespan2 = new TimeSpan(4, 15, 31);
                 var timespan3 = new TimeSpan(1, 0, 50);
                 var timespan4 = new TimeSpan(5, 45, 9);
-                var timespan5 = new TimeSpan(10, 32, 19);
+                var timespan5 = new TimeSpan(1, 10, 32, 19);
 
                 List<Visitor> visitors = new List<Visitor>()
                 {
