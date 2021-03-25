@@ -9,9 +9,9 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-auto">
             <div class="row">
-                <div class="col col-12 border border-dark bg-dark text-white">Present</div>
+                <div class="col border border-dark bg-dark text-white">Present</div>
             </div>
             <div class="row">
                 <div class="col border border-dark col-4">
@@ -36,11 +36,11 @@
                     <div class="col border border-dark col-2">
                         @if (visitor.ArrivalTime != null && visitor.ArrivalTime.Value.Date == DateTime.Today)
                         {
-                            @(((DateTime)visitor.ArrivalTime).ToString("T"))
+                            @(((DateTime)visitor.ArrivalTime).ToString("t"))
                         }
                         else
                         {
-                            @visitor.ArrivalTime
+                            @(((DateTime)visitor.ArrivalTime).ToString("g"))
                         }
                     </div>
                     <button type="button" @onclick="@(() => VisitorArrived(visitor, false))" class="col border border-dark col-3 btn-success">Arrived</button>
@@ -48,55 +48,57 @@
                 </div>
             }
         </div>
-        <div class="col-lg-7">
+        <br />
+        <br />
+        <div class="col-auto">
             <div class="row">
                 <div class="col col-12 border border-dark bg-dark text-white"> Not present</div>
             </div>
-                <div class="row">
-                    <div class="col border border-dark col-4">
-                        Full name
-                    </div>
-                    <div class="col border border-dark col-2">
-                        Arrival time
-                    </div>
-                    <div class="col border border-dark col-2">
-                        Departure time
-                    </div>
-                    <div class="col border border-dark col-2">
-                        Arrived
-                    </div>
-                    <div class="col border border-dark col-2">
-                        Departure
-                    </div>
+            <div class="row">
+                <div class="col border border-dark col-4">
+                    Full name
+                </div>
+                <div class="col border border-dark col-2">
+                    Arrival time
+                </div>
+                <div class="col border border-dark col-2">
+                    Departure time
+                </div>
+                <div class="col border border-dark col-2">
+                    Arrived
+                </div>
+                <div class="col border border-dark col-2">
+                    Departure
+                </div>
             </div>
             @foreach (var visitor in filterdNotPresentVisitors)
             {
                 <div class="row">
-                    <div class="col border border-dark col-sm-4">
+                    <div class="col border border-dark col-4">
                         @visitor.FullName()
                     </div>
-                    <div class="col border border-dark col-sm-2">
+                    <div class="col border border-dark col-2">
                         @if (visitor.ArrivalTime != null && visitor.ArrivalTime.Value.Date == DateTime.Today)
                         {
-                            @(((DateTime)visitor.ArrivalTime).ToString("T"))
+                            @(((DateTime)visitor.ArrivalTime).ToString("t"))
                         }
                         else
                         {
-                            @visitor.ArrivalTime
+                            @(((DateTime)visitor.ArrivalTime).ToString("g"))
                         }
                     </div>
-                    <div class="col border border-dark col-sm-2">
+                    <div class="col border border-dark col-2">
                         @if (visitor.DepartureTime != null && visitor.DepartureTime.Value.Date == DateTime.Today)
                         {
-                            @(((DateTime)visitor.DepartureTime).ToString("T"))
+                            @(((DateTime)visitor.DepartureTime).ToString("t"))
                         }
                         else
                         {
-                            @visitor.DepartureTime
+                            @(((DateTime)visitor.DepartureTime).ToString("g"))
                         }
                     </div>
-                    <button type="button" @onclick="@(() => VisitorArrived(visitor, false))" class="col border border-dark col-sm-2 btn-success">Arrived</button>
-                    <button type="button" @onclick="@(() => VisitorDeparted(visitor, false))" class="col border border-dark col-sm-2 btn-danger">Departure</button>
+                    <button type="button" @onclick="@(() => VisitorArrived(visitor, false))" class="col border border-dark col-2 btn-success">Arrived</button>
+                    <button type="button" @onclick="@(() => VisitorDeparted(visitor, false))" class="col border border-dark col-2 btn-danger">Departure</button>
                 </div>
             }
         </div>
