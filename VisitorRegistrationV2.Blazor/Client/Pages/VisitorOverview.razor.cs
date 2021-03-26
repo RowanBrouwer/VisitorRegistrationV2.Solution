@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System.Timers;
+using VisitorRegistrationV2.Blazor.Client.ClientServices;
 using VisitorRegistrationV2.Blazor.Client.PageModels;
 using VisitorRegistrationV2.Blazor.Shared;
 
@@ -22,51 +23,43 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            hubConnection.On("ReceiveMessage", () =>
-            {
-                CallGetUpdatedUser();
-                StateHasChanged();
-            });
-
-            hubConnection.On<int>("ReceiveAddedUser", (VisitorId) =>
-            {
-                 CallGetAddedUserAndAddToList(VisitorId);
-                 StateHasChanged();
-            });
+            SignalRService.NotifyOfUpdate += GetAddedUserAndAddToList().Wait;
+            SignalRService.NotifyOfUpdate += StateHasChanged;
+            SignalRService.NotifyOfAdded += GetUpdatedUser().Wait;
+            SignalRService.NotifyOfAdded += StateHasChanged;
 
             await LoadData();
         }
 
-        protected void CallGetAddedUserAndAddToList(int VisitorId)
+        protected async Task GetAddedUserAndAddToList()
         {
-            Task.Run(async () =>
+            try
             {
-                await GetAddedUserAndAddToList(VisitorId);
-            });
-        }
+                var newvisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{SignalRService.visitorId}");
+                visitors.Add(newvisitor);
 
-        protected async Task GetAddedUserAndAddToList(int VisitorId)
-        {
-            var newvisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{VisitorId}");
-            visitors.Add(newvisitor);
-            StateHasChanged();
-        }
-
-        protected void CallGetUpdatedUser()
-        {
-            Task.Run(async () =>
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+            }
+            catch (AccessTokenNotAvailableException exception)
             {
-                await LoadData();
-            });
+                exception.Redirect();
+            }
+            
         }
 
         protected async Task GetUpdatedUser()
         {
             try
             {
-                var FoundVisitor = visitors.First(v => v.Id == SelectedVisitor.Id);
-                FoundVisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{SelectedVisitor.Id}");
-                StateHasChanged();
+                var FoundVisitor = visitors.First(v => v.Id == SignalRService.visitorId);
+                FoundVisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{SignalRService.visitorId}");
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
             }
             catch (AccessTokenNotAvailableException exception)
             {
@@ -107,11 +100,11 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
                {
                     showDialogArrived = false;
 
-                    if (IsConnected)
+                    if (SignalRService.IsConnected)
                     {
                         Message = ResponseManager.GetMessage(response);
 
-                        await SendUpdate();
+                        await SignalRService.SendUpdateNotification(visitorThatArrived.Id);
                         await delayMessageReset();
                     }
                     else
@@ -137,11 +130,11 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
                 {
                     showDialogDeparted = false;
 
-                    if (IsConnected)
+                    if (SignalRService.IsConnected)
                     {
                         Message = ResponseManager.GetMessage(response);
 
-                        await SendUpdate();
+                        await SignalRService.SendUpdateNotification(visitorThatDeparted.Id);
                         await delayMessageReset();
                     }
                     else
@@ -160,13 +153,6 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         protected void RedirectToCreatePage()
         {
             NavManager.NavigateTo("/Create");
-        }
-
-        Task SendUpdate() => hubConnection.SendAsync("SendUpdateNotification");
-
-        protected void Dispose()
-        {
-            _ = hubConnection.DisposeAsync();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 {
     public class VisitorCreateModel : VisitorCreateBaseModel
     {
-        protected Visitor newVisitor; 
+        protected Visitor newVisitor;
 
         protected override async Task OnInitializedAsync()
         {
@@ -22,20 +22,24 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         protected async Task saveNewVisitor(Visitor visitor)
         {
             Visitor AddedVisitor;
-            using var response = await Http.PostAsJsonAsync("api/Visitor", visitor);
+            if (SignalRService.IsConnected)
             {
-                Message = ResponseManager.GetMessage(response);
-
-                AddedVisitor = await response.Content.ReadFromJsonAsync<Visitor>();
-                if (IsConnected)
+                using var response = await Http.PostAsJsonAsync("api/Visitor", visitor);
                 {
-                    await SendUpdate(AddedVisitor.Id);
-                }
-            }
-            NavigateToDetailPage(AddedVisitor.Id);
-        }
+                    Message = ResponseManager.GetMessage(response);
 
-        Task SendUpdate(int visitorId) => hubConnection.SendAsync("SendAddNotification", visitorId);
+                    AddedVisitor = await response.Content.ReadFromJsonAsync<Visitor>();
+
+                    await SignalRService.SendAddNotification(AddedVisitor.Id);
+
+                }
+                NavigateToDetailPage(AddedVisitor.Id);
+            }
+            else
+            {
+                Message = "No Connection";
+            }
+        }
 
         protected void NavigateToDetailPage(int id)
         {
@@ -45,10 +49,6 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         protected void CancelRedirect()
         {
             NavManager.NavigateTo("/");
-        }
-        protected void Dispose()
-        {
-            _ = hubConnection.DisposeAsync();
         }
     }
 }

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using VisitorRegistrationV2.Blazor.Client.ClientServices;
 using VisitorRegistrationV2.Blazor.Client.ClientServices.IMessageResponse;
 
 namespace VisitorRegistrationV2.Blazor.Client
@@ -24,25 +25,18 @@ namespace VisitorRegistrationV2.Blazor.Client
             builder.Services.AddHttpClient("VisitorRegistrationV2.Blazor.ServerAPI", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
+            builder.Services.AddApiAuthorization();
+
             // Supply HttpClient instances that include access tokens when making requests to the server project
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("VisitorRegistrationV2.Blazor.ServerAPI"));
 
             builder.Services.AddScoped<IMessageResponse, MessageResponse>();
 
-            builder.Services.AddApiAuthorization();
+            builder.Services.AddSingleton<SignalRService>();
 
-            builder.Services.AddScoped<HubConnection>();
+            
 
-            var host = builder.Build();
-
-            var navmanager = host.Services.GetRequiredService<NavigationManager>();
-
-            HubConnection hubconnection = new HubConnectionBuilder()
-                    .WithUrl(navmanager.ToAbsoluteUri("/visitorhub"))
-                    .Build();
-
-            await hubconnection.StartAsync();
-            await host.RunAsync();
+            await builder.Build().RunAsync();
         }
     }
 }

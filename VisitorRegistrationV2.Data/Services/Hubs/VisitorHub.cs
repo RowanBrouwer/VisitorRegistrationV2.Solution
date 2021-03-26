@@ -10,14 +10,14 @@ namespace VisitorRegistrationV2.Data.Services.Hubs
 {
     public class VisitorHub : Hub
     {
-        public async Task SendUpdateNotification()
+        public async Task SendUpdateNotification(int visitorId)
         {
-            await Clients.All.SendAsync("ReceiveMessage");
+            await Clients.All.SendAsync("ReceiveUpdateNotification", visitorId);
         }
 
         public async Task SendAddNotification(int VisitorId)
         {
-            await Clients.All.SendAsync("ReceiveAddedUser", VisitorId);
+            await Clients.All.SendAsync("ReceiveAddedUserNotification", VisitorId);
         }
     }
 }
