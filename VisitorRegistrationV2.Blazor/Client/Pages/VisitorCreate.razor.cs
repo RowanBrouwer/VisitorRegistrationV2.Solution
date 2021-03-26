@@ -12,15 +12,11 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 {
     public class VisitorCreateModel : VisitorCreateBaseModel
     {
-        protected Visitor newVisitor = new Visitor();
+        protected Visitor newVisitor; 
 
         protected override async Task OnInitializedAsync()
         {
-            hubConnection = new HubConnectionBuilder()
-                    .WithUrl(NavManager.ToAbsoluteUri("/visitorhub"))
-                    .Build();
-
-            await hubConnection.StartAsync();
+            await Task.FromResult(newVisitor = new Visitor());
         }
 
         protected async Task saveNewVisitor(Visitor visitor)

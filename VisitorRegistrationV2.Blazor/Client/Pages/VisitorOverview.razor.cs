@@ -22,10 +22,6 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            hubConnection = new HubConnectionBuilder()
-                    .WithUrl(NavManager.ToAbsoluteUri("/visitorhub"))
-                    .Build();
-
             hubConnection.On("ReceiveMessage", () =>
             {
                 CallGetUpdatedUser();
@@ -37,8 +33,6 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
                  CallGetAddedUserAndAddToList(VisitorId);
                  StateHasChanged();
             });
-
-            await hubConnection.StartAsync();
 
             await LoadData();
         }

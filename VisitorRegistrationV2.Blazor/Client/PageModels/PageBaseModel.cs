@@ -18,11 +18,11 @@ namespace VisitorRegistrationV2.Blazor.Client.PageModels
         protected NavigationManager NavManager { get; set; }
         [Inject]
         protected IMessageResponse ResponseManager { get; set; }
+        [Inject]
+        protected HubConnection hubConnection { get; set; }
         protected string Message { get; set; }
 
         private Timer _delayTimer;
-
-        protected HubConnection hubConnection;
         protected bool IsConnected =>
         hubConnection.State == HubConnectionState.Connected;
 

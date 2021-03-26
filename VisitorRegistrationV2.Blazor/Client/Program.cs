@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -24,10 +26,23 @@ namespace VisitorRegistrationV2.Blazor.Client
 
             // Supply HttpClient instances that include access tokens when making requests to the server project
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("VisitorRegistrationV2.Blazor.ServerAPI"));
+
             builder.Services.AddScoped<IMessageResponse, MessageResponse>();
+
             builder.Services.AddApiAuthorization();
 
-            await builder.Build().RunAsync();
+            builder.Services.AddScoped<HubConnection>();
+
+            var host = builder.Build();
+
+            var navmanager = host.Services.GetRequiredService<NavigationManager>();
+
+            HubConnection hubconnection = new HubConnectionBuilder()
+                    .WithUrl(navmanager.ToAbsoluteUri("/visitorhub"))
+                    .Build();
+
+            await hubconnection.StartAsync();
+            await host.RunAsync();
         }
     }
 }
