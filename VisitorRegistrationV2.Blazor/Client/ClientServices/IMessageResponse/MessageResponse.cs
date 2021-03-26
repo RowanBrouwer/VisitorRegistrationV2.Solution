@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace VisitorRegistrationV2.Blazor.Client.ClientServices.IMessageResponseFolder
+namespace VisitorRegistrationV2.Blazor.Client.ClientServices.IMessageResponse
 {
     public class MessageResponse : IMessageResponse
     {

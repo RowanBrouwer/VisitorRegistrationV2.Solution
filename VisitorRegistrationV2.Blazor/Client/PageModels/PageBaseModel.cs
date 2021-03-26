@@ -6,13 +6,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Timers;
-using VisitorRegistrationV2.Blazor.Client.ClientServices.IHttpCommandsFolder;
-using VisitorRegistrationV2.Blazor.Client.ClientServices.IMessageResponseFolder;
-using VisitorRegistrationV2.Blazor.Client.ClientServices.ISignalRCommandsFolder;
+using VisitorRegistrationV2.Blazor.Client.ClientServices.IMessageResponse;
 
 namespace VisitorRegistrationV2.Blazor.Client.PageModels
 {
-    public class PageModel : ComponentBase
+    public class PageBaseModel : ComponentBase
     {
         [Inject]
         protected HttpClient Http { get; set; }
@@ -20,16 +18,13 @@ namespace VisitorRegistrationV2.Blazor.Client.PageModels
         protected NavigationManager NavManager { get; set; }
         [Inject]
         protected IMessageResponse ResponseManager { get; set; }
-        [Inject]
-        protected HubConnection hubConnection { get; set; }
-        [Inject]
-        protected ICrudCommands crudCommands { get; set; }
-        [Inject]
-        protected ISignalRCommands SignalRCommands { get; set; }
-
         protected string Message { get; set; }
 
         private Timer _delayTimer;
+
+        protected HubConnection hubConnection;
+        protected bool IsConnected =>
+        hubConnection.State == HubConnectionState.Connected;
 
         protected void MessageDisposal()
         {

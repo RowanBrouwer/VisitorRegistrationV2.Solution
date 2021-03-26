@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -9,9 +8,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using VisitorRegistrationV2.Blazor.Client.ClientServices.IHttpCommandsFolder;
-using VisitorRegistrationV2.Blazor.Client.ClientServices.IMessageResponseFolder;
-using VisitorRegistrationV2.Blazor.Client.ClientServices.ISignalRCommandsFolder;
+using VisitorRegistrationV2.Blazor.Client.ClientServices.IMessageResponse;
 
 namespace VisitorRegistrationV2.Blazor.Client
 {
@@ -29,15 +26,6 @@ namespace VisitorRegistrationV2.Blazor.Client
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("VisitorRegistrationV2.Blazor.ServerAPI"));
             builder.Services.AddScoped<IMessageResponse, MessageResponse>();
             builder.Services.AddApiAuthorization();
-
-            builder.Services.AddScoped(sr => new HubConnectionBuilder()
-                    .WithUrl(("https://localhost:44348/visitorhub"))
-                    .Build());
-
-            builder.Services.AddScoped<ICrudCommands, CrudCommands>();
-            builder.Services.AddScoped<ISignalRCommands, SignalRCommands>();
-
-            
 
             await builder.Build().RunAsync();
         }
