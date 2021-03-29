@@ -12,12 +12,11 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 {
     public class VisitorCreateModel : VisitorCreateBaseModel
     {
-        protected Visitor newVisitor;
+        protected Visitor newVisitor = new();
 
-        protected override async Task OnInitializedAsync()
-        {
-            await Task.FromResult(newVisitor = new Visitor());
-        }
+        //protected override async Task OnInitializedAsync()
+        //{
+        //}
 
         protected async Task saveNewVisitor(Visitor visitor)
         {
@@ -31,7 +30,6 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
                     AddedVisitor = await response.Content.ReadFromJsonAsync<Visitor>();
 
                     await SignalRService.SendAddNotification(AddedVisitor.Id);
-
                 }
                 NavigateToDetailPage(AddedVisitor.Id);
             }

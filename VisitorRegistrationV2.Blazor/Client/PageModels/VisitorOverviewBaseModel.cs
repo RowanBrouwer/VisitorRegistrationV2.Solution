@@ -22,8 +22,9 @@ namespace VisitorRegistrationV2.Blazor.Client.PageModels
             .ToLower().Contains(SearchTerm.ToLower()));
         protected IEnumerable<Visitor> filterdNotPresentVisitors => visitors
             .OrderBy(v => v.ArrivalTime)
-            .Where(a => a.ArrivalTime == null 
-            || a.DepartureTime != null && a.FullName()
+            .Where(a => a.ArrivalTime == null ?
+            a.ArrivalTime == null && a.DepartureTime == null || a.DepartureTime != null : 
+            a.ArrivalTime != null && a.DepartureTime != null && a.FullName()
             .ToLower().Contains(SearchTerm.ToLower()));
     }
 }

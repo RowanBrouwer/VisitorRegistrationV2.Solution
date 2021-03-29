@@ -50,22 +50,28 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             try
             { 
                 var newvisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{visitorId}");
+
                 visitors.Add(newvisitor);
+
                 StateHasChanged();
             }
             catch (AccessTokenNotAvailableException exception)
             {
                 exception.Redirect();
-            };
+            }
         }
 
         protected async Task GetUpdatedUser(int visitorId)
         {
             try
             {
-                var FoundVisitor = visitors.First(v => v.Id == visitorId);
-                FoundVisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{visitorId}");
-                base.StateHasChanged();
+                var FoundVisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{visitorId}");
+                int index = visitors.FindIndex(v => v.Id == visitorId);
+
+                if (index >= 0)
+                visitors[index] = FoundVisitor;
+
+                StateHasChanged();
             }
             catch (AccessTokenNotAvailableException exception)
             {
