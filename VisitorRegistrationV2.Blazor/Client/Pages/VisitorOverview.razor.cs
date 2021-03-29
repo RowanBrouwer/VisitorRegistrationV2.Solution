@@ -23,46 +23,54 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            SignalRService.NotifyOfUpdate += GetAddedUserAndAddToList().Wait;
-            SignalRService.NotifyOfAdded += GetUpdatedUser().Wait;
+            SignalRService.NotifyOfUpdate += onNotifyOfUpdate;
+            SignalRService.NotifyOfAdded += onNotifyOfAdded; 
 
             await LoadData();
         }
 
-        protected async Task GetAddedUserAndAddToList()
+        protected async Task Refresh()
         {
-            try
-            {
-                var newvisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{SignalRService.visitorId}");
-                visitors.Add(newvisitor);
-            }
-            catch (AccessTokenNotAvailableException exception)
-            {
-                exception.Redirect();
-            }
-
-            await InvokeAsync(() =>
-            {
-                StateHasChanged();
-            });
+            await InvokeAsync(StateHasChanged);
         }
 
-        protected async Task GetUpdatedUser()
+        public void onNotifyOfUpdate(int visitorId)
+        {
+            Task.Run(async () => await GetUpdatedUser(visitorId));
+            StateHasChanged();
+        }
+        public void onNotifyOfAdded(int visitorId)
+        {
+            Task.Run(async () => await GetAddedUserAndAddToList(visitorId));
+            StateHasChanged();
+        }
+
+        protected async Task GetAddedUserAndAddToList(int visitorId)
+        {
+            try
+            { 
+                var newvisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{visitorId}");
+                visitors.Add(newvisitor);
+                StateHasChanged();
+            }
+            catch (AccessTokenNotAvailableException exception)
+            {
+                exception.Redirect();
+            };
+        }
+
+        protected async Task GetUpdatedUser(int visitorId)
         {
             try
             {
-                var FoundVisitor = visitors.First(v => v.Id == SignalRService.visitorId);
-                FoundVisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{SignalRService.visitorId}");
+                var FoundVisitor = visitors.First(v => v.Id == visitorId);
+                FoundVisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{visitorId}");
+                base.StateHasChanged();
             }
             catch (AccessTokenNotAvailableException exception)
             {
                 exception.Redirect();
             }
-
-            await InvokeAsync(() =>
-            {
-                StateHasChanged();
-            });
         }
 
         protected async Task LoadData()
@@ -70,7 +78,6 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             try
             {
                 visitors = await Http.GetFromJsonAsync<List<Visitor>>("api/Visitor");
-                StateHasChanged();
             }
             catch (AccessTokenNotAvailableException exception)
             {
@@ -80,7 +87,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            builder.OpenElement(4, "input");
+            builder.OpenElement(6, "input");
             builder.AddAttribute(7, "value", BindConverter.FormatValue(SearchTerm));
             builder.AddAttribute(8, "oninput", EventCallback.Factory.CreateBinder(this, __value => SearchTerm = __value, SearchTerm));
         }
@@ -152,6 +159,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         {
             NavManager.NavigateTo("/Create");
         }
+
     }
 }
 
