@@ -78,6 +78,8 @@
                         @visitor.FullName()
                     </div>
                     <div class="col border border-dark col-2">
+                        @if (visitor.ArrivalTime != null)
+                        {
                         @if (visitor.ArrivalTime != null && visitor.ArrivalTime.Value.Date == DateTime.Today)
                         {
                             @(((DateTime)visitor.ArrivalTime).ToString("t"))
@@ -86,8 +88,15 @@
                         {
                             @(((DateTime)visitor.ArrivalTime).ToString("g"))
                         }
+                        }
+                        else
+                        {
+                            @visitor.ArrivalTime
+                        }
                     </div>
                     <div class="col border border-dark col-2">
+                        @if (visitor.DepartureTime != null)
+                        {
                         @if (visitor.DepartureTime != null && visitor.DepartureTime.Value.Date == DateTime.Today)
                         {
                             @(((DateTime)visitor.DepartureTime).ToString("t"))
@@ -95,6 +104,11 @@
                         else
                         {
                             @(((DateTime)visitor.DepartureTime).ToString("g"))
+                        }
+                        }
+                        else
+                        {
+                            @visitor.DepartureTime
                         }
                     </div>
                     <button type="button" @onclick="@(() => VisitorArrived(visitor, false))" class="col border border-dark col-2 btn-success">Arrived</button>

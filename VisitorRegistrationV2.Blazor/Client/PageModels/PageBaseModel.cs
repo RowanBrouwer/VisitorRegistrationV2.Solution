@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using VisitorRegistrationV2.Blazor.Client.ClientServices;
 using VisitorRegistrationV2.Blazor.Client.ClientServices.IMessageResponse;
+using VisitorRegistrationV2.Blazor.Shared;
 
 namespace VisitorRegistrationV2.Blazor.Client.PageModels
 {
@@ -24,7 +25,6 @@ namespace VisitorRegistrationV2.Blazor.Client.PageModels
         protected string Message { get; set; }
 
         private Timer _delayTimer;
-
         protected void MessageDisposal()
         {
             Message = null;

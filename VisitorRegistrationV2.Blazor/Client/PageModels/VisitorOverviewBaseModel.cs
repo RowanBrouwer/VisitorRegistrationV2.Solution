@@ -17,14 +17,13 @@ namespace VisitorRegistrationV2.Blazor.Client.PageModels
         protected List<Visitor> visitors { get; set; } = new List<Visitor>();
         protected IEnumerable<Visitor> filterdPresentVisitors => visitors
             .OrderBy(v => v.ArrivalTime)
-            .Where(a => a.ArrivalTime != null 
+            .Where(a => a.ArrivalTime != null
             && a.DepartureTime == null && a.FullName()
             .ToLower().Contains(SearchTerm.ToLower()));
+
         protected IEnumerable<Visitor> filterdNotPresentVisitors => visitors
-            .OrderBy(v => v.ArrivalTime)
-            .Where(a => a.ArrivalTime == null ?
-            a.ArrivalTime == null && a.DepartureTime == null || a.DepartureTime != null : 
-            a.ArrivalTime != null && a.DepartureTime != null && a.FullName()
-            .ToLower().Contains(SearchTerm.ToLower()));
+                .OrderBy(v => v.ArrivalTime)
+                .Where(a => (a.DepartureTime == null ? a.DepartureTime == null && a.ArrivalTime == null : a.DepartureTime != null && a.ArrivalTime != null) && a.FullName()
+                .ToLower().Contains(SearchTerm.ToLower()));
     }
 }

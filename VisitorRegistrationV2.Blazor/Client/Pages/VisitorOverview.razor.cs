@@ -29,20 +29,13 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             await LoadData();
         }
 
-        protected async Task Refresh()
-        {
-            await InvokeAsync(StateHasChanged);
-        }
-
         public void onNotifyOfUpdate(int visitorId)
         {
             Task.Run(async () => await GetUpdatedUser(visitorId));
-            StateHasChanged();
         }
         public void onNotifyOfAdded(int visitorId)
         {
             Task.Run(async () => await GetAddedUserAndAddToList(visitorId));
-            StateHasChanged();
         }
 
         protected async Task GetAddedUserAndAddToList(int visitorId)
@@ -84,6 +77,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             try
             {
                 visitors = await Http.GetFromJsonAsync<List<Visitor>>("api/Visitor");
+                StateHasChanged();
             }
             catch (AccessTokenNotAvailableException exception)
             {
