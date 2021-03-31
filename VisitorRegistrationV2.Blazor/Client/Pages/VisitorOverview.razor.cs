@@ -20,13 +20,20 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
     public class VisitorOverviewModel : VisitorOverviewBaseModel
     {
         protected Visitor SelectedVisitor { get; set; }
+        private event Action Changed;
 
         protected override async Task OnInitializedAsync()
         {
             SignalRService.NotifyOfUpdate += onNotifyOfUpdate;
-            SignalRService.NotifyOfAdded += onNotifyOfAdded; 
+            SignalRService.NotifyOfAdded += onNotifyOfAdded;
+            Changed += OnNotifyOfChange;
 
             await LoadData();
+        }
+
+        public void OnNotifyOfChange()
+        {
+            InvokeAsync(() => StateHasChanged());
         }
 
         public void onNotifyOfUpdate(int visitorId)
@@ -46,7 +53,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 
                 visitors.Add(newvisitor);
 
-                StateHasChanged();
+                Changed.Invoke();
             }
             catch (AccessTokenNotAvailableException exception)
             {
@@ -64,7 +71,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
                 if (index >= 0)
                 visitors[index] = FoundVisitor;
 
-                StateHasChanged();
+                Changed.Invoke();
             }
             catch (AccessTokenNotAvailableException exception)
             {
@@ -77,7 +84,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             try
             {
                 visitors = await Http.GetVisitorList();
-                StateHasChanged();
+                Changed.Invoke();
             }
             catch (AccessTokenNotAvailableException exception)
             {
