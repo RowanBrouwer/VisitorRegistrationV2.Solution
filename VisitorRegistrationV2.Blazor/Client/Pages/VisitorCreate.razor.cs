@@ -23,14 +23,13 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             Visitor AddedVisitor;
             if (SignalRService.IsConnected)
             {
-                using var response = await Http.PostAsJsonAsync("api/Visitor", visitor);
-                {
-                    Message = ResponseManager.GetMessage(response);
+                var response = await Http.AddVisitor(visitor);
 
-                    AddedVisitor = await response.Content.ReadFromJsonAsync<Visitor>();
+                Message = ResponseManager.GetMessage(response);
 
-                    await SignalRService.SendAddNotification(AddedVisitor.Id);
-                }
+                AddedVisitor = await response.Content.ReadFromJsonAsync<Visitor>();
+
+                await SignalRService.SendAddNotification(AddedVisitor.Id);
                 NavigateToDetailPage(AddedVisitor.Id);
             }
             else

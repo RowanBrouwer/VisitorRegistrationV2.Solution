@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Timers;
 using VisitorRegistrationV2.Blazor.Client.ClientServices;
+using VisitorRegistrationV2.Blazor.Client.ClientServices.HttpService;
 using VisitorRegistrationV2.Blazor.Client.ClientServices.IMessageResponse;
 using VisitorRegistrationV2.Blazor.Shared;
 
@@ -15,7 +16,7 @@ namespace VisitorRegistrationV2.Blazor.Client.PageModels
     public class PageBaseModel : ComponentBase
     {
         [Inject]
-        protected HttpClient Http { get; set; }
+        protected IHttpService Http { get; set; }
         [Inject]
         protected NavigationManager NavManager { get; set; }
         [Inject]

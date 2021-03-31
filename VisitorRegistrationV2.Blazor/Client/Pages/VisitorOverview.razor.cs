@@ -42,7 +42,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         {
             try
             { 
-                var newvisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{visitorId}");
+                var newvisitor = await Http.GetVisitor(visitorId);
 
                 visitors.Add(newvisitor);
 
@@ -58,7 +58,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         {
             try
             {
-                var FoundVisitor = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{visitorId}");
+                var FoundVisitor = await Http.GetVisitor(visitorId);
                 int index = visitors.FindIndex(v => v.Id == visitorId);
 
                 if (index >= 0)
@@ -76,7 +76,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         {
             try
             {
-                visitors = await Http.GetFromJsonAsync<List<Visitor>>("api/Visitor");
+                visitors = await Http.GetVisitorList();
                 StateHasChanged();
             }
             catch (AccessTokenNotAvailableException exception)
@@ -101,21 +101,20 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
                 visitorThatArrived.ArrivalTime = DateTime.Now;
                 visitorThatArrived.DepartureTime = null;
 
-               using var response = await Http.PutAsJsonAsync($"api/visitor/{visitorThatArrived.Id}", visitorThatArrived);
-               {
+                if (SignalRService.IsConnected)
+                {
+                    var response = await Http.UpdateVisitor(visitorThatArrived);
+
                     showDialogArrived = false;
 
-                    if (SignalRService.IsConnected)
-                    {
-                        Message = ResponseManager.GetMessage(response);
+                    Message = ResponseManager.GetMessage(response);
 
-                        await SignalRService.SendUpdateNotification(visitorThatArrived.Id);
-                        await delayMessageReset();
-                    }
-                    else
-                    {
-                        Message = "No Connection";
-                    }
+                    await SignalRService.SendUpdateNotification(visitorThatArrived.Id);
+                    await delayMessageReset();
+                }
+                else
+                {
+                    Message = "No Connection";
                 }
             }
             else
@@ -131,21 +130,21 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             if (visitorThatDeparted.DepartureTime == null || overRide == true)
             {
                 visitorThatDeparted.DepartureTime = DateTime.Now;
-                using var response = await Http.PutAsJsonAsync($"api/visitor/{visitorThatDeparted.Id}", visitorThatDeparted);
+                if (SignalRService.IsConnected)
                 {
+                    var response = await Http.UpdateVisitor(visitorThatDeparted);
+
                     showDialogDeparted = false;
 
-                    if (SignalRService.IsConnected)
-                    {
-                        Message = ResponseManager.GetMessage(response);
 
-                        await SignalRService.SendUpdateNotification(visitorThatDeparted.Id);
-                        await delayMessageReset();
-                    }
-                    else
-                    {
-                        Message = "No Connection";
-                    } 
+                    Message = ResponseManager.GetMessage(response);
+
+                    await SignalRService.SendUpdateNotification(visitorThatDeparted.Id);
+                    await delayMessageReset();
+                }
+                else
+                {
+                    Message = "No Connection";
                 }
             }
             else
