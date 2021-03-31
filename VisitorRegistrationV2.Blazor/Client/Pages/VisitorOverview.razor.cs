@@ -166,6 +166,12 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             NavManager.NavigateTo("/Create");
         }
 
+        protected void Dispose()
+        {
+            SignalRService.NotifyOfUpdate -= onNotifyOfUpdate;
+            SignalRService.NotifyOfAdded -= onNotifyOfAdded;
+            Changed -= OnNotifyOfChange;
+        }
     }
 }
 
