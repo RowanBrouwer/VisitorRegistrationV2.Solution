@@ -11,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 using System.Linq;
 using VisitorRegistrationV2.Blazor.Shared;
 using VisitorRegistrationV2.Data;
-using VisitorRegistrationV2.Blazor.Server.Hubs;
+using VisitorRegistrationV2.Data.Services.Hubs;
 using VisitorRegistrationV2.Data.Services.Visitors;
 
 namespace VisitorRegistrationV2.Blazor.Server

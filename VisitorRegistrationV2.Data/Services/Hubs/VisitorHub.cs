@@ -2,21 +2,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using VisitorRegistrationV2.Blazor.Client.ClientServices;
+using VisitorRegistrationV2.Blazor.Shared;
 
-namespace VisitorRegistrationV2.Blazor.Server.Hubs
+namespace VisitorRegistrationV2.Data.Services.Hubs
 {
-    public class VisitorHub : Hub<IClientNotifyHub>
+    public class VisitorHub : Hub
     {
         /// <summary>
         /// Sends update notification to all clients.
         /// </summary>
         /// <param name="visitorId">Id of visitor that got updated.</param>
         /// <returns></returns>
-        public async Task ReceiveUpdatedVisitorNotification(int visitorId)
+        public async Task SendUpdateNotification(int visitorId)
         {
-            await Clients.All.UpdatedVisitorNotify(visitorId);
+            await Clients.All.SendAsync("ReceiveUpdateNotification", visitorId);
         }
 
         /// <summary>
@@ -24,9 +25,9 @@ namespace VisitorRegistrationV2.Blazor.Server.Hubs
         /// </summary>
         /// <param name="VisitorId">Id of visitor that got added.</param>
         /// <returns></returns>
-        public async Task ReceiveAddedVisitorNotification(int visitorId)
+        public async Task SendAddNotification(int VisitorId)
         {
-            await Clients.All.AddedVisitorNotify(visitorId);
+            await Clients.All.SendAsync("ReceiveAddedUserNotification", VisitorId);
         }
     }
 }
