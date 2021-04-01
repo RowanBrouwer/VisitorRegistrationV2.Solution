@@ -46,7 +46,6 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
             connection.StartAsync();
         }
         public async Task SendUpdateNotification(int visitorId) => await connection.SendAsync("SendUpdateNotification", visitorId);
-
         public async Task SendAddNotification(int visitorId) => await connection.SendAsync("SendAddNotification", visitorId);
         public bool IsConnected => connection.State == HubConnectionState.Connected;
     }
