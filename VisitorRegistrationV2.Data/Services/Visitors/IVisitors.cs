@@ -14,7 +14,6 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
         public Task DeleteVisitor(int id);
         public Task UpdateVisitor(Visitor updatedVisitor);
         public Task<Visitor> GetVisitorById(int id);
-        //public Task<IEnumerable<Visitor>> GetVisitorListBySearchTerm(string searchTerm);
 
     }
 }

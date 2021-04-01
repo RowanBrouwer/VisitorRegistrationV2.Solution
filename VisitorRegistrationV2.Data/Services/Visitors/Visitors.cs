@@ -48,17 +48,6 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
             return Task.FromResult(context.Visitors.Find(id));
         }
 
-
-        // Still need to figure out how to change the linq for it to work.
-        //public async Task<IEnumerable<Visitor>> GetVisitorListBySearchTerm(string searchTerm)
-        //{
-        //    string LoweredSearchTerm = searchTerm.ToLower();
-
-        //    var result = await Task.FromResult(context.Visitors.Where(v => v.FullName().ToLower().ToString().Contains(searchTerm.ToLower())));
-
-        //    return result;
-        //}
-
         public async Task UpdateVisitor(Visitor updatedVisitor)
         {
             var UserToUpdate = await GetVisitorById(updatedVisitor.Id);
