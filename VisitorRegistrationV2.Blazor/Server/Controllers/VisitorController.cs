@@ -18,11 +18,9 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
     public class VisitorController : ControllerBase
     {
         private readonly IVisitors context;
-        private readonly IHubContext<VisitorHub> hubContext;
-        public VisitorController(IVisitors context, IHubContext<VisitorHub> hubContext)
+        public VisitorController(IVisitors context)
         {
             this.context = context;
-            this.hubContext = hubContext;
         }
 
 
