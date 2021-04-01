@@ -97,7 +97,7 @@
                     <div class="col border border-dark col-2">
                         @if (visitor.DepartureTime != null)
                         {
-                        @if (visitor.DepartureTime != null && visitor.DepartureTime.Value.Date == DateTime.Today)
+                        @if (visitor.DepartureTime.Value.Date == DateTime.Today)
                         {
                             @(((DateTime)visitor.DepartureTime).ToString("t"))
                         }
