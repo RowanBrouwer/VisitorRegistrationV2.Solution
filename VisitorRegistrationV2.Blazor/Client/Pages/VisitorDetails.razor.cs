@@ -14,13 +14,13 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
     {
         [Parameter]
         public int VisitorId { get; set; }
-        protected Visitor visitor { get; set; }
+        protected Visitor Visitor { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             try
             {
-                visitor = await Http.GetVisitor(VisitorId);
+                Visitor = await Http.GetVisitor(VisitorId);
             }
             catch (AccessTokenNotAvailableException exception)
             {

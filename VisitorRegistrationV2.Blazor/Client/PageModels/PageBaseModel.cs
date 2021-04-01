@@ -26,20 +26,22 @@ namespace VisitorRegistrationV2.Blazor.Client.PageModels
         protected string Message { get; set; }
 
         private Timer _delayTimer;
-        protected void MessageDisposal()
+        protected Task MessageDisposal()
         {
             Message = null;
             StateHasChanged();
+            return Task.CompletedTask;
         }
 
-        protected Task delayMessageReset()
+        protected async Task delayMessageReset()
         {
             _delayTimer = new Timer();
             _delayTimer.Interval = 3000;
             _delayTimer.Elapsed += (o, e) => MessageDisposal();
             _delayTimer.AutoReset = false;
+            _delayTimer.Stop();
             _delayTimer.Start();
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
     }
 }

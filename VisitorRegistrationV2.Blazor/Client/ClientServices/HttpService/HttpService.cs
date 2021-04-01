@@ -29,14 +29,13 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices.HttpService
 
             return result;
         }
-
+        
         public async Task<List<Visitor>> GetVisitorList()
         {
             var result = await Http.GetFromJsonAsync<List<Visitor>>("api/Visitor");
 
             return result;
         }
-
 
         public async Task<HttpResponseMessage> UpdateVisitor(Visitor visitor)
         {

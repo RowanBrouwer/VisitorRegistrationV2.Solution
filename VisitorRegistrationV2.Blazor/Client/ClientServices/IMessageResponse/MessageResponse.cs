@@ -9,6 +9,11 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices.IMessageResponse
 {
     public class MessageResponse : IMessageResponse
     {
+        /// <summary>
+        /// Returns a string based on the HttpResponseMessage given to it.
+        /// </summary>
+        /// <param name="response">HttpResponseMessage to get the statuscode from</param>
+        /// <returns></returns>
         public string GetMessage(HttpResponseMessage response)
         {
             switch (response.StatusCode)

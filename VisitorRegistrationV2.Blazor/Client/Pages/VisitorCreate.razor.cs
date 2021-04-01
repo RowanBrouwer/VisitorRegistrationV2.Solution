@@ -14,10 +14,11 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
     {
         protected Visitor newVisitor = new();
 
-        //protected override async Task OnInitializedAsync()
-        //{
-        //}
-
+        /// <summary>
+        /// Requests an save action.
+        /// </summary>
+        /// <param name="visitor"> visitor that needs to be saved </param>
+        /// <returns></returns>
         protected async Task saveNewVisitor(Visitor visitor)
         {
             Visitor AddedVisitor;
@@ -26,6 +27,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
                 var response = await Http.AddVisitor(visitor);
 
                 Message = ResponseManager.GetMessage(response);
+                await delayMessageReset();
 
                 AddedVisitor = await response.Content.ReadFromJsonAsync<Visitor>();
 

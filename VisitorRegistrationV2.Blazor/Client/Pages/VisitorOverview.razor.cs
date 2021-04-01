@@ -19,32 +19,53 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 {
     public class VisitorOverviewModel : VisitorOverviewBaseModel
     {
+        /// <summary>
+        /// Used as a temporary holding field for a visitor.
+        /// </summary>
         protected Visitor SelectedVisitor { get; set; }
+
         private event Action Changed;
 
         protected override async Task OnInitializedAsync()
         {
-            SignalRService.NotifyOfUpdate += onNotifyOfUpdate;
-            SignalRService.NotifyOfAdded += onNotifyOfAdded;
+            SignalRService.NotifyOfUpdate += OnNotifyOfUpdate;
+            SignalRService.NotifyOfAdded += OnNotifyOfAdded;
             Changed += OnNotifyOfChange;
 
             await LoadData();
         }
 
+        /// <summary>
+        /// Invokes StateHasChanged async
+        /// </summary>
         public void OnNotifyOfChange()
         {
             InvokeAsync(() => StateHasChanged());
         }
 
-        public void onNotifyOfUpdate(int visitorId)
+        /// <summary>
+        /// Handler for NotifyOfUpdate, Runs an async task.
+        /// </summary>
+        /// <param name="visitorId">Id of updated visitor.</param>
+        public void OnNotifyOfUpdate(int visitorId)
         {
             Task.Run(async () => await GetUpdatedUser(visitorId));
         }
-        public void onNotifyOfAdded(int visitorId)
+
+        /// <summary>
+        /// Handler for NotifyOfAdded, Runs an async task.
+        /// </summary>
+        /// <param name="visitorId">Id of Added visitor received from SignalR.</param>
+        public void OnNotifyOfAdded(int visitorId)
         {
             Task.Run(async () => await GetAddedUserAndAddToList(visitorId));
         }
 
+        /// <summary>
+        /// Requests the visitor through the IhttpService and adds it to the list visitors.
+        /// </summary>
+        /// <param name="visitorId">Id of Added visitor received from SignalR.</param>
+        /// <returns></returns>
         protected async Task GetAddedUserAndAddToList(int visitorId)
         {
             try
@@ -61,6 +82,11 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             }
         }
 
+        /// <summary>
+        /// Requests the visitor through the IhttpService by id and adds it to the list visitors.
+        /// </summary>
+        /// <param name="visitorId">Id of updated visitor received from SignalR.</param>
+        /// <returns></returns>
         protected async Task GetUpdatedUser(int visitorId)
         {
             try
@@ -79,6 +105,10 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             }
         }
 
+        /// <summary>
+        /// Requests a list of visitors through the IHttpService.
+        /// </summary>
+        /// <returns></returns>
         protected async Task LoadData()
         {
             try
@@ -98,7 +128,13 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             builder.AddAttribute(7, "value", BindConverter.FormatValue(SearchTerm));
             builder.AddAttribute(8, "oninput", EventCallback.Factory.CreateBinder(this, __value => SearchTerm = __value, SearchTerm));
         }
-        
+
+        /// <summary>
+        /// Checks if it can write or override the ArrivalTime.
+        /// </summary>
+        /// <param name="visitorThatArrived">Visitor wich got selected to have their ArrivalTime updated.</param>
+        /// <param name="overRide">weither or not to override this visitors ArrivalTime.</param>
+        /// <returns></returns>
         protected async Task VisitorArrived(Visitor visitorThatArrived, bool overRide)
         {
             SelectedVisitor = null;
@@ -130,6 +166,13 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
                 showDialogArrived = true;
             }
         }
+
+        /// <summary>
+        /// Checks if it can write or override the DepartureTime.
+        /// </summary>
+        /// <param name="visitorThatDeparted">Visitor wich got selected to have their DepartureTime updated.</param>
+        /// <param name="overRide">weither or not to override this visitors DepartureTime.</param>
+        /// <returns></returns>
         protected async Task VisitorDeparted(Visitor visitorThatDeparted, bool overRide)
         {
             SelectedVisitor = null;
@@ -168,8 +211,8 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 
         protected void Dispose()
         {
-            SignalRService.NotifyOfUpdate -= onNotifyOfUpdate;
-            SignalRService.NotifyOfAdded -= onNotifyOfAdded;
+            SignalRService.NotifyOfUpdate -= OnNotifyOfUpdate;
+            SignalRService.NotifyOfAdded -= OnNotifyOfAdded;
             Changed -= OnNotifyOfChange;
         }
     }
