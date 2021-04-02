@@ -18,28 +18,28 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices.HttpService
 
         public async Task<HttpResponseMessage> AddVisitor(Visitor visitor)
         {
-            var result = await Http.PostAsJsonAsync("api/Visitor", visitor);
+            var result = await Http.PostAsJsonAsync(StringCollection.ApiUri, visitor);
 
             return result;
         }
 
         public async Task<Visitor> GetVisitor(int id)
-        { 
-            var result = await Http.GetFromJsonAsync<Visitor>($"api/Visitor/{id}");
+        {
+            var result = await Http.GetFromJsonAsync<Visitor>(StringCollection.ApiUri + $"/{id}");
 
             return result;
         }
         
         public async Task<List<Visitor>> GetVisitorList()
         {
-            var result = await Http.GetFromJsonAsync<List<Visitor>>("api/Visitor");
+            var result = await Http.GetFromJsonAsync<List<Visitor>>(StringCollection.ApiUri);
 
             return result;
         }
 
         public async Task<HttpResponseMessage> UpdateVisitor(Visitor visitor)
         {
-            var result = await Http.PutAsJsonAsync($"api/visitor/{visitor.Id}", visitor);
+            var result = await Http.PutAsJsonAsync(StringCollection.ApiUri + $"/{visitor.Id}", visitor);
 
             return result;
         }

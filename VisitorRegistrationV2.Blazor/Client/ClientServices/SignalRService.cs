@@ -4,9 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components.Rendering;
+using VisitorRegistrationV2.Blazor.Client.ClientServices;
 using VisitorRegistrationV2.Blazor.Shared;
-using VisitorRegistrationV2.Blazor.Client.PageModels;
 
 namespace VisitorRegistrationV2.Blazor.Client.ClientServices
 {
@@ -15,6 +14,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
         public event Action<int> NotifyOfUpdate;
         public event Action<int> NotifyOfAdded;
         public int receivedVisitorId;
+
         HubConnection connection;
 
         /// <summary>
@@ -23,12 +23,13 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
         /// <param name="navManager"> Navigation manager used in the hubconnection. </param>
         public SignalRService(NavigationManager navManager)
         {
+
             connection = new HubConnectionBuilder()
-                    .WithUrl(navManager.ToAbsoluteUri("/visitorhub"))
+                    .WithUrl(navManager.ToAbsoluteUri(StringCollection.HubUri))
                     .WithAutomaticReconnect()
                     .Build();
 
-            connection.On<int>("ReceiveUpdateNotification", (visitorId) =>
+            connection.On<int>(StringCollection.VisitorUpdatedString, (visitorId) =>
             {
                 receivedVisitorId = visitorId;
                 if (NotifyOfUpdate != null)
@@ -37,7 +38,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
                 }
             });
 
-            connection.On<int>("ReceiveAddedUserNotification", (visitorId) =>
+            connection.On<int>(StringCollection.VisitorAddedString, (visitorId) =>
             {
                 receivedVisitorId = visitorId;
                 if (NotifyOfAdded != null)
@@ -55,14 +56,14 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
         /// </summary>
         /// <param name="visitorId"> Id of the updated visitor.</param>
         /// <returns></returns>
-        public async Task SendUpdateNotification(int visitorId) => await connection.SendAsync("SendUpdateNotification", visitorId);
+        public async Task SendUpdateNotification(int visitorId) => await connection.SendAsync(StringCollection.SendUpdatedVisitorNotificationString, visitorId);
 
         /// <summary>
         /// Sends an notification that someone is added to the SignalRHub with an Id.
         /// </summary>
         /// <param name="visitorId">Id of the added visitor.</param>
         /// <returns></returns>
-        public async Task SendAddNotification(int visitorId) => await connection.SendAsync("SendAddNotification", visitorId);
+        public async Task SendAddNotification(int visitorId) => await connection.SendAsync(StringCollection.SendAddedVisitorNotificationString, visitorId);
 
         /// <summary>
         /// Checks if the SignalR connection is still connected.
