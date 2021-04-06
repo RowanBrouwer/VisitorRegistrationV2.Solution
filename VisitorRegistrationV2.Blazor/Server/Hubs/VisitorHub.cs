@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VisitorRegistrationV2.Blazor.Shared;
 
 namespace VisitorRegistrationV2.Blazor.Server.Hubs
 {
@@ -15,7 +16,7 @@ namespace VisitorRegistrationV2.Blazor.Server.Hubs
         /// <returns></returns>
         public async Task SendUpdateNotification(int visitorId)
         {
-            await Clients.All.SendAsync("UpdateVisitor", visitorId);
+            await Clients.All.SendAsync(StringCollection.VisitorUpdatedString, visitorId);
         }
 
         /// <summary>
@@ -25,7 +26,7 @@ namespace VisitorRegistrationV2.Blazor.Server.Hubs
         /// <returns></returns>
         public async Task SendAddNotification(int VisitorId)
         {
-            await Clients.All.SendAsync("AddedVisitor", VisitorId);
+            await Clients.All.SendAsync(StringCollection.VisitorAddedString, VisitorId);
         }
     }
 }

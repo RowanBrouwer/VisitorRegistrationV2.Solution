@@ -6,7 +6,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using VisitorRegistrationV2.Blazor.Shared;
 
-namespace VisitorRegistrationV2.Blazor.Client.ClientServices.HttpService
+namespace VisitorRegistrationV2.Blazor.Client.ClientServices
 {
     public class HttpService : IHttpService
     {

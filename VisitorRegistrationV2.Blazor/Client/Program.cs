@@ -11,8 +11,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using VisitorRegistrationV2.Blazor.Client.ClientServices;
-using VisitorRegistrationV2.Blazor.Client.ClientServices.HttpService;
-using VisitorRegistrationV2.Blazor.Client.ClientServices.IMessageResponse;
 
 namespace VisitorRegistrationV2.Blazor.Client
 {
@@ -35,6 +33,7 @@ namespace VisitorRegistrationV2.Blazor.Client
 
             builder.Services.AddScoped<IHttpService, HttpService>();
             builder.Services.AddSingleton<SignalRService>();
+            builder.Services.AddScoped<ClientVisitorService>();
 
             
 

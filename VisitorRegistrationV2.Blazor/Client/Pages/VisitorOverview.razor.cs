@@ -31,6 +31,8 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             SignalRService.NotifyOfUpdate += OnNotifyOfUpdate;
             SignalRService.NotifyOfAdded += OnNotifyOfAdded;
             Changed += OnNotifyOfChange;
+            ResetMessage += MessageDisposal;
+            ResetMessage += ClientService.MessageDisposal;
 
             await LoadData();
         }
@@ -92,17 +94,22 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             try
             {
                 var FoundVisitor = await Http.GetVisitor(visitorId);
-                int index = visitors.FindIndex(v => v.Id == visitorId);
-
-                if (index >= 0)
-                visitors[index] = FoundVisitor;
-
-                Changed.Invoke();
+                await SetUpdatedUser(FoundVisitor);   
             }
             catch (AccessTokenNotAvailableException exception)
             {
                 exception.Redirect();
             }
+        }
+
+        public Task SetUpdatedUser(Visitor visitor)
+        {
+            int index = visitors.FindIndex(v => v.Id == visitor.Id);
+
+            if (index >= 0)
+                visitors[index] = visitor;
+            Changed.Invoke();
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -141,24 +148,11 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             showDialogArrived = false;
             if (visitorThatArrived.ArrivalTime == null || overRide == true)
             {
-                visitorThatArrived.ArrivalTime = DateTime.Now;
-                visitorThatArrived.DepartureTime = null;
-
-                if (SignalRService.IsConnected)
-                {
-                    var response = await Http.UpdateVisitor(visitorThatArrived);
-
-                    showDialogArrived = false;
-
-                    Message = ResponseManager.GetMessage(response);
-
-                    await SignalRService.SendUpdateNotification(visitorThatArrived.Id);
-                    await delayMessageReset();
-                }
-                else
-                {
-                    Message = "No Connection";
-                }
+                visitorThatArrived = await ClientService.VisitorArrives(visitorThatArrived, overRide, null);
+                await SetUpdatedUser(visitorThatArrived);
+                Message = ClientService.Message; 
+                await delayMessageReset();
+                Changed.Invoke();
             }
             else
             {
@@ -179,23 +173,11 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             showDialogDeparted = false;
             if (visitorThatDeparted.DepartureTime == null || overRide == true)
             {
-                visitorThatDeparted.DepartureTime = DateTime.Now;
-                if (SignalRService.IsConnected)
-                {
-                    var response = await Http.UpdateVisitor(visitorThatDeparted);
-
-                    showDialogDeparted = false;
-
-
-                    Message = ResponseManager.GetMessage(response);
-
-                    await SignalRService.SendUpdateNotification(visitorThatDeparted.Id);
-                    await delayMessageReset();
-                }
-                else
-                {
-                    Message = "No Connection";
-                }
+                visitorThatDeparted = await ClientService.VisitorDeparts(visitorThatDeparted, overRide, null);
+                await SetUpdatedUser(visitorThatDeparted);
+                Message = ClientService.Message;
+                await delayMessageReset();
+                Changed.Invoke();
             }
             else
             {

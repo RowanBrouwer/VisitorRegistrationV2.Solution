@@ -7,8 +7,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Timers;
 using VisitorRegistrationV2.Blazor.Client.ClientServices;
-using VisitorRegistrationV2.Blazor.Client.ClientServices.HttpService;
-using VisitorRegistrationV2.Blazor.Client.ClientServices.IMessageResponse;
 using VisitorRegistrationV2.Blazor.Shared;
 
 namespace VisitorRegistrationV2.Blazor.Client.PageModels
@@ -23,21 +21,24 @@ namespace VisitorRegistrationV2.Blazor.Client.PageModels
         protected IMessageResponse ResponseManager { get; set; }
         [Inject]
         protected SignalRService SignalRService { get; set; }
+        [Inject]
+        public ClientVisitorService ClientService { get; set; }
         protected string Message { get; set; }
 
+        public event Action ResetMessage;
+
         private Timer _delayTimer;
-        protected Task MessageDisposal()
+        protected void MessageDisposal()
         {
             Message = null;
             StateHasChanged();
-            return Task.CompletedTask;
         }
 
         protected async Task delayMessageReset()
         {
             _delayTimer = new Timer();
             _delayTimer.Interval = 3000;
-            _delayTimer.Elapsed += (o, e) => MessageDisposal();
+            _delayTimer.Elapsed += (o, e) => ResetMessage.Invoke();
             _delayTimer.AutoReset = false;
             _delayTimer.Stop();
             _delayTimer.Start();
