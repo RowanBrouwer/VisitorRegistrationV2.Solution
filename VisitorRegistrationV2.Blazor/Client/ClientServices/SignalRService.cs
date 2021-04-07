@@ -13,7 +13,6 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
     {
         public event Action<int> NotifyOfUpdate;
         public event Action<int> NotifyOfAdded;
-        public int receivedVisitorId;
 
         HubConnection connection;
 
@@ -31,7 +30,6 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
 
             connection.On<int>(StringCollection.VisitorUpdatedString, (visitorId) =>
             {
-                receivedVisitorId = visitorId;
                 if (NotifyOfUpdate != null)
                 {
                     NotifyOfUpdate?.Invoke(visitorId);
@@ -40,7 +38,6 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
 
             connection.On<int>(StringCollection.VisitorAddedString, (visitorId) =>
             {
-                receivedVisitorId = visitorId;
                 if (NotifyOfAdded != null)
                 {
                     NotifyOfAdded?.Invoke(visitorId);
