@@ -8,11 +8,11 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
 {
     public class VisitorService : IVisitorService
     {
-        SignalRService signalRService;
+        ISignalRService signalRService;
         IHttpService Http;
         IMessageResponse ResponseManager;
 
-        public VisitorService(SignalRService signalRService, IHttpService Http, IMessageResponse ResponseManager)
+        public VisitorService(ISignalRService signalRService, IHttpService Http, IMessageResponse ResponseManager)
         {
             this.signalRService = signalRService;
             this.Http = Http;
@@ -74,16 +74,6 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
         }
 
         void IVisitorService.MessageDisposal()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Visitor> IVisitorService.VisitorArrives(Visitor visitorThatArrived, bool OverRide, DateTime? time)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Visitor> IVisitorService.VisitorDeparts(Visitor visitorThatDeparted, bool OverRide, DateTime? time)
         {
             throw new NotImplementedException();
         }
