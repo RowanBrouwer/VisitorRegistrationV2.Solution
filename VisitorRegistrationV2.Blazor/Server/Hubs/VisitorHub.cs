@@ -16,7 +16,7 @@ namespace VisitorRegistrationV2.Blazor.Server.Hubs
         /// <returns></returns>
         public async Task SendUpdateNotification(int visitorId)
         {
-            await Clients.All.SendAsync(StringCollection.VisitorUpdatedString, visitorId);
+            await Clients.Others.SendAsync(StringCollection.VisitorUpdatedString, visitorId);
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace VisitorRegistrationV2.Blazor.Server.Hubs
         /// <returns></returns>
         public async Task SendAddNotification(int VisitorId)
         {
-            await Clients.All.SendAsync(StringCollection.VisitorAddedString, VisitorId);
+            await Clients.Others.SendAsync(StringCollection.VisitorAddedString, VisitorId);
         }
     }
 }
