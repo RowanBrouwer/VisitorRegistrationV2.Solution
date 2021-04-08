@@ -6,20 +6,21 @@ using VisitorRegistrationV2.Blazor.Shared;
 
 namespace VisitorRegistrationV2.Blazor.Client.ClientServices
 {
-    public class ClientVisitorService
+    public class VisitorService : IVisitorService
     {
         SignalRService signalRService;
         IHttpService Http;
         IMessageResponse ResponseManager;
 
-        public ClientVisitorService(SignalRService signalRService, IHttpService Http, IMessageResponse ResponseManager)
+        public VisitorService(SignalRService signalRService, IHttpService Http, IMessageResponse ResponseManager)
         {
             this.signalRService = signalRService;
             this.Http = Http;
             this.ResponseManager = ResponseManager;
         }
 
-        public string Message { get; set; }
+        private string Message { get; set; }
+        string IVisitorService.Message { get => Message; set => Message = value; }
 
         public void MessageDisposal()
         {
@@ -28,7 +29,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
 
         public async Task<Visitor> VisitorArrives(Visitor visitorThatArrived, bool OverRide, DateTime? time)
         {
-            if (signalRService.IsConnected)
+            if (await signalRService.IsConnected())
             {
                 var Succeeded = await visitorThatArrived.SetArrivalTime(time, OverRide);
 
@@ -51,7 +52,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
 
         public async Task<Visitor> VisitorDeparts(Visitor visitorThatDeparted, bool OverRide, DateTime? time)
         {
-            if (signalRService.IsConnected)
+            if (await signalRService.IsConnected())
             {
                 var Succeeded = await visitorThatDeparted.SetDepartureTime(time, OverRide);
 
@@ -70,6 +71,21 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
             }
 
             return visitorThatDeparted;
+        }
+
+        void IVisitorService.MessageDisposal()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Visitor> IVisitorService.VisitorArrives(Visitor visitorThatArrived, bool OverRide, DateTime? time)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Visitor> IVisitorService.VisitorDeparts(Visitor visitorThatDeparted, bool OverRide, DateTime? time)
+        {
+            throw new NotImplementedException();
         }
     }
 }

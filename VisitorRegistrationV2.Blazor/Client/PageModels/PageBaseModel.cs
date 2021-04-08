@@ -22,7 +22,7 @@ namespace VisitorRegistrationV2.Blazor.Client.PageModels
         [Inject]
         protected SignalRService SignalRService { get; set; }
         [Inject]
-        public ClientVisitorService ClientService { get; set; }
+        public VisitorService ClientService { get; set; }
         protected string Message { get; set; }
 
         public event Action ResetMessage;

@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,10 +31,8 @@ namespace VisitorRegistrationV2.Blazor.Client
             builder.Services.AddScoped<IMessageResponse, MessageResponse>();
 
             builder.Services.AddScoped<IHttpService, HttpService>();
-            builder.Services.AddSingleton<SignalRService>();
-            builder.Services.AddScoped<ClientVisitorService>();
-
-            
+            builder.Services.AddSingleton<ISignalRService, SignalRService>();
+            builder.Services.AddScoped<IVisitorService ,VisitorService>();
 
             await builder.Build().RunAsync();
         }
