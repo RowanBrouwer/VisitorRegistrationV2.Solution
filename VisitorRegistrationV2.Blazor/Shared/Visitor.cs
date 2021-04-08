@@ -183,23 +183,24 @@ namespace VisitorRegistrationV2.Blazor.Shared
         public Task<bool> SetDepartureTime(DateTime? time, bool overRide)
         {
             bool timeHasValue = time.HasValue;
+            bool arrivalTimeHasValue = ArrivalTime.HasValue;
             bool departureTimeHasValue = DepartureTime.HasValue;
 
-            switch (timeHasValue, overRide, departureTimeHasValue)
+            switch (timeHasValue, overRide, departureTimeHasValue, arrivalTimeHasValue)
             {
-                case (true, true, false):
+                case (true, true, false, true):
                     DepartureTime = time;
                     return Task.FromResult(true);
-                case (true, true, true):
+                case (true, true, true, true):
                     DepartureTime = time;
                     return Task.FromResult(true);
-                case (false, true, false):
+                case (false, true, false, true):
                     DepartureTime = DateTime.Now;
                     return Task.FromResult(true);
-                case (false, true, true):
+                case (false, true, true, true):
                     DepartureTime = DateTime.Now;
                     return Task.FromResult(true);
-                case (false, false, false):
+                case (false, false, false, true):
                     DepartureTime = DateTime.Now;
                     return Task.FromResult(true);
                 default:
