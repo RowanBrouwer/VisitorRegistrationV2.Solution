@@ -9,7 +9,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-auto">
+        <div class="col-auto" style="padding:4px,10px,2px,10px">
             <div class="row">
                 <div class="col border border-dark bg-dark text-white">Present</div>
             </div>
@@ -34,13 +34,13 @@
                         @visitor.FullName()
                     </div>
                     <div class="col border border-dark col-2">
-                        @if (visitor.ArrivalTime != null && visitor.ArrivalTime.Value.Date == DateTime.Today)
+                        @if (visitor.ArrivalTime.Value.Date == DateTime.Today)
                         {
-                            @(((DateTime)visitor.ArrivalTime).ToString("t"))
+                            @(visitor.ArrivalTime.Value.ToShortTimeString())
                         }
                         else
                         {
-                            @(((DateTime)visitor.ArrivalTime).ToString("g"))
+                            @(visitor.ArrivalTime.Value.ToShortDateString() + ' ' + visitor.ArrivalTime.Value.ToShortTimeString())
                         }
                     </div>
                     <button type="button" @onclick="@(() => VisitorArrived(visitor, false))" 
@@ -54,9 +54,8 @@
                 </div>
             }
         </div>
-        <br />
-        <br />
-        <div class="col-auto">
+        <div class="col-auto"></div>
+        <div class="col-auto" style="padding:4px,10px,2px,10px">
             <div class="row">
                 <div class="col col-12 border border-dark bg-dark text-white"> Not present</div>
             </div>
@@ -86,14 +85,14 @@
                     <div class="col border border-dark col-2">
                         @if (visitor.ArrivalTime != null)
                         {
-                        @if (visitor.ArrivalTime != null && visitor.ArrivalTime.Value.Date == DateTime.Today)
-                        {
-                            @(((DateTime)visitor.ArrivalTime).ToString("t"))
-                        }
-                        else
-                        {
-                            @(((DateTime)visitor.ArrivalTime).ToString("g"))
-                        }
+                            @if (visitor.ArrivalTime.Value.Date == DateTime.Today)
+                            {
+                                @(visitor.ArrivalTime.Value.ToShortTimeString())
+                            }
+                            else
+                            {
+                                @(visitor.ArrivalTime.Value.ToShortDateString() + ' ' + visitor.ArrivalTime.Value.ToShortTimeString())
+                            }
                         }
                         else
                         {
@@ -103,22 +102,28 @@
                     <div class="col border border-dark col-2">
                         @if (visitor.DepartureTime != null)
                         {
-                        @if (visitor.DepartureTime.Value.Date == DateTime.Today)
-                        {
-                            @(((DateTime)visitor.DepartureTime).ToString("t"))
-                        }
-                        else
-                        {
-                            @(((DateTime)visitor.DepartureTime).ToString("g"))
-                        }
+                            @if (visitor.DepartureTime.Value.Date == DateTime.Today)
+                            {
+                                @(visitor.DepartureTime.Value.ToShortTimeString())
+                            }
+                            else
+                            {
+                                @(visitor.DepartureTime.Value.ToShortDateString() + ' ' + visitor.ArrivalTime.Value.ToShortTimeString())
+                            }
                         }
                         else
                         {
                             @visitor.DepartureTime
                         }
                     </div>
-                    <button type="button" @onclick="@(() => VisitorArrived(visitor, false))" disabled="@(showDialogDeparted == true || showDialogArrived == true)" class="col border border-dark col-2 btn-success">Arrived</button>
-                    <button type="button" @onclick="@(() => VisitorDeparted(visitor, false))" disabled="@(showDialogDeparted == true || showDialogArrived == true)" class="col border border-dark col-2 btn-danger">Departure</button>
+                    <button type="button" @onclick="@(() => VisitorArrived(visitor, false))"
+                            disabled="@(showDialogDeparted == true || showDialogArrived == true)" 
+                            class="col border border-dark col-2 btn-success">Arrived
+                    </button>
+                    <button type="button" @onclick="@(() => VisitorDeparted(visitor, false))" 
+                            disabled="@(showDialogDeparted == true || showDialogArrived == true || visitor.ArrivalTime == null)" 
+                            class="col border border-dark col-2 btn-danger">Departure
+                    </button>
                 </div>
             }
         </div>
