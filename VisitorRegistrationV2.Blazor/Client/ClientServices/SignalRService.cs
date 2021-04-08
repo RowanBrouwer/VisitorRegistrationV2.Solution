@@ -53,19 +53,22 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
         /// </summary>
         /// <param name="visitorId"> Id of the updated visitor.</param>
         /// <returns></returns>
-        public async Task SendUpdateNotification(int visitorId) => await connection.SendAsync(StringCollection.SendUpdatedVisitorNotificationString, visitorId);
+        public async Task SendUpdateNotification(int visitorId) => 
+            await connection.SendAsync(StringCollection.SendUpdatedVisitorNotificationString, visitorId);
 
         /// <summary>
         /// Sends an notification that someone is added to the SignalRHub with an Id.
         /// </summary>
         /// <param name="visitorId">Id of the added visitor.</param>
         /// <returns></returns>
-        public async Task SendAddNotification(int visitorId) => await connection.SendAsync(StringCollection.SendAddedVisitorNotificationString, visitorId);
+        public async Task SendAddNotification(int visitorId) => 
+            await connection.SendAsync(StringCollection.SendAddedVisitorNotificationString, visitorId);
 
         /// <summary>
         /// Checks if the SignalR connection is still connected.
         /// </summary>
-        public bool IsConnected => connection.State == HubConnectionState.Connected;
+        public bool IsConnected => 
+            connection.State == HubConnectionState.Connected;
     }
 }
 
