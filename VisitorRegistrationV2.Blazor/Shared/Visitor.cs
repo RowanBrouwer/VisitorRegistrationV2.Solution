@@ -13,121 +13,19 @@ namespace VisitorRegistrationV2.Blazor.Shared
     {
         [Key]
         public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string MiddleName { get; set; }
-        public string LastName { get; set; }
-        public DateTime? ArrivalTime { get; set; }
-        public DateTime? DepartureTime { get; set; }
-        public string FullName() => (MiddleName == null) ? $"{FirstName} {LastName}" : $"{FirstName} {MiddleName} {LastName}";
+        private string firstName;
+        private string middleName;
+        private string lastName;
+        private DateTime? arrivalTime;
+        private DateTime? departureTime;
 
-        public Task<bool> OverrideArrivalTime(DateTime? time, bool overRide)
-            => SetArrivalTimeToNow(time, overRide);
+        public string FirstName { get => firstName; set => firstName = value; }
+        public string MiddleName { get => middleName; set => middleName = value; }
+        public string LastName { get => lastName; set => lastName = value; }
+        public DateTime? ArrivalTime { get => arrivalTime; set => arrivalTime = value; }
+        public DateTime? DepartureTime { get => departureTime; set => departureTime = value; }
 
-        public Task<bool> OverrideDepartureTime(DateTime? time, bool overRide)
-            => SetDepartureTimeToNow(time, overRide);
-
-        private Task<bool> SetArrivalTimeToNow(DateTime? time, bool overRide)
-        {
-            if (time != null)
-            {
-                if (ArrivalTime != null)
-                {
-                    if (overRide == true)
-                    {
-                        ArrivalTime = time;
-                        return Task.FromResult(true);
-                    }
-                    else
-                    {
-                        return Task.FromResult(false);
-                    }
-                }
-                else
-                {
-                    if (overRide == true)
-                    {
-                        ArrivalTime = time;
-                        if (DepartureTime != null)
-                        {
-                            DepartureTime = null;
-                        }
-                        return Task.FromResult(true);
-                    }
-                    else
-                    {
-                        return Task.FromResult(false);
-                    }
-                }
-            }
-            else
-            {
-                if (ArrivalTime == null && DepartureTime == null)
-                {
-                    ArrivalTime = DateTime.Now;
-                    return Task.FromResult(true);
-                }
-                else
-                {
-                    if (overRide == true)
-                    {
-                        ArrivalTime = DateTime.Now;
-                        if (DepartureTime != null)
-                        {
-                            DepartureTime = null;
-                        }
-                        return Task.FromResult(true);
-                    }
-                    else
-                    {
-                        return Task.FromResult(false);
-                    }
-                }
-            }
-        }
-
-        private Task<bool> SetDepartureTimeToNow(DateTime? time, bool overRide)
-        {
-            if (time != null)
-            {
-                if (DepartureTime != null)
-                {
-                    DepartureTime = time;
-                    return Task.FromResult(true);
-                }
-                else
-                {
-                    if (overRide == true)
-                    {
-                        DepartureTime = time;
-                        return Task.FromResult(true);
-                    }
-                    else
-                    {
-                        return Task.FromResult(false);
-                    }
-                }
-            }
-            else
-            {
-                if (DepartureTime == null)
-                {
-                    DepartureTime = DateTime.Now;
-                    return Task.FromResult(true);
-                }
-                else
-                {
-                    if (overRide == true)
-                    {
-                        DepartureTime = DateTime.Now;
-                        return Task.FromResult(true);
-                    }
-                    else
-                    {
-                        return Task.FromResult(false);
-                    }
-                }
-            }
-        }
+        public string FullName() => (middleName == null) ? $"{firstName} {lastName}" : $"{firstName} {middleName} {lastName}";
 
         public Task<bool> SetArrivalTime(DateTime? time, bool overRide)
         {
