@@ -22,7 +22,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         protected async Task saveNewVisitor(Visitor visitor)
         {
             Visitor AddedVisitor;
-            if (SignalRService.IsConnected)
+            if (await SignalRService.IsConnected())
             {
                 var response = await Http.AddVisitor(visitor);
 

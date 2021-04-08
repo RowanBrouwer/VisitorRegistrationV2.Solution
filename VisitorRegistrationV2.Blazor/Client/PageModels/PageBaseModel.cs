@@ -20,9 +20,9 @@ namespace VisitorRegistrationV2.Blazor.Client.PageModels
         [Inject]
         protected IMessageResponse ResponseManager { get; set; }
         [Inject]
-        protected SignalRService SignalRService { get; set; }
+        protected ISignalRService SignalRService { get; set; }
         [Inject]
-        public VisitorService ClientService { get; set; }
+        public IVisitorService ClientService { get; set; }
         protected string Message { get; set; }
 
         public event Action ResetMessage;
