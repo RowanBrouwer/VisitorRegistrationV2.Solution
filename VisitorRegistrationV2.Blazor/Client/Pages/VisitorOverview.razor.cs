@@ -131,9 +131,15 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            builder.OpenElement(6, "input");
-            builder.AddAttribute(7, "value", BindConverter.FormatValue(SearchTerm));
-            builder.AddAttribute(8, "oninput", EventCallback.Factory.CreateBinder(this, __value => SearchTerm = __value, SearchTerm));
+            builder.OpenElement
+                (6, "input");
+
+            builder.AddAttribute
+                (7, "value", BindConverter.FormatValue(SearchTerm));
+
+            builder.AddAttribute
+                (8, "oninput", EventCallback.Factory.CreateBinder
+                (this, __value => SearchTerm = __value, SearchTerm));
         }
 
         /// <summary>
