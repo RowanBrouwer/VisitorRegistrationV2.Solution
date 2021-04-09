@@ -72,10 +72,5 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
 
             return visitorThatDeparted;
         }
-
-        void IVisitorService.MessageDisposal()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
