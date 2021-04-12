@@ -9,8 +9,8 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
     {
         public event Action<int> NotifyOfUpdate;
         public event Action<int> NotifyOfAdded;
-        public Task SendUpdateNotification(int visitorId);
-        public Task SendAddNotification(int visitorId);
+        public Task SendUpdatedVisitorNotification(int visitorId);
+        public Task SendAddedVisitorNotification(int visitorId);
         public Task<bool> IsConnected();
 
     }

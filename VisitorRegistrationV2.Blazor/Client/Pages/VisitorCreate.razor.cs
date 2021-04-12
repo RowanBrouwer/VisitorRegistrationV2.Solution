@@ -31,7 +31,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 
                 AddedVisitor = await response.Content.ReadFromJsonAsync<Visitor>();
 
-                await SignalRService.SendAddNotification(AddedVisitor.Id);
+                await SignalRService.SendAddedVisitorNotification(AddedVisitor.Id);
                 NavigateToDetailPage(AddedVisitor.Id);
             }
             else

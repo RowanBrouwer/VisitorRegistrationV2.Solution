@@ -37,7 +37,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
                 {
                     var response = await Http.UpdateVisitor(visitorThatArrived);
 
-                    await signalRService.SendUpdateNotification(visitorThatArrived.Id);
+                    await signalRService.SendUpdatedVisitorNotification(visitorThatArrived.Id);
 
                     Message = ResponseManager.GetMessage(response);
                 }
@@ -60,7 +60,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
                 {
                     var response = await Http.UpdateVisitor(visitorThatDeparted);
 
-                    await signalRService.SendUpdateNotification(visitorThatDeparted.Id);
+                    await signalRService.SendUpdatedVisitorNotification(visitorThatDeparted.Id);
 
                     Message = ResponseManager.GetMessage(response);
                 }

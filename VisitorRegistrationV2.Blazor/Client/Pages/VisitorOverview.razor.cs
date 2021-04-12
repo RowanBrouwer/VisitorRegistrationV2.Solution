@@ -202,6 +202,8 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             SignalRService.NotifyOfUpdate -= OnNotifyOfUpdate;
             SignalRService.NotifyOfAdded -= OnNotifyOfAdded;
             Changed -= OnNotifyOfChange;
+            ResetMessage -= MessageDisposal;
+            ResetMessage -= ClientService.MessageDisposal;
         }
     }
 }

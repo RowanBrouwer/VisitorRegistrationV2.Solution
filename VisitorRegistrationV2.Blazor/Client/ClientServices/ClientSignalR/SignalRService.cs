@@ -52,7 +52,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
         /// </summary>
         /// <param name="visitorId"> Id of the updated visitor.</param>
         /// <returns></returns>
-        public async Task SendUpdateNotification(int visitorId) => 
+        public async Task SendUpdatedVisitorNotification(int visitorId) => 
             await connection.SendAsync(StringCollection.SendUpdatedVisitorNotificationString, visitorId);
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
         /// </summary>
         /// <param name="visitorId">Id of the added visitor.</param>
         /// <returns></returns>
-        public async Task SendAddNotification(int visitorId) => 
+        public async Task SendAddedVisitorNotification(int visitorId) => 
             await connection.SendAsync(StringCollection.SendAddedVisitorNotificationString, visitorId);
 
         /// <summary>
