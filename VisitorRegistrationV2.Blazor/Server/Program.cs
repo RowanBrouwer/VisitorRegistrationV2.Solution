@@ -16,7 +16,7 @@ namespace VisitorRegistrationV2.Blazor.Server
 {
     public class Program
     {
-        public async static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
             using (var scope = host.Services.CreateScope())
@@ -37,7 +37,7 @@ namespace VisitorRegistrationV2.Blazor.Server
 
                 }
             }
-            await host.RunAsync();
+            host.Run();
         }
 
 
