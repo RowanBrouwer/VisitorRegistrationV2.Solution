@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VisitorRegistrationV2.Blazor.Server.CustomLogger;
 using VisitorRegistrationV2.Blazor.Shared;
 using VisitorRegistrationV2.Data;
 
@@ -15,7 +16,7 @@ namespace VisitorRegistrationV2.Blazor.Server
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public async static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
             using (var scope = host.Services.CreateScope())
@@ -36,15 +37,20 @@ namespace VisitorRegistrationV2.Blazor.Server
 
                 }
             }
-            host.Run();
+            await host.RunAsync();
         }
-    
+
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+            .ConfigureLogging(logging =>
+            {
+                logging.ClearProviders();
+                logging.AddConsoleLogger();
+            })
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
     }
 }

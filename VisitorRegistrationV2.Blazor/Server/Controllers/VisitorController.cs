@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VisitorRegistrationV2.Blazor.Server.CustomLogger;
 using VisitorRegistrationV2.Blazor.Shared;
 using VisitorRegistrationV2.Data.Services.Visitors;
 
@@ -33,7 +35,6 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
             {
                 return NotFound();
             }
-
             return Ok(result);
         }
 
