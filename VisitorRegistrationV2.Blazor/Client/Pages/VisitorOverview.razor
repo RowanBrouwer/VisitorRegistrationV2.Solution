@@ -31,7 +31,7 @@
             {
                 <div class="row">
                     <div class="col border border-dark col-4">
-                        @visitor.FullName()
+                        @visitor.FullName
                     </div>
                     <div class="col border border-dark col-2">
                         @if (visitor.ArrivalTime.Value.Date == DateTime.Today)
@@ -80,7 +80,7 @@
             {
                 <div class="row">
                     <div class="col border border-dark col-4">
-                        @visitor.FullName()
+                        @visitor.FullName
                     </div>
                     <div class="col border border-dark col-2">
                         @if (visitor.ArrivalTime != null)

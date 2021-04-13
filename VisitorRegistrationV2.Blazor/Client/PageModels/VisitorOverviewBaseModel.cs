@@ -24,7 +24,7 @@ namespace VisitorRegistrationV2.Blazor.Client.PageModels
         protected IEnumerable<Visitor> FilterdPresentVisitors => visitors
             .OrderBy(v => v.ArrivalTime)
             .Where(a => a.ArrivalTime != null
-            && a.DepartureTime == null && a.FullName()
+            && a.DepartureTime == null && a.FullName
             .ToLower().Contains(SearchTerm.ToLower()));
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace VisitorRegistrationV2.Blazor.Client.PageModels
                 .OrderBy(v => v.ArrivalTime)
                 .Where(a => (a.DepartureTime == null ? a.DepartureTime == null 
                 && a.ArrivalTime == null : a.DepartureTime != null 
-                && a.ArrivalTime != null) && a.FullName()
+                && a.ArrivalTime != null) && a.FullName
                 .ToLower().Contains(SearchTerm.ToLower()));
     }
 }

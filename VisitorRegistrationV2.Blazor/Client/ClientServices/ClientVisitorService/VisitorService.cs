@@ -32,7 +32,12 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
         {
             if (await signalRService.IsConnected())
             {
-                var Succeeded = await visitorThatArrived.SetArrivalTime(time, OverRide);
+                if (time == null)
+                {
+                    time = DateTime.Now;
+                }
+
+                bool Succeeded = await visitorThatArrived.SetArrivalTime(time, OverRide);
 
                 if (Succeeded)
                 {
@@ -55,6 +60,11 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
         {
             if (await signalRService.IsConnected())
             {
+                if (time == null)
+                {
+                    time = DateTime.Now;
+                }
+
                 var Succeeded = await visitorThatDeparted.SetDepartureTime(time, OverRide);
 
                 if (Succeeded)
