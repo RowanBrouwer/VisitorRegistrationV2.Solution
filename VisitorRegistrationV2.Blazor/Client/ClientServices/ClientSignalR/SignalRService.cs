@@ -15,17 +15,24 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
         public event Action<int> NotifyOfAdded;
 
         HubConnection connection;
+        ILoggerProvider logger;
 
         /// <summary>
         /// Creates a connection and sets on what it needs to react.
         /// </summary>
         /// <param name="navManager"> Navigation manager used in the hubconnection. </param>
-        public SignalRService(NavigationManager navManager)
+        public SignalRService(NavigationManager navManager, ILoggerProvider logger)
         {
+            this.logger = logger;
 
             connection = new HubConnectionBuilder()
                     .WithUrl(navManager.ToAbsoluteUri(StringCollection.HubUri))
                     .WithAutomaticReconnect()
+                    .ConfigureLogging(logging =>
+                    {
+                        logging.AddProvider(logger);
+                        logging.SetMinimumLevel(LogLevel.Information);
+                    })
                     .Build();
 
             connection.On<int>(StringCollection.VisitorUpdatedString, (visitorId) =>

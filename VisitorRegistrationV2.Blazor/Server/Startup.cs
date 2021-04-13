@@ -12,7 +12,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
-using VisitorRegistrationV2.Blazor.Server.CustomLogger;
 using VisitorRegistrationV2.Blazor.Server.Hubs;
 using VisitorRegistrationV2.Blazor.Shared;
 using VisitorRegistrationV2.Data;

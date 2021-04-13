@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VisitorRegistrationV2.Blazor.Server.CustomLogger;
 using VisitorRegistrationV2.Blazor.Shared;
 using VisitorRegistrationV2.Data.Services.Visitors;
 
@@ -19,8 +18,10 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
     public class VisitorController : ControllerBase
     {
         private readonly IVisitors context;
-        public VisitorController(IVisitors context)
+        private ILogger<VisitorController> logger;
+        public VisitorController(IVisitors context, ILogger<VisitorController> logger)
         {
+            this.logger = logger;
             this.context = context;
         }
 
@@ -29,10 +30,13 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Visitor>>> Get()
         {
+            logger.LogInformation($"GET VisitorList API call at {DateTime.Now.ToShortTimeString()}");
+
             var result = await context.GetListOfVisitors();
 
             if (result == null)
             {
+                logger.LogWarning($"NOTFOUND VisitorList at {DateTime.Now.ToShortTimeString()}");
                 return NotFound();
             }
             return Ok(result);
@@ -42,10 +46,13 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
+            logger.LogInformation($"GET Visitor {id} API call - {DateTime.Now.ToShortTimeString()}");
+
             var result = await context.GetVisitorById(id);
 
             if (result == null)
             {
+                logger.LogWarning($"NOTFOUND Visitor {id} - {DateTime.Now.ToShortTimeString()}");
                 return NotFound();
             }
 
@@ -56,15 +63,17 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Visitor>> Post([FromBody] Visitor newVisitor)
         {
+            logger.LogInformation($"POST Visitor {newVisitor.Id} - {DateTime.Now.ToShortTimeString()}");
+
             Visitor result = newVisitor;
             if (ModelState.IsValid)
             {
-                result = await context.AddVisitor(newVisitor);
-
-                if (result == null)
-                {
-                    return BadRequest();
-                }
+                result = await context.AddVisitor(newVisitor);  
+            }
+            else
+            {
+                logger.LogInformation($"BADREQUEST Modelstate not valid - Visitor {newVisitor.Id} {DateTime.Now.ToShortTimeString()}");
+                return BadRequest();
             }
 
             return Ok(result);
@@ -74,10 +83,13 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody]Visitor visitor)
         {
+            logger.LogInformation($"PUT Visitor {id} - {DateTime.Now.ToShortTimeString()}");
+
             var result = await Task.FromResult(context.UpdateVisitor(visitor));
 
             if (result == null)
             {
+                logger.LogInformation($"NOTFOUND Visitor {id} - {DateTime.Now.ToShortTimeString()}");
                 return NotFound();
             }
             
@@ -88,6 +100,7 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
+            logger.LogInformation($"DELETE Visitor {id} - {DateTime.Now.ToShortTimeString()}");
             await context.DeleteVisitor(id);
 
             return Ok();
