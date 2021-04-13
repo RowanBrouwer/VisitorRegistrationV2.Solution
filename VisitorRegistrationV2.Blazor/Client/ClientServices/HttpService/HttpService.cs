@@ -22,7 +22,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
 
         public async Task<HttpResponseMessage> AddVisitor(Visitor visitor)
         {
-            logger.LogInformation($"Calling API-POST for Visitor {visitor.Id}");
+            logger.LogInformation($"Calling API-POST for Visitor {visitor.Id} at {DateTime.Now.ToShortTimeString()}");
             var result = await Http.PostAsJsonAsync(StringCollection.ApiUri, visitor);
             
             return result;
@@ -30,7 +30,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
 
         public async Task<Visitor> GetVisitor(int id)
         {
-            logger.LogInformation($"Calling API-GET for Visitor {id}");
+            logger.LogInformation($"Calling API-GET for Visitor {id} at {DateTime.Now.ToShortTimeString()}");
             var result = await Http.GetFromJsonAsync<Visitor>(StringCollection.ApiUri + $"/{id}");
 
             return result;
@@ -38,7 +38,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
         
         public async Task<List<Visitor>> GetVisitorList()
         {
-            logger.LogInformation($"Calling API-GET for Visitor List");
+            logger.LogInformation($"Calling API-GET for Visitor List at {DateTime.Now.ToShortTimeString()}");
             var result = await Http.GetFromJsonAsync<List<Visitor>>(StringCollection.ApiUri);
 
             return result;
@@ -46,7 +46,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
 
         public async Task<HttpResponseMessage> UpdateVisitor(Visitor visitor)
         {
-            logger.LogInformation($"Calling API-PUT for Visitor {visitor.Id}");
+            logger.LogInformation($"Calling API-PUT for Visitor {visitor.Id} at {DateTime.Now.ToShortTimeString()}");
             var result = await Http.PutAsJsonAsync(StringCollection.ApiUri + $"/{visitor.Id}", visitor);
 
             return result;

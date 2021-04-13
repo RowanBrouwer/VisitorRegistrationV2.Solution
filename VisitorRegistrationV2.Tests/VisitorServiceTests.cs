@@ -52,7 +52,7 @@ namespace VisitorRegistrationV2.Tests
         {
             var result = await context.GetVisitorById(TestVisitorId1);
 
-            string fullname = result.FullName();
+            string fullname = result.FullName;
             string expectedFullname = "Rowan Brouwer";
 
             Assert.Equal(fullname, expectedFullname);
@@ -63,15 +63,9 @@ namespace VisitorRegistrationV2.Tests
         {
             var user = await context.GetVisitorById(TestVisitorId1);
 
-            Visitor updatedUser = new Visitor
-            {
-                FirstName = user.FirstName,
-                MiddleName = "Test",
-                LastName= user.LastName,
-                Id = user.Id
-            };
+            user.MiddleName = "Test";
 
-            await context.UpdateVisitor(updatedUser);
+            await context.UpdateVisitor(user);
 
             var userAfterUpdate = await context.GetVisitorById(TestVisitorId1);
             var ExpectedMiddleName = "Test";
