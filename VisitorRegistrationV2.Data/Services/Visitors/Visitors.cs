@@ -50,25 +50,8 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
 
         public async Task UpdateVisitor(Visitor updatedVisitor)
         {
-            var UserToUpdate = await GetVisitorById(updatedVisitor.Id);
-
-            if (UserToUpdate.FirstName != updatedVisitor.FirstName)
-                UserToUpdate.FirstName = updatedVisitor.FirstName;
-
-            if (UserToUpdate.MiddleName != updatedVisitor.MiddleName)
-                UserToUpdate.MiddleName = updatedVisitor.MiddleName;
-
-            if (UserToUpdate.LastName != updatedVisitor.LastName)
-                UserToUpdate.LastName = updatedVisitor.LastName;
-
-            if (UserToUpdate.ArrivalTime != updatedVisitor.ArrivalTime)
-                UserToUpdate.ArrivalTime = updatedVisitor.ArrivalTime;
-
-            if (UserToUpdate.DepartureTime != updatedVisitor.DepartureTime)
-                UserToUpdate.DepartureTime = updatedVisitor.DepartureTime;
-
-            context.Update(UserToUpdate);
-            context.SaveChanges();
+            context.Update(updatedVisitor);
+            await context.SaveChangesAsync();
         }
     }
 }
