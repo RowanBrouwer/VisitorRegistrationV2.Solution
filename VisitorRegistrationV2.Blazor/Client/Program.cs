@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using Microsoft.AspNetCore.Components.Rendering;
-using Microsoft.AspNetCore.Components.WebAssembly.Services;
 using System.Net.Http;
 using System.Threading.Tasks;
 using VisitorRegistrationV2.Blazor.Client.ClientServices;
@@ -34,7 +32,14 @@ namespace VisitorRegistrationV2.Blazor.Client
             builder.Services.AddSingleton<ISignalRService, SignalRService>();
             builder.Services.AddScoped<IVisitorService ,VisitorService>();
 
-            builder.Services.AddLogging(builder => builder.AddBrowserConsole().SetMinimumLevel(LogLevel.Trace));
+            builder.Services.AddLogging(builder => 
+            {
+                builder.AddBrowserConsole().SetMinimumLevel(LogLevel.Trace);
+                builder.AddFilter("Microsoft.AspNetCore.SignalR.Client", LogLevel.Information);
+                builder.AddFilter("System.Net.Http", LogLevel.Information);
+                builder.AddFilter("Microsoft.AspNetCore.Components.WebAssembly.Authentication", LogLevel.Information);
+                builder.AddFilter("Microsoft.AspNetCore.Components.WebAssembly.Hosting", LogLevel.Information);
+            });
 
             await builder.Build().RunAsync();
         }
