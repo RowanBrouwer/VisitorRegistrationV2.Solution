@@ -106,19 +106,19 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
             return Ok();
         }
 
-        [HttpGet("{SearchTerm}")]
-        public async Task<ActionResult<List<Visitor>>> Search(string SearchTerm)
-        {
-            logger.LogInformation($"SEARCH Visitors by NAME - {DateTime.Now.ToShortTimeString()}");
-            var result = await context.SearchVisitorsByName(SearchTerm);
+        //[HttpGet("{SearchTerm}")]
+        //public async Task<ActionResult<List<Visitor>>> Search(string SearchTerm)
+        //{
+        //    logger.LogInformation($"SEARCH Visitors by NAME - {DateTime.Now.ToShortTimeString()}");
+        //    var result = await context.SearchVisitorsByName(SearchTerm);
 
-            if (result == null)
-            {
-                logger.LogInformation($"NOTFOUND Visitors With {SearchTerm} - {DateTime.Now.ToShortTimeString()}");
-                return NotFound();
-            }
+        //    if (result == null)
+        //    {
+        //        logger.LogInformation($"NOTFOUND Visitors With {SearchTerm} - {DateTime.Now.ToShortTimeString()}");
+        //        return NotFound();
+        //    }
 
-            return Ok(result);
-        }
+        //    return Ok(result);
+        //}
     }
 }

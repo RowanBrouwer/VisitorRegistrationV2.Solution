@@ -205,13 +205,6 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             ResetMessage -= MessageDisposal;
             ResetMessage -= ClientService.MessageDisposal;
         }
-
-
-        protected string ServerSearchString { get; set; } = "";
-        //protected async Task ServerSearch()
-        //{
-        //    var response = await Http.SearchVisitor(ServerSearchString);
-        //}
     }
 }
 
