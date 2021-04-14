@@ -17,133 +17,133 @@
 </div>
 
 
-        @if (ListSelection == 0)
-        {
-            <div class="col-auto" style="padding:4px,10px,2px,10px">
-                <div class="row">
-                    <div class="col border border-dark bg-dark text-white">Present</div>
-                </div>
-                <div class="row">
-                    <div class="col border border-dark col-4">
-                        Full name
-                    </div>
-                    <div class="col border border-dark col-2">
-                        Arrival time
-                    </div>
-                    <div class="col border border-dark col-3">
-                        Arrived
-                    </div>
-                    <div class="col border border-dark col-3">
-                        Departure
-                    </div>
-                </div>
-                @foreach (var visitor in FilterdPresentVisitors)
-                {
-                    <div class="row">
-                        <div class="col border border-dark col-4">
-                            @visitor.FullName
-                        </div>
-                        <div class="col border border-dark col-2">
-                            @if (visitor.ArrivalTime.Value.Date == DateTime.Today)
-                            {
-                                @(visitor.ArrivalTime.Value.ToShortTimeString())
-                            }
-                            else
-                            {
-                                @(visitor.ArrivalTime.Value.ToShortDateString() + ' ' + visitor.ArrivalTime.Value.ToShortTimeString())
-                            }
-                        </div>
-                        <button type="button" @onclick="@(() => VisitorArrived(visitor, false))"
-                                disabled="@(showDialogDeparted == true || showDialogArrived == true)"
-                                class="col border border-dark col-3 btn-success shadow-sm rounded">
-                            Arrived
-                        </button>
-                        <button type="button" @onclick="@(() => VisitorDeparted(visitor, false))"
-                                disabled="@(showDialogDeparted == true || showDialogArrived == true)"
-                                class="col border border-dark col-3 btn-danger shadow-sm rounded">
-                            Departure
-                        </button>
-                    </div>
-                }
-            </div>
-        }
-        @if (ListSelection == 1)
-            {
-    <div class="col-auto" style="padding:4px,10px,2px,10px">
-        <div class="row">
-            <div class="col col-12 border border-dark bg-dark text-white"> Not present</div>
+@if (ListSelection == 0)
+{ 
+<div class="col-auto" style="padding:4px,10px,2px,10px">
+    <div class="row">
+        <div class="col border border-dark bg-dark text-white">Present</div>
+    </div>
+    <div class="row">
+        <div class="col border border-dark col-4">
+            Full name
         </div>
+        <div class="col border border-dark col-2">
+            Arrival time
+        </div>
+        <div class="col border border-dark col-3">
+            Arrived
+        </div>
+        <div class="col border border-dark col-3">
+            Departure
+        </div>
+    </div>
+    @foreach (var visitor in FilterdPresentVisitors)
+    {
         <div class="row">
             <div class="col border border-dark col-4">
-                Full name
+                @visitor.FullName
             </div>
             <div class="col border border-dark col-2">
-                Arrival time
+                @if (visitor.ArrivalTime.Value.Date == DateTime.Today)
+                {
+                    @(visitor.ArrivalTime.Value.ToShortTimeString())
+                }
+                else
+                {
+                    @(visitor.ArrivalTime.Value.ToShortDateString() + ' ' + visitor.ArrivalTime.Value.ToShortTimeString())
+                }
             </div>
-            <div class="col border border-dark col-2">
-                Departure time
-            </div>
-            <div class="col border border-dark col-2">
+            <button type="button" @onclick="@(() => VisitorArrived(visitor, false))"
+                    disabled="@(showDialogDeparted == true || showDialogArrived == true)"
+                    class="col border border-dark col-3 btn-success shadow-sm rounded">
                 Arrived
+            </button>
+            <button type="button" @onclick="@(() => VisitorDeparted(visitor, false))"
+                    disabled="@(showDialogDeparted == true || showDialogArrived == true)"
+                    class="col border border-dark col-3 btn-danger shadow-sm rounded">
+                Departure
+            </button>
+        </div>
+    }
+</div>
+}
+@if (ListSelection == 1)
+{
+<div class="col-auto" style="padding:4px,10px,2px,10px">
+    <div class="row">
+        <div class="col col-12 border border-dark bg-dark text-white"> Not present</div>
+    </div>
+    <div class="row">
+        <div class="col border border-dark col-4">
+            Full name
+        </div>
+        <div class="col border border-dark col-2">
+            Arrival time
+        </div>
+        <div class="col border border-dark col-2">
+            Departure time
+        </div>
+        <div class="col border border-dark col-2">
+            Arrived
+        </div>
+        <div class="col border border-dark col-2">
+            Departure
+        </div>
+    </div>
+    @foreach (var visitor in FilterdNotPresentVisitors)
+    {
+        <div class="row">
+            <div class="col border border-dark col-4">
+                @visitor.FullName
             </div>
             <div class="col border border-dark col-2">
+                @if (visitor.ArrivalTime != null)
+                {
+                    @if (visitor.ArrivalTime.Value.Date == DateTime.Today)
+                    {
+                        @(visitor.ArrivalTime.Value.ToShortTimeString())
+                    }
+                    else
+                    {
+                        @(visitor.ArrivalTime.Value.ToShortDateString() + ' ' + visitor.ArrivalTime.Value.ToShortTimeString())
+                    }
+                }
+                else
+                {
+                    @visitor.ArrivalTime
+                }
+            </div>
+            <div class="col border border-dark col-2">
+                @if (visitor.DepartureTime != null)
+                {
+                    @if (visitor.DepartureTime.Value.Date == DateTime.Today)
+                    {
+                        @(visitor.DepartureTime.Value.ToShortTimeString())
+                    }
+                    else
+                    {
+                        @(visitor.DepartureTime.Value.ToShortDateString() + ' ' + visitor.ArrivalTime.Value.ToShortTimeString())
+                    }
+                }
+                else
+                {
+                    @visitor.DepartureTime
+                }
+            </div>
+            <button type="button" @onclick="@(() => VisitorArrived(visitor, false))"
+                    disabled="@(showDialogDeparted == true || showDialogArrived == true)"
+                    class="col border border-dark col-2 btn-success shadow-sm rounded">
+                Arrived
+            </button>
+            <button type="button" @onclick="@(() => VisitorDeparted(visitor, false))"
+                    disabled="@(showDialogDeparted == true || showDialogArrived == true || visitor.ArrivalTime == null)"
+                    class="col border border-dark col-2 btn-danger shadow-sm rounded">
                 Departure
-            </div>
+            </button>
         </div>
-        @foreach (var visitor in FilterdNotPresentVisitors)
-        {
-            <div class="row">
-                <div class="col border border-dark col-4">
-                    @visitor.FullName
-                </div>
-                <div class="col border border-dark col-2">
-                    @if (visitor.ArrivalTime != null)
-                    {
-                        @if (visitor.ArrivalTime.Value.Date == DateTime.Today)
-                        {
-                            @(visitor.ArrivalTime.Value.ToShortTimeString())
-                        }
-                        else
-                        {
-                            @(visitor.ArrivalTime.Value.ToShortDateString() + ' ' + visitor.ArrivalTime.Value.ToShortTimeString())
-                        }
-                    }
-                    else
-                    {
-                        @visitor.ArrivalTime
-                    }
-                </div>
-                <div class="col border border-dark col-2">
-                    @if (visitor.DepartureTime != null)
-                    {
-                        @if (visitor.DepartureTime.Value.Date == DateTime.Today)
-                        {
-                            @(visitor.DepartureTime.Value.ToShortTimeString())
-                        }
-                        else
-                        {
-                            @(visitor.DepartureTime.Value.ToShortDateString() + ' ' + visitor.ArrivalTime.Value.ToShortTimeString())
-                        }
-                    }
-                    else
-                    {
-                        @visitor.DepartureTime
-                    }
-                </div>
-                <button type="button" @onclick="@(() => VisitorArrived(visitor, false))"
-                        disabled="@(showDialogDeparted == true || showDialogArrived == true)"
-                        class="col border border-dark col-2 btn-success shadow-sm rounded">
-                    Arrived
-                </button>
-                <button type="button" @onclick="@(() => VisitorDeparted(visitor, false))"
-                        disabled="@(showDialogDeparted == true || showDialogArrived == true || visitor.ArrivalTime == null)"
-                        class="col border border-dark col-2 btn-danger shadow-sm rounded">
-                    Departure
-                </button>
-            </div>
-        }
-    </div>
     }
+</div>
+}
     <br />
     <div class="row">
         @if (showDialogArrived)
