@@ -28,11 +28,6 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
             connection = new HubConnectionBuilder()
                     .WithUrl(navManager.ToAbsoluteUri(StringCollection.HubUri))
                     .WithAutomaticReconnect()
-                    .ConfigureLogging(logging =>
-                    {
-                        logging.AddProvider(logger);
-                        logging.SetMinimumLevel(LogLevel.Information);
-                    })
                     .Build();
 
             connection.On<int>(StringCollection.VisitorUpdatedString, (visitorId) =>
