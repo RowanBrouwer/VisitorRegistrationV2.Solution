@@ -51,13 +51,5 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
 
             return result;
         }
-
-        //public async Task<List<Visitor>> SearchVisitor(string ServerSearchTerm)
-        //{
-        //    logger.LogInformation($"Calling API-PUT for Visitors with {ServerSearchTerm} at {DateTime.Now.ToShortTimeString()}");
-        //    var result = await Http.GetFromJsonAsync<List<Visitor>>("api/Visitor/SearchTerm" + $"/{ServerSearchTerm}");
-
-        //    return result;
-        //}
     }
 }

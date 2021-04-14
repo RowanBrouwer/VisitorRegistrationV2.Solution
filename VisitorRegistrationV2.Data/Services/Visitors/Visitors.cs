@@ -59,8 +59,7 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
 
         public async Task UpdateVisitor(Visitor updatedVisitor)
         {
-            var user = await GetVisitorById(updatedVisitor.Id);
-            context.Update(user);
+            context.Update(updatedVisitor);
             await context.SaveChangesAsync();
         }
     }
