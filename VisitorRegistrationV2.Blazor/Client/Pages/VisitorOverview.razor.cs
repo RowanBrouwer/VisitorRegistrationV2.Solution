@@ -25,7 +25,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         protected Visitor SelectedVisitor { get; set; }
 
         private event Action Changed;
-
+        protected int ListSelection { get; set; } = 0;
         protected override async Task OnInitializedAsync()
         {
             SignalRService.NotifyOfUpdate += OnNotifyOfUpdate;
