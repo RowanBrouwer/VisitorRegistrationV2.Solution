@@ -48,6 +48,6 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
         /// </summary>
         /// <param name="SearchTerm">String to filter the Fullname</param>
         /// <returns></returns>
-        public Task<IEnumerable<Visitor>> SearchVisitorsByName(string SearchTerm);
+        public Task<List<Visitor>> SearchVisitorsByName(string SearchTerm);
     }
 }

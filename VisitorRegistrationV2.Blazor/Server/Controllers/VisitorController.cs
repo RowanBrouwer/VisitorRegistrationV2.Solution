@@ -106,8 +106,8 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
             return Ok();
         }
 
-        [HttpGet("{Search}")]
-        public async Task<ActionResult<IEnumerable<Visitor>>> Search([FromBody] string SearchTerm)
+        [HttpGet("{SearchTerm}")]
+        public async Task<ActionResult<List<Visitor>>> Search(string SearchTerm)
         {
             logger.LogInformation($"SEARCH Visitors by NAME - {DateTime.Now.ToShortTimeString()}");
             var result = await context.SearchVisitorsByName(SearchTerm);

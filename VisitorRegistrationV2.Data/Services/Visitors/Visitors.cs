@@ -48,11 +48,11 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
             return Task.FromResult(context.Visitors.Find(id));
         }
 
-        public async Task<IEnumerable<Visitor>> SearchVisitorsByName(string SearchTerm)
+        public async Task<List<Visitor>> SearchVisitorsByName(string SearchTerm)
         {
             var result = (context.Visitors
                          .Where(v => v.MiddleName == null ? ($"{v.FirstName} {v.LastName}").Contains(SearchTerm) 
-                         : ($"{v.FirstName} {v.MiddleName} {v.LastName}").Contains(SearchTerm)));
+                         : ($"{v.FirstName} {v.MiddleName} {v.LastName}").Contains(SearchTerm))).ToList();
 
             return await Task.FromResult(result);
         }

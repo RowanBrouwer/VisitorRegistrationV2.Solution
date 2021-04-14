@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.SignalR.Client;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System.Timers;
 using VisitorRegistrationV2.Blazor.Client.ClientServices;
@@ -205,6 +205,13 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             ResetMessage -= MessageDisposal;
             ResetMessage -= ClientService.MessageDisposal;
         }
+
+
+        protected string ServerSearchString { get; set; } = "";
+        //protected async Task ServerSearch()
+        //{
+        //    var response = await Http.SearchVisitor(ServerSearchString);
+        //}
     }
 }
 

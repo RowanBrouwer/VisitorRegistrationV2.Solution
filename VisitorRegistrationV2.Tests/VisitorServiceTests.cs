@@ -78,11 +78,9 @@ namespace VisitorRegistrationV2.Tests
         {
             var user = await context.GetVisitorById(TestVisitorId1);
 
-            await context.DeleteVisitor(TestVisitorId1);
+            await context.DeleteVisitor(user.Id);
 
-            var DeletedUser = await context.GetVisitorById(TestVisitorId1);
-
-            Assert.Null(DeletedUser);
+            Assert.DoesNotContain(user, db.Visitors);
         }
 
         [Fact]

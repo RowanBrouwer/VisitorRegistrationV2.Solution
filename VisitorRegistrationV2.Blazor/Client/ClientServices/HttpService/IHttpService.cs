@@ -35,5 +35,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
         /// <param name="visitor">Visitor that needs to be added</param>
         /// <returns></returns>
         public Task<HttpResponseMessage> AddVisitor(Visitor visitor);
+
+        //public Task<List<Visitor>> SearchVisitor(string ServerSearchTerm);
     }
 }
