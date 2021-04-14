@@ -68,7 +68,7 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
             Visitor result = newVisitor;
             if (ModelState.IsValid)
             {
-                result = await context.AddVisitor(newVisitor);  
+                result = await context.AddVisitor(newVisitor);
             }
             else
             {
@@ -81,7 +81,7 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
 
         // PUT api/<VisitorController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody]Visitor visitor)
+        public async Task<ActionResult> Put(int id, [FromBody] Visitor visitor)
         {
             logger.LogInformation($"PUT Visitor {id} - {DateTime.Now.ToShortTimeString()}");
 
@@ -92,7 +92,7 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
                 logger.LogInformation($"NOTFOUND Visitor {id} - {DateTime.Now.ToShortTimeString()}");
                 return NotFound();
             }
-            
+
             return NoContent();
         }
 
@@ -104,6 +104,21 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
             await context.DeleteVisitor(id);
 
             return Ok();
+        }
+
+        [HttpGet("{Search}")]
+        public async Task<ActionResult<IEnumerable<Visitor>>> Search([FromBody] string SearchTerm)
+        {
+            logger.LogInformation($"SEARCH Visitors by NAME - {DateTime.Now.ToShortTimeString()}");
+            var result = await context.SearchVisitorsByName(SearchTerm);
+
+            if (result == null)
+            {
+                logger.LogInformation($"NOTFOUND Visitors With {SearchTerm} - {DateTime.Now.ToShortTimeString()}");
+                return NotFound();
+            }
+
+            return Ok(result);
         }
     }
 }

@@ -96,18 +96,16 @@ namespace VisitorRegistrationV2.Tests
         }
 
 
-        // need to figure the linq behind the method
-        //[Fact]
-        //public async void GetVisitorListBySearchTermTest()
-        //{
-        //    string Name = "Rowan Brouwer";
+       [Fact]
+        public async void GetVisitorListBySearchTermTest()
+        {
+            string Name = "Rowan Brouwer";
 
-        //    var SearchResult = await context.GetVisitorListBySearchTerm(Name);
+            var SearchResult = await context.SearchVisitorsByName(Name);
 
-        //    var RowanVisitor = SearchResult.FirstOrDefault(v => v.FullName() == Name);
+            var RowanVisitor = SearchResult.FirstOrDefault(v => v.FullName == Name);
 
-        //    Assert.Equal(Name, RowanVisitor.FullName());
-        //}
-
+            Assert.Equal(Name, RowanVisitor.FullName);
+        }
     }
 }

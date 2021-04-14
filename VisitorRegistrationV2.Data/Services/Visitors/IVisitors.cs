@@ -43,5 +43,11 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
         /// <returns></returns>
         public Task<Visitor> GetVisitorById(int id);
 
+        /// <summary>
+        /// Gets list of visitors based on full name and searchTerm.
+        /// </summary>
+        /// <param name="SearchTerm">String to filter the Fullname</param>
+        /// <returns></returns>
+        public Task<IEnumerable<Visitor>> SearchVisitorsByName(string SearchTerm);
     }
 }
