@@ -1,19 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using Microsoft.AspNetCore.SignalR.Client;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Timers;
-using VisitorRegistrationV2.Blazor.Client.ClientServices;
+using VisitorRegistrationV2.Blazor.Client.Components.PresentVisitorsUIComponent;
 using VisitorRegistrationV2.Blazor.Client.PageModels;
 using VisitorRegistrationV2.Blazor.Shared;
+
 
 namespace VisitorRegistrationV2.Blazor.Client.Pages
 {
@@ -24,25 +17,36 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         /// </summary>
         protected Visitor SelectedVisitor { get; set; }
 
-        private event Action Changed;
+        protected FilterdPresentVisitorsComponent PresentComponent = new FilterdPresentVisitorsComponent();
         protected int ListSelection { get; set; } = 0;
         protected override async Task OnInitializedAsync()
         {
             SignalRService.NotifyOfUpdate += OnNotifyOfUpdate;
             SignalRService.NotifyOfAdded += OnNotifyOfAdded;
-            Changed += OnNotifyOfChange;
             ResetMessage += MessageDisposal;
             ResetMessage += ClientService.MessageDisposal;
+            Changed += OnChange;
 
             await LoadData();
         }
 
-        /// <summary>
-        /// Invokes StateHasChanged async
-        /// </summary>
-        public void OnNotifyOfChange()
+        public event Action Changed;
+
+        protected void OnChange()
         {
             InvokeAsync(() => StateHasChanged());
+        }
+
+        public void OnVisitorDeparted(Visitor visitor, bool overRide)
+        {
+            InvokeAsync(() => VisitorDeparted(visitor, overRide));
+            Changed.Invoke();
+        }
+
+        public void OnVisitorArrived(Visitor visitor, bool overRide)
+        {
+            InvokeAsync(() => VisitorArrived(visitor, overRide));
+            Changed.Invoke();
         }
 
         /// <summary>
@@ -94,7 +98,9 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             try
             {
                 var FoundVisitor = await Http.GetVisitor(visitorId);
-                await SetUpdatedUser(FoundVisitor);   
+                await SetUpdatedUser(FoundVisitor);
+
+                Changed.Invoke();
             }
             catch (AccessTokenNotAvailableException exception)
             {
@@ -108,7 +114,6 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
 
             if (index >= 0)
                 visitors[index] = visitor;
-            Changed.Invoke();
             return Task.CompletedTask;
         }
 
@@ -121,7 +126,6 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             try
             {
                 visitors = await Http.GetVisitorList();
-                Changed.Invoke();
             }
             catch (AccessTokenNotAvailableException exception)
             {
@@ -158,7 +162,6 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
                 await SetUpdatedUser(visitorThatArrived);
                 Message = ClientService.Message; 
                 await delayMessageReset();
-                Changed.Invoke();
             }
             else
             {
@@ -183,7 +186,6 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
                 await SetUpdatedUser(visitorThatDeparted);
                 Message = ClientService.Message;
                 await delayMessageReset();
-                Changed.Invoke();
             }
             else
             {
@@ -201,9 +203,9 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         {
             SignalRService.NotifyOfUpdate -= OnNotifyOfUpdate;
             SignalRService.NotifyOfAdded -= OnNotifyOfAdded;
-            Changed -= OnNotifyOfChange;
             ResetMessage -= MessageDisposal;
             ResetMessage -= ClientService.MessageDisposal;
+            Changed -= OnChange;
         }
     }
 }

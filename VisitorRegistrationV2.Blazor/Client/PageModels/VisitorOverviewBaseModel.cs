@@ -10,8 +10,8 @@ namespace VisitorRegistrationV2.Blazor.Client.PageModels
     {
         [Parameter]
         public string SearchTerm { get; set; } = "";
-        protected bool showDialogArrived { get; set; } = false;
-        protected bool showDialogDeparted { get; set; } = false;
+        public bool showDialogArrived { get; set; }
+        public bool showDialogDeparted { get; set; }
 
         /// <summary>
         /// List of all visitors.

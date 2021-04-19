@@ -1,6 +1,6 @@
-﻿@page "/"
+﻿
+@page "/"
 @inherits VisitorOverviewModel
-
 
 <div class="text-left bg-blue-100" style="padding-bottom:4em"> Search by name :
     <input class="border-dark" @bind-value="SearchTerm" @bind-value:event="oninput" />
@@ -13,53 +13,13 @@
 
 @if (ListSelection == 0)
 { 
-<div class="col-auto" style="padding:4px,10px,2px,10px">
-    <div class="row">
-        <div class="col border border-dark bg-dark text-white">Present</div>
-    </div>
-    <div class="row">
-        <div class="col border border-dark col-4">
-            Full name
-        </div>
-        <div class="col border border-dark col-2">
-            Arrival time
-        </div>
-        <div class="col border border-dark col-3">
-            Arrived
-        </div>
-        <div class="col border border-dark col-3">
-            Departure
-        </div>
-    </div>
-    @foreach (var visitor in FilterdPresentVisitors)
-    {
-        <div class="row">
-            <div class="col border border-dark col-4">
-                @visitor.FullName
-            </div>
-            <div class="col border border-dark col-2">
-                @if (visitor.ArrivalTime.Value.Date == DateTime.Today)
-                {
-                    @(visitor.ArrivalTime.Value.ToShortTimeString())
-                }
-                else
-                {
-                    @(visitor.ArrivalTime.Value.ToShortDateString() + ' ' + visitor.ArrivalTime.Value.ToShortTimeString())
-                }
-            </div>
-            <button type="button" @onclick="@(() => VisitorArrived(visitor, false))"
-                    disabled="@(showDialogDeparted == true || showDialogArrived == true)"
-                    class="col border border-dark col-3 btn-success shadow-sm rounded">
-                Arrived
-            </button>
-            <button type="button" @onclick="@(() => VisitorDeparted(visitor, false))"
-                    disabled="@(showDialogDeparted == true || showDialogArrived == true)"
-                    class="col border border-dark col-3 btn-danger shadow-sm rounded">
-                Departure
-            </button>
-        </div>
-    }
-</div>
+    <FilterdPresentVisitorsComponent 
+     @ref="PresentComponent"
+     PresentVisitors="FilterdPresentVisitors"
+     showDialogDeparted="showDialogDeparted" 
+     showDialogArrived="showDialogArrived"
+     VisitorArrived="OnVisitorArrived"
+     VisitorDeparted="OnVisitorDeparted"/>
 }
 @if (ListSelection == 1)
 {
@@ -138,15 +98,17 @@
     }
 </div>
 }
-    <br />
+
+<br/>
+
     <div class="row">
-        @if (showDialogArrived)
+        @if (showDialogArrived == true)
         {
             <div class="col col-2 border border-dark col-auto">Want to override this time? </div>
             <button class="col col-5 border border-dark col-auto btn-success shadow-sm rounded" type="button" style="" @onclick="@(() => VisitorArrived(SelectedVisitor, true))">Yes</button>
             <button class="col col-5 border border-dark col-auto btn-danger shadow-sm rounded" type="button" style="" @onclick="@(() => showDialogArrived = false)">No</button>
         }
-        @if (showDialogDeparted)
+        @if (showDialogDeparted == true)
         {
             <div class="col col-2 border border-dark col-auto">Want to override this time? </div>
             <button class="col col-5 border border-dark col-auto btn-success shadow-sm rounded" type="button" style="" @onclick="@(() => VisitorDeparted(SelectedVisitor, true))">Yes</button>
@@ -154,11 +116,14 @@
         }
     </div>
 
-<br />
+<br/>
+
 <div>
     <button @onclick="@(() => RedirectToCreatePage())">Add visitor</button>
 </div>
+
 <br />
+
 @if (!string.IsNullOrEmpty(Message))
 {
     <span class="alert alert-info" style="padding:10px,17px,12px,8px">@Message</span>

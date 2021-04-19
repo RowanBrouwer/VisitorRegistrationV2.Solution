@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisitorRegistrationV2.Blazo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisitorRegistrationV2.Data", "VisitorRegistrationV2.Data\VisitorRegistrationV2.Data.csproj", "{6005A058-3E01-4701-8D7D-158ACF0DFE29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisitorRegistrationV2.Tests", "VisitorRegistrationV2.Tests\VisitorRegistrationV2.Tests.csproj", "{1A476293-EB75-4009-977B-067FBC9D9713}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisitorRegistrationV2.Tests", "VisitorRegistrationV2.Tests\VisitorRegistrationV2.Tests.csproj", "{1A476293-EB75-4009-977B-067FBC9D9713}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
