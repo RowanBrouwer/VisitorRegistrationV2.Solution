@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using System;
 using System.Threading.Tasks;
+using VisitorRegistrationV2.Blazor.Client.Components.NotPresentVisitorsUIComponent;
 using VisitorRegistrationV2.Blazor.Client.Components.PresentVisitorsUIComponent;
 using VisitorRegistrationV2.Blazor.Client.PageModels;
 using VisitorRegistrationV2.Blazor.Shared;
@@ -18,6 +19,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         protected Visitor SelectedVisitor { get; set; }
 
         protected FilterdPresentVisitorsComponent PresentComponent = new FilterdPresentVisitorsComponent();
+        protected FilterdNotPresentVisitorsUIComponent NotPresentComponent = new FilterdNotPresentVisitorsUIComponent();
         protected int ListSelection { get; set; } = 0;
         protected override async Task OnInitializedAsync()
         {

@@ -24,14 +24,7 @@
                 @visitor.FullName
             </div>
             <div class="col border border-dark col-2">
-                @if (visitor.ArrivalTime.Value.Date == DateTime.Today)
-                {
-                    @(visitor.ArrivalTime.Value.ToShortTimeString())
-                }
-                else
-                {
-                    @(visitor.ArrivalTime.Value.ToShortDateString() + ' ' + visitor.ArrivalTime.Value.ToShortTimeString())
-                }
+                @GetDateTimeAsString(visitor.ArrivalTime.Value).Result
             </div>
             <button type="button" @onclick="@(() => VisitorArrived.Invoke(visitor, false))"
                     disabled="@(showDialogDeparted == true || showDialogArrived == true)"

@@ -1,17 +1,16 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VisitorRegistrationV2.Blazor.Shared;
 
-namespace VisitorRegistrationV2.Blazor.Client.Components.PresentVisitorsUIComponent
+namespace VisitorRegistrationV2.Blazor.Client.Components.NotPresentVisitorsUIComponent
 {
-    public partial class FilterdPresentVisitorsComponent
+    public partial class FilterdNotPresentVisitorsUIComponent
     {
         [Parameter]
-        public IEnumerable<Visitor> PresentVisitors { get; set; }
+        public IEnumerable<Visitor> NotPresentVisitors { get; set; }
         [Parameter]
         public bool showDialogArrived { get; set; }
         [Parameter]
@@ -21,22 +20,22 @@ namespace VisitorRegistrationV2.Blazor.Client.Components.PresentVisitorsUICompon
         [Parameter]
         public Action<Visitor, bool> VisitorDeparted { get; set; }
 
-        public async Task<string> GetDateTimeAsString(DateTime? dateTime)
+        public Task<string> GetDateTimeAsString(DateTime? dateTime)
         {
             if (dateTime != null)
             {
                 if (dateTime.Value.Date == DateTime.Today)
                 {
-                    return await Task.FromResult(dateTime.Value.ToShortTimeString());
+                    return Task.FromResult(dateTime.Value.ToShortTimeString());
                 }
                 else
                 {
-                    return await Task.FromResult(dateTime.Value.ToShortDateString() + ' ' + dateTime.Value.ToShortTimeString());
-                }
+                    return Task.FromResult(dateTime.Value.ToShortDateString() + ' ' + dateTime.Value.ToShortTimeString());
+                }  
             }
             else
             {
-                return await Task.FromResult("");
+                return Task.FromResult("");
             }
         }
 
