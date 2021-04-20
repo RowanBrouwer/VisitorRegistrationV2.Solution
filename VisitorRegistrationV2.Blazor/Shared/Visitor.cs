@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using VisitorRegistrationV2.Blazor.Shared.TimeObjects.Actual;
+using VisitorRegistrationV2.Blazor.Shared.TimeObjects.Expected;
 
 namespace VisitorRegistrationV2.Blazor.Shared
 {
@@ -16,23 +18,15 @@ namespace VisitorRegistrationV2.Blazor.Shared
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
-        public DateTime? ArrivalTime { get; set; }
-        public DateTime? DepartureTime { get; set; }
+
+        public List<ActualTime> ActualTimes { get; set; }
+        public List<ExpectedTime> ExpectedTimes { get; set; }
+
+        public DateTime? ExpectedArrivalTime() => ExpectedTimes.Where(a => a.ArrivalTime.Value.Date == DateTime.Now.Date).First().ArrivalTime;
+        public DateTime? ExptectedDepartureTime() => ActualTimes.Where(a => a.ArrivalTime.Value.Date == DateTime.Now.Date).First().DepartureTime;
+        public DateTime? TodaysArrivalTime() => ActualTimes.Where(a => a.ArrivalTime.Value.Date == DateTime.Now.Date).First().ArrivalTime;
+        public DateTime? TodaysDepartureTime() => ActualTimes.Where(a => a.ArrivalTime.Value.Date == DateTime.Now.Date).First().DepartureTime;
         public string FullName => string.IsNullOrEmpty(MiddleName) ? $"{FirstName} {LastName}" : $"{FirstName} {MiddleName} {LastName}";
-
-        public Task<bool> SetArrivalTime(DateTime? time, bool overRide)
-            => ArrivalTime == null ? 
-                Task.FromResult((true, ArrivalTime = time).Item1)
-                : (overRide == true ? 
-                Task.FromResult((true, ArrivalTime = time, DepartureTime = null).Item1) 
-                : Task.FromResult(false));
-
-        public Task<bool> SetDepartureTime(DateTime? time, bool overRide)
-            => DepartureTime == null && ArrivalTime.HasValue ? 
-                Task.FromResult((true, DepartureTime = time).Item1)
-                : (overRide == true && ArrivalTime.HasValue ? 
-                Task.FromResult((true, DepartureTime = time).Item1) 
-                : Task.FromResult(false));
 
         public Task<string> GetDateTimeAsString(DateTime? dateTime)
         {

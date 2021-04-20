@@ -7,6 +7,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using VisitorRegistrationV2.Blazor.Client.PageModels;
 using VisitorRegistrationV2.Blazor.Shared;
+using VisitorRegistrationV2.Blazor.Shared.DTOs;
 
 namespace VisitorRegistrationV2.Blazor.Client.Pages
 {
@@ -14,7 +15,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
     {
         [Parameter]
         public int VisitorId { get; set; }
-        protected Visitor Visitor { get; set; }
+        protected VisitorDTO Visitor { get; set; }
 
         protected override async Task OnInitializedAsync()
         {

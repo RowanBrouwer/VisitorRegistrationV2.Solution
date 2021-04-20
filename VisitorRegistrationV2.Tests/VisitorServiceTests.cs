@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VisitorRegistrationV2.Blazor.Shared;
+using VisitorRegistrationV2.Blazor.Shared.DTOs;
 using VisitorRegistrationV2.Data;
 using VisitorRegistrationV2.Data.Services.Visitors;
 using Xunit;
@@ -86,11 +87,11 @@ namespace VisitorRegistrationV2.Tests
         [Fact]
         public async void AddVisitorTest()
         {
-            Visitor newVisitor = new Visitor { ArrivalTime = DateTime.Now, FirstName = "Test", LastName = "Person" };
+            VisitorDTO newVisitor = new VisitorDTO { TodaysArrivalTime = DateTime.Now, FirstName = "Test", LastName = "Person" };
 
-            var lookUpNewVisitor = await context.AddVisitor(newVisitor);
+            var result1 = await context.AddVisitor(newVisitor);
 
-            Assert.Equal(7, lookUpNewVisitor.Id);
+            Assert.Equal(7, result1.Id);
         }
 
 

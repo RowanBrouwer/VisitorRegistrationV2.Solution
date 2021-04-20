@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using VisitorRegistrationV2.Blazor.Shared;
+using VisitorRegistrationV2.Blazor.Shared.DTOs;
 
 namespace VisitorRegistrationV2.Blazor.Client.PageModels
 {
@@ -16,25 +17,25 @@ namespace VisitorRegistrationV2.Blazor.Client.PageModels
         /// <summary>
         /// List of all visitors.
         /// </summary>
-        protected List<Visitor> visitors { get; set; } = new List<Visitor>();
+        protected List<VisitorDTO> visitors { get; set; } = new List<VisitorDTO>();
 
         /// <summary>
         /// List of all currently present visitors filterd by their fullname.
         /// </summary>
-        protected IEnumerable<Visitor> FilterdPresentVisitors => visitors
-            .OrderBy(v => v.ArrivalTime)
-            .Where(a => a.ArrivalTime != null
-            && a.DepartureTime == null && a.FullName
+        protected IEnumerable<VisitorDTO> FilterdPresentVisitors => visitors
+            .OrderBy(v => v.TodaysArrivalTime)
+            .Where(a => a.TodaysArrivalTime != null
+            && a.TodaysDepartureTime == null && a.FullName
             .ToLower().Contains(SearchTerm.ToLower()));
 
         /// <summary>
         /// List of all currently not present visitors filterd by their fullname.
         /// </summary>
-        protected IEnumerable<Visitor> FilterdNotPresentVisitors => visitors
-                .OrderBy(v => v.ArrivalTime)
-                .Where(a => (a.DepartureTime == null ? a.DepartureTime == null 
-                && a.ArrivalTime == null : a.DepartureTime != null 
-                && a.ArrivalTime != null) && a.FullName
+        protected IEnumerable<VisitorDTO> FilterdNotPresentVisitors => visitors
+                .OrderBy(v => v.TodaysArrivalTime)
+                .Where(a => (a.TodaysDepartureTime == null ? a.TodaysDepartureTime == null 
+                && a.TodaysArrivalTime == null : a.TodaysDepartureTime != null 
+                && a.TodaysArrivalTime != null) && a.FullName
                 .ToLower().Contains(SearchTerm.ToLower()));
     }
 }

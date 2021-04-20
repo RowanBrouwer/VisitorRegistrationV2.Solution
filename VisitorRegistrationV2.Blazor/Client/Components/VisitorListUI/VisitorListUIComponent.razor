@@ -27,10 +27,10 @@
                 @visitor.FullName
             </div>
             <div class="col border border-dark col-2">
-                @visitor.GetDateTimeAsString(visitor.ArrivalTime.HasValue ? visitor.ArrivalTime.Value : null).Result
+                @visitor.GetDateTimeAsString(visitor.TodaysArrivalTime.HasValue ? visitor.TodaysArrivalTime.Value : null).Result
             </div>
             <div class="col border border-dark col-2" hidden="@(!RenderDepartureTime)">
-                @visitor.GetDateTimeAsString(visitor.DepartureTime.HasValue ? visitor.DepartureTime.Value : null).Result
+                @visitor.GetDateTimeAsString(visitor.TodaysDepartureTime.HasValue ? visitor.TodaysDepartureTime.Value : null).Result
             </div>
             <button type="button" @onclick="@(() => VisitorArrived(visitor, false))"
                     disabled="@(showDialogDeparted == true || showDialogArrived == true)"
@@ -38,7 +38,7 @@
                 Arrived
             </button>
             <button type="button" @onclick="@(() => VisitorDeparted(visitor, false))"
-                    disabled="@(showDialogDeparted == true || showDialogArrived == true || visitor.ArrivalTime == null)"
+                    disabled="@(showDialogDeparted == true || showDialogArrived == true || visitor.TodaysArrivalTime == null)"
                     class="col border border-dark @(RenderDepartureTime ? "col-2" : "col-3") btn-danger shadow-sm rounded">
                 Departure
             </button>

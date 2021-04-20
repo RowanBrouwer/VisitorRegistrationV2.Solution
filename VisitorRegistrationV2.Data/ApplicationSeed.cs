@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VisitorRegistrationV2.Blazor.Shared;
+using VisitorRegistrationV2.Blazor.Shared.TimeObjects.Actual;
+using VisitorRegistrationV2.Blazor.Shared.TimeObjects.Expected;
 
 namespace VisitorRegistrationV2.Data
 {
@@ -42,12 +44,69 @@ namespace VisitorRegistrationV2.Data
 
                 List<Visitor> visitors = new List<Visitor>()
                 {
-                    new Visitor{ ArrivalTime = DateTime.Now.Subtract(timespan1), FirstName = "Rowan", LastName = "Brouwer"},
-                    new Visitor{ ArrivalTime = DateTime.Now.Subtract(timespan3), FirstName = "Jan", LastName = "Jansen"},
-                    new Visitor{ ArrivalTime = DateTime.Now.Subtract(timespan2), FirstName = "Bob", MiddleName = "de", LastName = "Bouwer", DepartureTime = DateTime.Now.Subtract(timespan3)},
-                    new Visitor{ ArrivalTime = DateTime.Now.Subtract(timespan4), FirstName = "Lucky", LastName = "Luke"},
-                    new Visitor{ ArrivalTime = DateTime.Now, FirstName = "Sponge", LastName = "Bob" },
-                    new Visitor{ ArrivalTime = DateTime.Now.Subtract(timespan5), FirstName = "Koos", LastName = "Brouwer", DepartureTime = DateTime.Now.Subtract(timespan1)}
+                    new Visitor
+                    {  
+                        ActualTimes = 
+                        new List<ActualTime> 
+                        {new ActualTime{ ArrivalTime = DateTime.Now.Subtract(timespan1)} },
+                        ExpectedTimes =
+                        new List<ExpectedTime>
+                        {new ExpectedTime{ DepartureTime = DateTime.Now} }
+                        , FirstName = "Rowan"
+                        , LastName = "Brouwer"
+                    },
+
+                    new Visitor
+                    {
+                        ActualTimes =
+                        new List<ActualTime>
+                        {new ActualTime{ ArrivalTime = DateTime.Now.Subtract(timespan3)} }
+                        , FirstName = "Jan"
+                        , LastName = "Jansen"
+                    },
+
+                    new Visitor
+                    {
+                        ActualTimes =
+                        new List<ActualTime>
+                        {new ActualTime{ ArrivalTime = DateTime.Now.Subtract(timespan2), DepartureTime = DateTime.Now.Subtract(timespan3)} }
+                        , FirstName = "Bob"
+                        , MiddleName = "de"
+                        , LastName = "Bouwer"
+                    },
+
+                    new Visitor
+                    {
+                        ActualTimes =
+                        new List<ActualTime>
+                        {new ActualTime{ ArrivalTime = DateTime.Now.Subtract(timespan4)} }
+                        , FirstName = "Lucky"
+                        , LastName = "Luke"
+                    },
+
+                    new Visitor
+                    {
+                        ActualTimes =
+                        new List<ActualTime>
+                        {new ActualTime{ ArrivalTime = DateTime.Now} },
+                        ExpectedTimes =
+                        new List<ExpectedTime>
+                        {new ExpectedTime{ ArrivalTime = DateTime.Now} }
+                        , FirstName = "Sponge"
+                        , LastName = "Bob"
+                    },
+
+                    new Visitor
+                    {
+                        ActualTimes =
+                        new List<ActualTime>
+                        {new ActualTime{ ArrivalTime = DateTime.Now.Subtract(timespan5), DepartureTime = DateTime.Now.Subtract(timespan1)} },
+                        ExpectedTimes =
+                        new List<ExpectedTime>
+                        {new ExpectedTime{ DepartureTime = DateTime.Now, ArrivalTime = DateTime.Now.Subtract(timespan1)} }
+                        , FirstName = "Koos"
+                        , LastName = "Brouwer"
+                    },
                 };
 
                 db.AddRange(visitors);

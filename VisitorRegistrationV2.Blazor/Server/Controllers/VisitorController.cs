@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VisitorRegistrationV2.Blazor.Shared;
+using VisitorRegistrationV2.Blazor.Shared.DTOs;
 using VisitorRegistrationV2.Data.Services.Visitors;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -28,64 +29,76 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
 
         // GET: api/<VisitorController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Visitor>>> Get()
+        public async Task<ActionResult<IEnumerable<VisitorDTO>>> Get()
         {
             logger.LogInformation($"GET VisitorList API call at {DateTime.Now.ToShortTimeString()}");
 
-            var result = await context.GetListOfVisitors();
+            var queryResult = await context.GetListOfVisitors();
 
-            if (result == null)
+            if (queryResult == null)
             {
                 logger.LogWarning($"NOTFOUND VisitorList at {DateTime.Now.ToShortTimeString()}");
                 return NotFound();
             }
-            return Ok(result);
+
+            List<VisitorDTO> Result = new List<VisitorDTO>();
+            foreach (var visitor in queryResult)
+            {
+                Result.Add(await context.VisitorToVisitorDTO(visitor));
+            }
+
+            return Ok(Result);
         }
 
         // GET api/<VisitorController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> Get(int id)
+        public async Task<ActionResult<VisitorDTO>> Get(int id)
         {
             logger.LogInformation($"GET Visitor {id} API call - {DateTime.Now.ToShortTimeString()}");
 
-            var result = await context.GetVisitorById(id);
+            var queryResult = await context.GetVisitorById(id);
 
-            if (result == null)
+            if (queryResult == null)
             {
                 logger.LogWarning($"NOTFOUND Visitor {id} - {DateTime.Now.ToShortTimeString()}");
                 return NotFound();
             }
+
+            var result = context.VisitorToVisitorDTO(queryResult);
 
             return Ok(result);
         }
 
         // POST api/<VisitorController>
         [HttpPost]
-        public async Task<ActionResult<Visitor>> Post([FromBody] Visitor newVisitor)
+        public async Task<ActionResult<VisitorDTO>> Post([FromBody] VisitorDTO newVisitor)
         {
             logger.LogInformation($"POST Visitor {newVisitor.Id} - {DateTime.Now.ToShortTimeString()}");
 
-            Visitor result = newVisitor;
+            Visitor result;
             if (ModelState.IsValid)
             {
-                result = await context.AddVisitor(newVisitor);
+                result = await context.AddVisitor(newVisitor);         
             }
             else
             {
                 logger.LogInformation($"BADREQUEST Modelstate not valid - Visitor {newVisitor.Id} {DateTime.Now.ToShortTimeString()}");
                 return BadRequest();
             }
+            var ReturnResult = await context.VisitorToVisitorDTO(result);
 
-            return Ok(result);
+            return Ok(ReturnResult);
         }
 
         // PUT api/<VisitorController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Visitor visitor)
+        public async Task<ActionResult> Put(int id, [FromBody] VisitorDTO visitor)
         {
             logger.LogInformation($"PUT Visitor {id} - {DateTime.Now.ToShortTimeString()}");
 
-            var result = await Task.FromResult(context.UpdateVisitor(visitor));
+            var ConvertResult = await context.VisitorDTOToVisitor(visitor);
+
+            var result = await Task.FromResult(context.UpdateVisitor(ConvertResult));
 
             if (result == null)
             {

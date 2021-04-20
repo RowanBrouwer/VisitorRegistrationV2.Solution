@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VisitorRegistrationV2.Blazor.Shared;
+using VisitorRegistrationV2.Blazor.Shared.DTOs;
+using VisitorRegistrationV2.Blazor.Shared.TimeObjects.Actual;
+using VisitorRegistrationV2.Blazor.Shared.TimeObjects.Expected;
 
 namespace VisitorRegistrationV2.Data.Services.Visitors
 {
@@ -20,7 +23,7 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
         /// </summary>
         /// <param name="newVisitor">Is the new visitor that needs to be added.</param>
         /// <returns></returns>
-        public Task<Visitor> AddVisitor(Visitor newVisitor);
+        public Task<Visitor> AddVisitor(VisitorDTO newVisitor);
 
         /// <summary>
         /// Deletes visitor from the database.
@@ -49,5 +52,12 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
         /// <param name="SearchTerm">String to filter the Fullname</param>
         /// <returns></returns>
         public Task<List<Visitor>> SearchVisitorsByName(string SearchTerm);
+
+        public Task<ActualTime> AddActualTime(DateTime? arrival, DateTime? departure);
+        public Task<ExpectedTime> AddExpectedTime(DateTime? dateTime, DateTime? departure);
+        public Task<ActualTime> GetActualTimeById(int Id);
+        public Task<ExpectedTime> GetExpectedTimeById(int Id);
+        public Task<VisitorDTO> VisitorToVisitorDTO(Visitor visitor);
+        public Task<Visitor> VisitorDTOToVisitor(VisitorDTO visitorDTO);
     }
 }

@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VisitorRegistrationV2.Blazor.Shared;
+using VisitorRegistrationV2.Blazor.Shared.TimeObjects.Actual;
+using VisitorRegistrationV2.Blazor.Shared.TimeObjects.Expected;
 
 namespace VisitorRegistrationV2.Data
 {
@@ -34,5 +36,8 @@ namespace VisitorRegistrationV2.Data
 
         public DbSet<Registrar> Registrars { get; set; }
         public DbSet<Visitor> Visitors { get; set; }
+        public DbSet<ActualTime> ActualTimes {get;set;}
+        public DbSet<ExpectedTime> ExpectedTimes { get; set; }
     }
 }
+

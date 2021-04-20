@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VisitorRegistrationV2.Blazor.Shared;
+using VisitorRegistrationV2.Blazor.Shared.DTOs;
 
 namespace VisitorRegistrationV2.Blazor.Client.ClientServices
 {
@@ -28,7 +29,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
             Message = "";
         }
 
-        public async Task<Visitor> VisitorArrives(Visitor visitorThatArrived, bool OverRide, DateTime? time)
+        public async Task<VisitorDTO> VisitorArrives(VisitorDTO visitorThatArrived, bool OverRide, DateTime? time)
         {
             if (await signalRService.IsConnected())
             {
@@ -37,7 +38,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
                     time = DateTime.Now;
                 }
 
-                bool Succeeded = await visitorThatArrived.SetArrivalTime(time, OverRide);
+                bool Succeeded = await visitorThatArrived.SetTodaysArrivalTime(time, OverRide);
 
                 if (Succeeded)
                 {
@@ -56,7 +57,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
             return visitorThatArrived;
         }
 
-        public async Task<Visitor> VisitorDeparts(Visitor visitorThatDeparted, bool OverRide, DateTime? time)
+        public async Task<VisitorDTO> VisitorDeparts(VisitorDTO visitorThatDeparted, bool OverRide, DateTime? time)
         {
             if (await signalRService.IsConnected())
             {
@@ -65,7 +66,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
                     time = DateTime.Now;
                 }
 
-                var Succeeded = await visitorThatDeparted.SetDepartureTime(time, OverRide);
+                var Succeeded = await visitorThatDeparted.SetTodaysDepartureTime(time, OverRide);
 
                 if (Succeeded)
                 {
