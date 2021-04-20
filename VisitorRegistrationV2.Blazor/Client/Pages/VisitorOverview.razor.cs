@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using System;
 using System.Threading.Tasks;
-using VisitorRegistrationV2.Blazor.Client.Components.NotPresentVisitorsUIComponent;
-using VisitorRegistrationV2.Blazor.Client.Components.PresentVisitorsUIComponent;
+using VisitorRegistrationV2.Blazor.Client.Components.VisitorListUI;
 using VisitorRegistrationV2.Blazor.Client.PageModels;
 using VisitorRegistrationV2.Blazor.Shared;
 
@@ -18,8 +17,8 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         /// </summary>
         protected Visitor SelectedVisitor { get; set; }
 
-        protected FilterdPresentVisitorsComponent PresentComponent = new FilterdPresentVisitorsComponent();
-        protected FilterdNotPresentVisitorsUIComponent NotPresentComponent = new FilterdNotPresentVisitorsUIComponent();
+        protected VisitorListUIComponent PresentComponent = new VisitorListUIComponent();
+        protected VisitorListUIComponent NotPresentComponent = new VisitorListUIComponent();
         protected int ListSelection { get; set; } = 0;
         protected override async Task OnInitializedAsync()
         {
@@ -162,7 +161,8 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             {
                 visitorThatArrived = await ClientService.VisitorArrives(visitorThatArrived, overRide, null);
                 await SetUpdatedUser(visitorThatArrived);
-                Message = ClientService.Message; 
+                Message = ClientService.Message;
+                Changed.Invoke();
                 await delayMessageReset();
             }
             else
@@ -187,6 +187,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
                 visitorThatDeparted = await ClientService.VisitorDeparts(visitorThatDeparted, overRide, null);
                 await SetUpdatedUser(visitorThatDeparted);
                 Message = ClientService.Message;
+                Changed.Invoke();
                 await delayMessageReset();
             }
             else

@@ -5,12 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using VisitorRegistrationV2.Blazor.Shared;
 
-namespace VisitorRegistrationV2.Blazor.Client.Components.NotPresentVisitorsUIComponent
+namespace VisitorRegistrationV2.Blazor.Client.Components.VisitorListUI
 {
-    public partial class FilterdNotPresentVisitorsUIComponent
+    public partial class VisitorListUIComponent
     {
         [Parameter]
-        public IEnumerable<Visitor> NotPresentVisitors { get; set; }
+        public IEnumerable<Visitor> Visitors { get; set; }
         [Parameter]
         public bool showDialogArrived { get; set; }
         [Parameter]
@@ -19,26 +19,8 @@ namespace VisitorRegistrationV2.Blazor.Client.Components.NotPresentVisitorsUICom
         public Action<Visitor, bool> VisitorArrived { get; set; }
         [Parameter]
         public Action<Visitor, bool> VisitorDeparted { get; set; }
-
-        public Task<string> GetDateTimeAsString(DateTime? dateTime)
-        {
-            if (dateTime != null)
-            {
-                if (dateTime.Value.Date == DateTime.Today)
-                {
-                    return Task.FromResult(dateTime.Value.ToShortTimeString());
-                }
-                else
-                {
-                    return Task.FromResult(dateTime.Value.ToShortDateString() + ' ' + dateTime.Value.ToShortTimeString());
-                }  
-            }
-            else
-            {
-                return Task.FromResult("");
-            }
-        }
-
+        [Parameter]
+        public bool RenderDepartureTime { get; set; }
         public void OnVisitorArrived(Visitor visitor, bool overRide)
         {
             VisitorArrived.Invoke(visitor, overRide);

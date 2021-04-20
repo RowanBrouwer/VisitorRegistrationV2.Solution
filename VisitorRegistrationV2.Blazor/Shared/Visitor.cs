@@ -33,5 +33,24 @@ namespace VisitorRegistrationV2.Blazor.Shared
                 : (overRide == true && ArrivalTime.HasValue ? 
                 Task.FromResult((true, DepartureTime = time).Item1) 
                 : Task.FromResult(false));
+
+        public Task<string> GetDateTimeAsString(DateTime? dateTime)
+        {
+            if (dateTime != null)
+            {
+                if (dateTime.Value.Date == DateTime.Today)
+                {
+                    return Task.FromResult(dateTime.Value.ToShortTimeString());
+                }
+                else
+                {
+                    return Task.FromResult(dateTime.Value.ToShortDateString() + ' ' + dateTime.Value.ToShortTimeString());
+                }
+            }
+            else
+            {
+                return Task.FromResult("");
+            }
+        }
     }
 }

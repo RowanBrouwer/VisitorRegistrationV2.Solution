@@ -1,7 +1,7 @@
 ﻿
 <div class="col-auto" style="padding:4px,10px,2px,10px">
     <div class="row">
-        <div class="col col-12 border border-dark bg-dark text-white"> Not present</div>
+        <div class="col col-12 border border-dark bg-dark text-white"> @(RenderDepartureTime ? "Not present" : "Present")</div>
     </div>
     <div class="row">
         <div class="col border border-dark col-4">
@@ -10,38 +10,39 @@
         <div class="col border border-dark col-2">
             Arrival time
         </div>
-        <div class="col border border-dark col-2">
+        <div class="col border border-dark col-2" hidden="@(!RenderDepartureTime)">
             Departure time
         </div>
-        <div class="col border border-dark col-2">
+        <div class="col border border-dark @(RenderDepartureTime ? "col-2" : "col-3")">
             Arrived
         </div>
-        <div class="col border border-dark col-2">
+        <div class="col border border-dark @(RenderDepartureTime ? "col-2" : "col-3")">
             Departure
         </div>
     </div>
-    @foreach (var visitor in NotPresentVisitors)
+    @foreach (var visitor in Visitors)
     {
         <div class="row">
             <div class="col border border-dark col-4">
                 @visitor.FullName
             </div>
             <div class="col border border-dark col-2">
-                @GetDateTimeAsString(visitor.ArrivalTime.Value).Result
+                @visitor.GetDateTimeAsString(visitor.ArrivalTime.HasValue ? visitor.ArrivalTime.Value : null).Result
             </div>
-            <div class="col border border-dark col-2">
-                @GetDateTimeAsString(visitor.DepartureTime.Value).Result
+            <div class="col border border-dark col-2" hidden="@(!RenderDepartureTime)">
+                @visitor.GetDateTimeAsString(visitor.DepartureTime.HasValue ? visitor.DepartureTime.Value : null).Result
             </div>
             <button type="button" @onclick="@(() => VisitorArrived(visitor, false))"
                     disabled="@(showDialogDeparted == true || showDialogArrived == true)"
-                    class="col border border-dark col-2 btn-success shadow-sm rounded">
+                    class="col border border-dark @(RenderDepartureTime ? "col-2" : "col-3") btn-success shadow-sm rounded">
                 Arrived
             </button>
             <button type="button" @onclick="@(() => VisitorDeparted(visitor, false))"
                     disabled="@(showDialogDeparted == true || showDialogArrived == true || visitor.ArrivalTime == null)"
-                    class="col border border-dark col-2 btn-danger shadow-sm rounded">
+                    class="col border border-dark @(RenderDepartureTime ? "col-2" : "col-3") btn-danger shadow-sm rounded">
                 Departure
             </button>
         </div>
     }
 </div>
+

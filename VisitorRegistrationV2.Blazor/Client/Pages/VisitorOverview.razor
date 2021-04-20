@@ -12,23 +12,25 @@
 
 @if (ListSelection == 0)
 { 
-    <FilterdPresentVisitorsComponent 
+    <VisitorListUIComponent 
      @ref="PresentComponent"
-     PresentVisitors="FilterdPresentVisitors"
+     Visitors="FilterdPresentVisitors"
      showDialogDeparted="showDialogDeparted" 
      showDialogArrived="showDialogArrived"
      VisitorArrived="OnVisitorArrived"
-     VisitorDeparted="OnVisitorDeparted"/>
+     VisitorDeparted="OnVisitorDeparted"
+     RenderDepartureTime="false"/>
 }
 @if (ListSelection == 1)
 {
-    <FilterdNotPresentVisitorsUIComponent
+    <VisitorListUIComponent
      @ref="NotPresentComponent"
-     NotPresentVisitors="FilterdNotPresentVisitors"
+     Visitors="FilterdNotPresentVisitors"
      showDialogDeparted="showDialogDeparted" 
      showDialogArrived="showDialogArrived"
      VisitorArrived="OnVisitorArrived"
-     VisitorDeparted="OnVisitorDeparted"/>
+     VisitorDeparted="OnVisitorDeparted"
+     RenderDepartureTime="true"/>
 }
 
 <br/>
