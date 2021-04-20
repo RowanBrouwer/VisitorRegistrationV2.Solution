@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using System;
 using System.Threading.Tasks;
 using VisitorRegistrationV2.Blazor.Client.Components.VisitorListUI;
+using VisitorRegistrationV2.Blazor.Client.Components.ArrivedUIButton;
+using VisitorRegistrationV2.Blazor.Client.Components.DepartedUIButton;
 using VisitorRegistrationV2.Blazor.Client.PageModels;
 using VisitorRegistrationV2.Blazor.Shared;
 
@@ -15,10 +17,13 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         /// <summary>
         /// Used as a temporary holding field for a visitor.
         /// </summary>
-        protected Visitor SelectedVisitor { get; set; }
+        public Visitor SelectedVisitor { get; set; }
 
         protected VisitorListUIComponent PresentComponent = new VisitorListUIComponent();
         protected VisitorListUIComponent NotPresentComponent = new VisitorListUIComponent();
+        protected VisitorArrivedComponent ArrivedButton = new VisitorArrivedComponent();
+        protected VisitorDepartedComponent DepartedButton = new VisitorDepartedComponent();
+
         protected int ListSelection { get; set; } = 0;
         protected override async Task OnInitializedAsync()
         {
