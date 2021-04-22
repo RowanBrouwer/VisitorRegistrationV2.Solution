@@ -19,10 +19,11 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
             this.context = context;
         }
 
-        public async Task<ActualTime> AddActualTime(DateTime? arrival, DateTime? departure)
+        public async Task<ActualTime> AddActualTime(ActualTime actualTime)
         {
-            var addedTime = new ActualTime { ArrivalTime = arrival, DepartureTime = departure };
-            context.Add(addedTime);
+            var addedTime = actualTime;
+
+            context.ActualTimes.Add(addedTime);
 
             context.SaveChanges();
 
@@ -31,11 +32,11 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
             return result;
         }
 
-        public async Task<ExpectedTime> AddExpectedTime(DateTime? arrival, DateTime? departure)
+        public async Task<ExpectedTime> AddExpectedTime(ExpectedTime expectedTime)
         {
-            var addedTime = new ExpectedTime { ArrivalTime = arrival, DepartureTime = departure };
+            var addedTime = expectedTime;
 
-            context.Add(addedTime);
+            context.ExpectedTimes.Add(addedTime);
 
             context.SaveChanges();
 
@@ -44,25 +45,21 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
             return result;
         }
 
-        public async Task<Visitor> AddVisitor(VisitorDTO newVisitor)
+        public async Task<Visitor> AddVisitor(Visitor newVisitor)
         {
-            var actualResult = await AddActualTime(newVisitor.TodaysArrivalTime, newVisitor.TodaysDepartureTime);
+            var actualResult = await AddActualTime(newVisitor.TodaysTimes);
 
-            var expectedResult = await AddExpectedTime(newVisitor.TodaysArrivalTime, newVisitor.TodaysDepartureTime);
+            var expectedResult = await AddExpectedTime(newVisitor.ExpectedTimes);
 
-            Visitor ConvertedDto = await VisitorDTOToVisitor(newVisitor);
-            ConvertedDto.ActualTimesList = new List<ActualTime>();
-            ConvertedDto.ExpectedTimes = new List<ExpectedTime>();
-
-            context.Add(ConvertedDto);
+            context.Add(newVisitor);
             context.SaveChanges();
 
-            ConvertedDto.ActualTimesList.Add(actualResult);
-            ConvertedDto.ExpectedTimes.Add(expectedResult);
+            newVisitor.ActualTimesList.Add(actualResult);
+            newVisitor.ExpectedTimesList.Add(expectedResult);
 
             context.SaveChanges();
 
-            var result = await GetVisitorById(ConvertedDto.Id);
+            var result = await GetVisitorById(newVisitor.Id);
 
             return result;
         }
@@ -115,42 +112,6 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
         {
             context.Update(updatedVisitor);
             await context.SaveChangesAsync();
-        }
-
-        public async Task<Visitor> VisitorDTOToVisitor(VisitorDTO visitorDTO)
-        {
-            var result = await GetVisitorById(visitorDTO.Id);
-
-            if (result == null)
-            {
-                var visitor = new Visitor()
-                {
-                    FirstName = visitorDTO.FirstName,
-                    MiddleName = visitorDTO.MiddleName,
-                    LastName = visitorDTO.LastName,
-                };
-                return visitor;
-            }
-
-            return result;
-        }
-
-        public async Task<VisitorDTO> VisitorToVisitorDTO(Visitor visitor)
-        {
-            var result = new VisitorDTO()
-            {
-                Id = visitor.Id,
-                ExpectedArrivalTime = visitor.ExpectedArrivalTime(),
-                ExpectedDepartureTime = visitor.ExptectedDepartureTime(),
-                TodaysArrivalTime = visitor.TodaysArrivalTime(),
-                TodaysDepartureTime = visitor.TodaysDepartureTime(),
-                FirstName = visitor.FirstName,
-                MiddleName = visitor.MiddleName,
-                LastName = visitor.LastName,
-                FullName = visitor.FullName
-            };
-
-            return await Task.FromResult(result);
         }
     }
 }

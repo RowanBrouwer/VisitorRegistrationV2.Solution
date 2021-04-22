@@ -87,9 +87,11 @@ namespace VisitorRegistrationV2.Tests
         [Fact]
         public async void AddVisitorTest()
         {
-            VisitorDTO newVisitor = new VisitorDTO { TodaysArrivalTime = DateTime.Now, FirstName = "Test", LastName = "Person" };
+            VisitorDTO newVisitor = new VisitorDTO { TodaysArrivalTime = DateTime.Now.ToString(), FirstName = "Test", LastName = "Person" };
 
-            var result1 = await context.AddVisitor(newVisitor);
+            Visitor ConvertedVisitor = new Visitor(newVisitor);
+
+            var result1 = await context.AddVisitor(ConvertedVisitor);
 
             Assert.Equal(7, result1.Id);
         }

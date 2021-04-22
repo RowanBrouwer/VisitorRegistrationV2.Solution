@@ -49,7 +49,7 @@ namespace VisitorRegistrationV2.Data
                         ActualTimesList = 
                         new List<ActualTime> 
                         {new ActualTime{ ArrivalTime = DateTime.Now.Subtract(timespan1)} },
-                        ExpectedTimes =
+                        ExpectedTimesList =
                         new List<ExpectedTime>
                         {new ExpectedTime{ DepartureTime = DateTime.Now} }
                         , FirstName = "Rowan"
@@ -89,7 +89,7 @@ namespace VisitorRegistrationV2.Data
                         ActualTimesList =
                         new List<ActualTime>
                         {new ActualTime{ ArrivalTime = DateTime.Now} },
-                        ExpectedTimes =
+                        ExpectedTimesList =
                         new List<ExpectedTime>
                         {new ExpectedTime{ ArrivalTime = DateTime.Now} }
                         , FirstName = "Sponge"
@@ -101,7 +101,7 @@ namespace VisitorRegistrationV2.Data
                         ActualTimesList =
                         new List<ActualTime>
                         {new ActualTime{ ArrivalTime = DateTime.Now.Subtract(timespan5), DepartureTime = DateTime.Now.Subtract(timespan1)} },
-                        ExpectedTimes =
+                        ExpectedTimesList =
                         new List<ExpectedTime>
                         {new ExpectedTime{ DepartureTime = DateTime.Now, ArrivalTime = DateTime.Now.Subtract(timespan1)} }
                         , FirstName = "Koos"

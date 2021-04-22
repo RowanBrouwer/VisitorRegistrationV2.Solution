@@ -9,6 +9,7 @@ using VisitorRegistrationV2.Blazor.Client.Components.DepartedUIButton;
 using VisitorRegistrationV2.Blazor.Client.PageModels;
 using VisitorRegistrationV2.Blazor.Shared;
 using VisitorRegistrationV2.Blazor.Shared.DTOs;
+using VisitorRegistration.Blazor.Client.Models;
 
 namespace VisitorRegistrationV2.Blazor.Client.Pages
 {
@@ -17,7 +18,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         /// <summary>
         /// Used as a temporary holding field for a visitor.
         /// </summary>
-        public VisitorDTO SelectedVisitor { get; set; }
+        public ClientVisitor SelectedVisitor { get; set; }
 
         protected VisitorListUIComponent PresentComponent = new VisitorListUIComponent();
         protected VisitorListUIComponent NotPresentComponent = new VisitorListUIComponent();
@@ -43,13 +44,13 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             InvokeAsync(() => StateHasChanged());
         }
 
-        public void OnVisitorDeparted(VisitorDTO visitor, bool overRide)
+        public void OnVisitorDeparted(ClientVisitor visitor, bool overRide)
         {
             InvokeAsync(() => VisitorDeparted(visitor, overRide));
             Changed.Invoke();
         }
 
-        public void OnVisitorArrived(VisitorDTO visitor, bool overRide)
+        public void OnVisitorArrived(ClientVisitor visitor, bool overRide)
         {
             InvokeAsync(() => VisitorArrived(visitor, overRide));
             Changed.Invoke();
@@ -84,9 +85,9 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             { 
                 var newvisitor = await Http.GetVisitor(visitorId);
 
+                ClientVisitor newClientVisitor = new ClientVisitor(newvisitor);
 
-
-                visitors.Add(newvisitor);
+                visitors.Add(newClientVisitor);
 
                 Changed.Invoke();
             }
@@ -106,7 +107,10 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             try
             {
                 var FoundVisitor = await Http.GetVisitor(visitorId);
-                await SetUpdatedUser(FoundVisitor);
+
+                ClientVisitor clientVisitor = new ClientVisitor(FoundVisitor);
+
+                await SetUpdatedUser(clientVisitor);
 
                 Changed.Invoke();
             }
@@ -116,7 +120,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
             }
         }
 
-        public Task SetUpdatedUser(VisitorDTO visitor)
+        public Task SetUpdatedUser(ClientVisitor visitor)
         {
             int index = visitors.FindIndex(v => v.Id == visitor.Id);
 
@@ -133,7 +137,12 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         {
             try
             {
-                visitors = await Http.GetVisitorList();
+                var visitorDTOList = await Http.GetVisitorList();
+
+                foreach (var visitor in visitorDTOList)
+                {
+                    visitors.Add(new ClientVisitor(visitor));
+                }
             }
             catch (AccessTokenNotAvailableException exception)
             {
@@ -160,7 +169,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         /// <param name="visitorThatArrived">Visitor wich got selected to have their ArrivalTime updated.</param>
         /// <param name="overRide">weither or not to override this visitors ArrivalTime.</param>
         /// <returns></returns>
-        protected async Task VisitorArrived(VisitorDTO visitorThatArrived, bool overRide)
+        protected async Task VisitorArrived(ClientVisitor visitorThatArrived, bool overRide)
         {
             SelectedVisitor = null;
             showDialogArrived = false;
@@ -185,7 +194,7 @@ namespace VisitorRegistrationV2.Blazor.Client.Pages
         /// <param name="visitorThatDeparted">Visitor wich got selected to have their DepartureTime updated.</param>
         /// <param name="overRide">weither or not to override this visitors DepartureTime.</param>
         /// <returns></returns>
-        protected async Task VisitorDeparted(VisitorDTO visitorThatDeparted, bool overRide)
+        protected async Task VisitorDeparted(ClientVisitor visitorThatDeparted, bool overRide)
         {
             SelectedVisitor = null;
             showDialogDeparted = false;

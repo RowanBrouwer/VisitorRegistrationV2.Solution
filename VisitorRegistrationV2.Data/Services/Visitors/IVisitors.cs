@@ -23,7 +23,7 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
         /// </summary>
         /// <param name="newVisitor">Is the new visitor that needs to be added.</param>
         /// <returns></returns>
-        public Task<Visitor> AddVisitor(VisitorDTO newVisitor);
+        public Task<Visitor> AddVisitor(Visitor newVisitor);
 
         /// <summary>
         /// Deletes visitor from the database.
@@ -53,11 +53,9 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
         /// <returns></returns>
         public Task<List<Visitor>> SearchVisitorsByName(string SearchTerm);
 
-        public Task<ActualTime> AddActualTime(DateTime? arrival, DateTime? departure);
-        public Task<ExpectedTime> AddExpectedTime(DateTime? dateTime, DateTime? departure);
+        public Task<ActualTime> AddActualTime(ActualTime actualTime);
+        public Task<ExpectedTime> AddExpectedTime(ExpectedTime expectedTime);
         public Task<ActualTime> GetActualTimeById(int Id);
         public Task<ExpectedTime> GetExpectedTimeById(int Id);
-        public Task<VisitorDTO> VisitorToVisitorDTO(Visitor visitor);
-        public Task<Visitor> VisitorDTOToVisitor(VisitorDTO visitorDTO);
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VisitorRegistration.Blazor.Client.Models;
 using VisitorRegistrationV2.Blazor.Shared;
 using VisitorRegistrationV2.Blazor.Shared.DTOs;
 
@@ -29,7 +30,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
             Message = "";
         }
 
-        public async Task<VisitorDTO> VisitorArrives(VisitorDTO visitorThatArrived, bool OverRide, DateTime? time)
+        public async Task<ClientVisitor> VisitorArrives(ClientVisitor visitorThatArrived, bool OverRide, DateTime? time)
         {
             if (await signalRService.IsConnected())
             {
@@ -42,9 +43,13 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
 
                 if (Succeeded)
                 {
-                    var response = await Http.UpdateVisitor(visitorThatArrived);
+                    var visitorDTO = await visitorThatArrived.ConvertToVisitorDTO();
 
-                    await signalRService.SendUpdatedVisitorNotification(visitorThatArrived.Id);
+                    var response = await Http.UpdateVisitor(visitorDTO);
+
+                    await signalRService.SendUpdatedVisitorNotification(visitorDTO.Id);
+
+                    visitorThatArrived = new(visitorDTO);
 
                     Message = ResponseManager.GetMessage(response);
                 }
@@ -57,7 +62,7 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
             return visitorThatArrived;
         }
 
-        public async Task<VisitorDTO> VisitorDeparts(VisitorDTO visitorThatDeparted, bool OverRide, DateTime? time)
+        public async Task<ClientVisitor> VisitorDeparts(ClientVisitor visitorThatDeparted, bool OverRide, DateTime? time)
         {
             if (await signalRService.IsConnected())
             {
@@ -70,11 +75,15 @@ namespace VisitorRegistrationV2.Blazor.Client.ClientServices
 
                 if (Succeeded)
                 {
-                    var response = await Http.UpdateVisitor(visitorThatDeparted);
+                    var visitorDTO = await visitorThatDeparted.ConvertToVisitorDTO();
+
+                    var response = await Http.UpdateVisitor(visitorDTO);
 
                     await signalRService.SendUpdatedVisitorNotification(visitorThatDeparted.Id);
 
                     Message = ResponseManager.GetMessage(response);
+
+                    visitorThatDeparted = new(visitorDTO);
                 }
             }
             else

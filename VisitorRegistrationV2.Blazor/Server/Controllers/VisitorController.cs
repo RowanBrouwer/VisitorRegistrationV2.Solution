@@ -42,9 +42,11 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
             }
 
             List<VisitorDTO> Result = new List<VisitorDTO>();
+
             foreach (var visitor in queryResult)
             {
-                Result.Add(await context.VisitorToVisitorDTO(visitor));
+                var visitorDTO = await visitor.ConvertToDTO();
+                Result.Add(visitorDTO);
             }
 
             return Ok(Result);
@@ -64,7 +66,7 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
                 return NotFound();
             }
 
-            var result = context.VisitorToVisitorDTO(queryResult);
+            var result = await queryResult.ConvertToDTO();
 
             return Ok(result);
         }
@@ -78,16 +80,15 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
             Visitor result;
             if (ModelState.IsValid)
             {
-                result = await context.AddVisitor(newVisitor);         
+                result = await context.AddVisitor(new Visitor(newVisitor));         
             }
             else
             {
                 logger.LogInformation($"BADREQUEST Modelstate not valid - Visitor {newVisitor.Id} {DateTime.Now.ToShortTimeString()}");
                 return BadRequest();
             }
-            var ReturnResult = await context.VisitorToVisitorDTO(result);
 
-            return Ok(ReturnResult);
+            return Ok(await result.ConvertToDTO());
         }
 
         // PUT api/<VisitorController>/5
@@ -96,7 +97,7 @@ namespace VisitorRegistrationV2.Blazor.Server.Controllers
         {
             logger.LogInformation($"PUT Visitor {id} - {DateTime.Now.ToShortTimeString()}");
 
-            var ConvertResult = await context.VisitorDTOToVisitor(visitor);
+            Visitor ConvertResult = new(visitor);
 
             var result = await Task.FromResult(context.UpdateVisitor(ConvertResult));
 

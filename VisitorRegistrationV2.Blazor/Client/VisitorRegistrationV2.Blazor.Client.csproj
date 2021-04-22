@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\VisitorRegistration.Blazor.Client.Models\VisitorRegistration.Blazor.Client.Models.csproj" />
     <ProjectReference Include="..\Shared\VisitorRegistrationV2.Blazor.Shared.csproj" />
   </ItemGroup>
 

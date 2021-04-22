@@ -25,15 +25,7 @@ namespace VisitorRegistration.Blazor.Client.Models
 
         public ClientVisitor(VisitorDTO visitorDTO)
         {
-            Id = visitorDTO.Id;
-            FirstName = visitorDTO.FirstName;
-            MiddleName = visitorDTO.MiddleName;
-            LastName = visitorDTO.LastName;
-            ExpectedArrivalTime = visitorDTO.ExpectedArrivalTime.StringToNullableDateTime();
-            ExpectedDepartureTime = visitorDTO.ExpectedDepartureTime.StringToNullableDateTime();
-            TodaysArrivalTime = visitorDTO.TodaysArrivalTime.StringToNullableDateTime();
-            TodaysDepartureTime = visitorDTO.TodaysDepartureTime.StringToNullableDateTime();
-            FullName = string.IsNullOrEmpty(MiddleName) ? $"{FirstName} {LastName}" : $"{FirstName} {MiddleName} {LastName}";
+            ConvertFromDto(visitorDTO);
         }
 
         public ClientVisitor()
@@ -102,6 +94,21 @@ namespace VisitorRegistration.Blazor.Client.Models
             };
 
             return Task.FromResult(visitorDTO);
+        }
+
+        public Task ConvertFromDto(VisitorDTO visitorDTO)
+        {
+            Id = visitorDTO.Id;
+            FirstName = visitorDTO.FirstName;
+            MiddleName = visitorDTO.MiddleName;
+            LastName = visitorDTO.LastName;
+            ExpectedArrivalTime = visitorDTO.ExpectedArrivalTime.StringToNullableDateTime();
+            ExpectedDepartureTime = visitorDTO.ExpectedDepartureTime.StringToNullableDateTime();
+            TodaysArrivalTime = visitorDTO.TodaysArrivalTime.StringToNullableDateTime();
+            TodaysDepartureTime = visitorDTO.TodaysDepartureTime.StringToNullableDateTime();
+            FullName = string.IsNullOrEmpty(MiddleName) ? $"{FirstName} {LastName}" : $"{FirstName} {MiddleName} {LastName}";
+
+            return Task.CompletedTask;
         }
     }
 }
