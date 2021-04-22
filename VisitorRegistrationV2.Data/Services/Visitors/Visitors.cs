@@ -51,13 +51,13 @@ namespace VisitorRegistrationV2.Data.Services.Visitors
             var expectedResult = await AddExpectedTime(newVisitor.TodaysArrivalTime, newVisitor.TodaysDepartureTime);
 
             Visitor ConvertedDto = await VisitorDTOToVisitor(newVisitor);
-            ConvertedDto.ActualTimes = new List<ActualTime>();
+            ConvertedDto.ActualTimesList = new List<ActualTime>();
             ConvertedDto.ExpectedTimes = new List<ExpectedTime>();
 
             context.Add(ConvertedDto);
             context.SaveChanges();
 
-            ConvertedDto.ActualTimes.Add(actualResult);
+            ConvertedDto.ActualTimesList.Add(actualResult);
             ConvertedDto.ExpectedTimes.Add(expectedResult);
 
             context.SaveChanges();

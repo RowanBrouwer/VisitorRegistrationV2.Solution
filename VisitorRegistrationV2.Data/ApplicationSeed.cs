@@ -46,7 +46,7 @@ namespace VisitorRegistrationV2.Data
                 {
                     new Visitor
                     {  
-                        ActualTimes = 
+                        ActualTimesList = 
                         new List<ActualTime> 
                         {new ActualTime{ ArrivalTime = DateTime.Now.Subtract(timespan1)} },
                         ExpectedTimes =
@@ -58,7 +58,7 @@ namespace VisitorRegistrationV2.Data
 
                     new Visitor
                     {
-                        ActualTimes =
+                        ActualTimesList =
                         new List<ActualTime>
                         {new ActualTime{ ArrivalTime = DateTime.Now.Subtract(timespan3)} }
                         , FirstName = "Jan"
@@ -67,7 +67,7 @@ namespace VisitorRegistrationV2.Data
 
                     new Visitor
                     {
-                        ActualTimes =
+                        ActualTimesList =
                         new List<ActualTime>
                         {new ActualTime{ ArrivalTime = DateTime.Now.Subtract(timespan2), DepartureTime = DateTime.Now.Subtract(timespan3)} }
                         , FirstName = "Bob"
@@ -77,7 +77,7 @@ namespace VisitorRegistrationV2.Data
 
                     new Visitor
                     {
-                        ActualTimes =
+                        ActualTimesList =
                         new List<ActualTime>
                         {new ActualTime{ ArrivalTime = DateTime.Now.Subtract(timespan4)} }
                         , FirstName = "Lucky"
@@ -86,7 +86,7 @@ namespace VisitorRegistrationV2.Data
 
                     new Visitor
                     {
-                        ActualTimes =
+                        ActualTimesList =
                         new List<ActualTime>
                         {new ActualTime{ ArrivalTime = DateTime.Now} },
                         ExpectedTimes =
@@ -98,7 +98,7 @@ namespace VisitorRegistrationV2.Data
 
                     new Visitor
                     {
-                        ActualTimes =
+                        ActualTimesList =
                         new List<ActualTime>
                         {new ActualTime{ ArrivalTime = DateTime.Now.Subtract(timespan5), DepartureTime = DateTime.Now.Subtract(timespan1)} },
                         ExpectedTimes =
